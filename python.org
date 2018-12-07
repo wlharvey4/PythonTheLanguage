@@ -1,0 +1,226 @@
+#+TEXINFO_FILENAME:python.info
+#+TEXINFO_CLASS: info
+#+TEXINFO_HEADER:
+#+TEXINFO_POST_HEADER:
+#+SUBTITLE: Version {{{version}}} {{{time(%F %R)}}}
+#+SUBAUTHOR:
+#+TEXINFO_DIR_CATEGORY:Python
+#+TEXINFO_DIR_TITLE:Python
+#+TEXINFO_DIR_DESC:Python the Language
+#+TEXINFO_PRINTED_TITLE: Python the Language
+#+OPTIONS: H:4
+#+TITLE: Python the Language
+#+AUTHOR: WLHarvey4
+#+DATE: 2018-12-06
+#+MACRO: version 0.1
+
+* Keywords
+- False
+- None
+- True
+- and
+- as
+- assert
+- break
+- class
+- continue
+- def
+- del
+- elif
+- else
+- except
+- finally
+- for
+- from
+- global
+- if
+- import
+- in
+- is
+- lambda
+- nonlocal
+- not
+- or
+- pass
+- raise
+- return
+- try
+- while
+- with
+- yield
+
+* Operators
+Operators are the constructs which can manipulate the value of operands.
+
+Python language supports the following types of operators.
+
+** Arithmetic
+   - addition (+) :: Adds values on either side of the operator.
+   - subtraction (-) :: Subtracts right hand operand from left hand operand.
+   - multiplication (*) :: Multiplies values on either side of the operator
+   - division (/) :: Divides left hand operand by right hand operand
+   - modulus (%) :: Divides left hand operand by right hand operand and returns remainder
+   - exponent (**) :: Performs exponential (power) calculation on operators
+   - floor division (//) :: Floor Division - The division of operands
+        where the result is the quotient in which the digits after the
+        decimal point are removed. But if one of the operands is
+        negative, the result is floored, i.e., rounded away from zero
+        (towards negative infinity)
+
+** Relational
+These operators compare the values on either sides of them and decide
+the relation among them.
+   - == :: If the values of two operands are equal, then the condition becomes true.
+   - != :: If values of two operands are not equal, then condition becomes true.
+   - <> :: If values of two operands are not equal, then condition becomes true.
+   - > :: If the value of left operand is greater than the value of
+          right operand, then condition becomes true.
+   - < :: If the value of left operand is less than the value of right
+          operand, then condition becomes true.
+   - >= :: If the value of left operand is greater than or equal to
+           the value of right operand, then condition becomes true.
+   - <= :: If the value of left operand is less than or equal to the
+           value of right operand, then condition becomes true.
+
+** Assignment
+   - = :: Assigns values from right side operands to left side operand
+   - += Add AND :: It adds right operand to the left operand and
+                   assign the result to left operand
+   - -= Subtract AND :: It subtracts right operand from the left
+        operand and assign the result to left operand
+   - *= Multiply AND :: It multiplies right operand with the left
+        operand and assign the result to left operand
+   - /= Divide AND :: It divides left operand with the right operand
+                      and assign the result to left operand
+   - %= Modulus AND :: It takes modulus using two operands and assign
+                       the result to left operand
+   - **= Exponent AND :: Performs exponential (power) calculation on
+        operators and assign value to the left operand
+   - //= Floor AND :: It performs floor division on operators and
+                      assign value to the left operand
+
+** Logical
+   - and :: If both the operands are true then condition becomes true.
+   - or :: If any of the two operands are non-zero then condition
+           becomes true.
+   - not :: Used to reverse the logical state of its operand.
+
+** Bitwise
+   - & :: AND Operator copies a bit to the result if it exists in both
+          operands
+   - | :: OR Operator copies a bit if it exists in either operand.
+   - ^ :: XOR Operator copies the bit if it is set in one operand but
+          not both.
+   - ~ :: Ones Complement s unary and has the effect of 'flipping'
+          bits.
+   - << :: Binary Left Shift; The left operands value is moved left by
+           the number of bits specified by the right operand.
+   - >> :: Binary Right Shift; The left operands value is moved right
+           by the number of bits specified by the right operand.
+
+** Membership
+Python’s membership operators test for membership in a sequence, such
+as strings, lists, or tuples.
+    - in :: Evaluates to true if it finds a variable in the specified
+            sequence and false otherwise.
+    - not in :: Evaluates to true if it does not finds a variable in
+                the specified sequence and false otherwise.
+
+#+NAME: membership
+#+BEGIN_SRC python -n :results output :tangle membership.py :exports both
+
+  a = 10
+  b = 20
+  list = [1, 2, 3, 4, 5 ];
+
+  if ( a in list ):
+     print ("Line 1 - a is available in the given list")
+  else:
+     print ("Line 1 - a is not available in the given list")
+
+  if ( b not in list ):
+     print ("Line 2 - b is not available in the given list")
+  else:
+     print ("Line 2 - b is available in the given list")
+
+  a = 2
+  if ( a in list ):
+     print ("Line 3 - a is available in the given list")
+  else:
+     print ("Line 3 - a is not available in the given list")
+
+#+END_SRC
+
+#+RESULTS: membership
+: Line 1 - a is not available in the given list
+: Line 2 - b is not available in the given list
+: Line 3 - a is available in the given list
+: done
+
+** Identity
+Identity operators compare the memory locations of two objects.
+   - is :: Evaluates to true if the variables on either side of the
+           operator point to the same object and false otherwise.
+
+           ~x is y~, here ~is~ results in 1 if ~id(x)~ equals ~id(y)~.
+
+   - is not :: Evaluates to false if the variables on either side of
+               the operator point to the same object and true
+               otherwise.
+
+               ~x is not y~, here ~is not~ results in 1 if ~id(x)~ is
+               not equal to ~id(y)~.
+
+#+NAME: identity
+#+BEGIN_SRC python -n :results output :exports both :tangle identity.py
+
+#!/usr/bin/python3
+
+a = 20
+b = 20
+
+if ( a is b ):
+   print ("Line 1 - a and b have same identity")
+else:
+   print ("Line 1 - a and b do not have same identity")
+
+if ( id(a) == id(b) ):
+   print ("Line 2 - a and b have same identity")
+else:
+   print ("Line 2 - a and b do not have same identity")
+
+b = 30
+if ( a is b ):
+   print ("Line 3 - a and b have same identity")
+else:
+   print ("Line 3 - a and b do not have same identity")
+
+if ( a is not b ):
+   print ("Line 4 - a and b do not have same identity")
+else:
+   print ("Line 4 - a and b have same identity")
+
+#+END_SRC
+
+#+RESULTS:
+: Line 1 - a and b have same identity
+: Line 2 - a and b have same identity
+: Line 3 - a and b do not have same identity
+: Line 4 - a and b do not have same identity
+
+** Precedence
+1. ~**~ Exponentiation
+2. ~~ + -~ Complement, unary plus and minus (method names for the last
+   two are +@ and -@)
+3. ~* / % //~ Multiply, divide, modulo and floor division
+4. ~+ -~ Addition and subtraction
+5. ~>> <<~ Right and left bitwise shift
+6. ~&~ Bitwise 'And'
+7. ~^ |~ Bitwise exclusive `OR' and regular `OR'
+8. ~<= < > >=~ Comparison operators
+9. ~<> == !=~ Equality operators
+10. ~= %= /= //= -= += *= **=~ Assignment operators
+11. ~is is not~ Identity operators
+12. ~in not in~ Membership operators
+13. ~not or and~ Logical operators
+
