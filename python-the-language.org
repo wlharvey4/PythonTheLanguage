@@ -1,4 +1,11 @@
-#+TEXINFO_FILENAME:python.info
+# -*- fill-column: 79 -*-
+
+#+TITLE: Python the Language
+#+AUTHOR: WLHarvey4
+#+DATE: <2018-12-14 Fri 11:07>
+#+MACRO: version 0.2.0
+
+#+TEXINFO_FILENAME:python-the-language.info
 #+TEXINFO_CLASS: info
 #+TEXINFO_HEADER:
 #+TEXINFO_POST_HEADER:
@@ -9,10 +16,6 @@
 #+TEXINFO_DIR_DESC:Python the Language
 #+TEXINFO_PRINTED_TITLE: Python the Language
 #+OPTIONS: H:4
-#+TITLE: Python the Language
-#+AUTHOR: WLHarvey4
-#+DATE: 2018-12-06
-#+MACRO: version 0.1
 
 * Keywords
 - False
@@ -223,4 +226,131 @@ else:
 11. ~is is not~ Identity operators
 12. ~in not in~ Membership operators
 13. ~not or and~ Logical operators
+
+* Data
+
+** Data Model
+:CI:
+#+CINDEX: data model
+#+CINDEX: objects as data
+:END:
+
+*** Objects --- Identity • Type • Value
+:CI:
+#+CINDEX: identity
+#+CINDEX: type
+#+CINDEX: value
+#+CINDEX: ~is~ operator
+#+CINDEX: ~id()~ function
+#+CINDEX: ~type()~ function
+#+CINDEX: garbage collection
+:END:
+
+/Objects/ are Python’s  abstraction for *data*.  All data  in a Python
+program is represented by objects or by relations between objects.
+Every object has an:
+
+ - identity :: immutable; an object's place in memory
+   - ~is~ :: operator to compare the identity of two objects
+   - ~id()~  :: function that returns an integer representing
+                      the object's identity.
+ - type :: determines the operations that the object supports, and the
+           possible values for objects of that type.
+   - ~type()~ :: function returns an object's type (an object itself);
+                 type is immutable
+ - value :: values can be either mutable or immutable, which is
+            determined by its type.  Numbers, strings, and tuples are
+            /immutable/, while dictionaries and lists are /mutable/.
+
+Objects are nevery explicitly destroyed; rather, they are
+garbage-collected when they become unreachable.
+
+*** Container Objects
+:CI:
+#+CINDEX: container objects
+#+CINDEX: containers
+#+CINDEX: containers, mutability
+:END:
+
+/Container objects/ are objects that contain references to other
+objects.  Examples are:
+ - tuples
+ - lists
+ - dictionaries
+
+The references are part of a container’s value.  When referring to the
+/mutability/ of a container, the identities of the immediately
+contained objects are implied.  Thus, if an immutable container (like
+a tuple) contains a reference to a mutable object, its value changes
+if that mutable object is changed.
+
+** Type Hierarchy
+A discussion of the types built into Python.
+
+*** None
+ - ~None~ :: single object with a single value, accessed through the
+             name ~None~.  It signifies /the absence of a value/,
+             i.e., it would be returned from a function that did not
+             explicitly return anything.  It's *truth* value is
+             /false/.
+
+*** NotImplemented
+ - ~NotImplemented~ :: single object with a single value, accessed
+      through the name ~NotImplemented~.  Numeric methods and rich
+      comparison methods should return this value if they do not
+      implement the operation for the operands provided.  It's *truth*
+      value is /true/.
+
+*** Ellipsis
+ - ~Ellipsis~ :: single  object with a single  value, accessed through
+                 the literal ... or the name ~Ellipsis~.  It's *truth*
+                 value is /true/.
+
+*** ~numbers.Number~
+These types are created by numeric literals and returned as results by
+arithmetic operators and arithmetic built-in functions.  They are
+immutable.  Python distinguishes between integers, floating point
+numbers, and complex numbers.
+
+**** ~numbers.Integral~
+These are integers.  There are two types:
+
+***** Integers ~int~
+These represent numbers in an unlimited range, subject to available
+(virtual) memory only.
+
+***** Booleans ~bool~
+These represent the truth values ~False~ and ~True~.  The Boolean type is a
+subtype of the integer type, and Boolean values behave like the values 0 and 1,
+respectively, in almost all contexts, the exception being that when converted
+to a string, the strings "False" or "True" are returned, respectively.
+
+**** ~numbers.Real~ • Float
+These represent machine-level double precision floating point numbers.  Python
+does not support single-precision floating point numbers;
+
+**** ~numbers.Complex~ • Complex
+These represent complex numbers as a pair of machine-level double precision
+floating point numbers.  The real and imaginary parts of a complex number z can
+be retrieved through the read-only attributes:
+ - ~z.real~
+ - ~z.imag~
+
+*** Sequences
+
+*** Sets
+
+*** Mappings
+
+*** Callable
+
+*** Modules
+
+*** Custom
+
+*** Class Instance
+
+*** I/O Objects
+
+*** Internal
 
