@@ -2,8 +2,8 @@
 
 #+TITLE: Python the Language
 #+AUTHOR: WLHarvey4
-#+DATE: <2018-12-15 Sat 12:21>
-#+MACRO: version 0.2.1
+#+DATE: <2018-12-15 Sat 13:27>
+#+MACRO: version 0.2.2
 
 #+TEXINFO_FILENAME:python-the-language.info
 #+TEXINFO_CLASS: info
@@ -450,19 +450,183 @@ used to build Python supports C ~long long~, or, on Windows, ~__int64~.
             add initial items to the array.
        - array.typecodes :: a string with all available type codes.
 
-*** Sets
+*** Set Types
+:CI:
+#+CINDEX: sets
+#+CINDEX: frozen sets
+:END:
+    Sets represent unordered, finite sets of unique, immutable objects.  They
+    cannot be indexed by any subscript.  They can be iterated over.
+     - ~len()~ :: returns the number of items in a set. 
+
+    Common uses for sets are:
+     - fast membership testing
+     - removing duplicates from a sequence
+     - computing mathematical operations such as intersection, union,
+       difference, and symmetric difference
+
+    There are currently two intrinsic set types:
+
+**** Sets
+     These represent a mutable set.
+      - ~set()~ :: constructor
+
+**** Frozen Sets
+     These represent an immutable set.  They are hashable, and therefore can be
+     used again as an element of another set, or as a dictionary key.
+      - ~frozenset()~ :: constructor
 
 *** Mappings
+    Mappings represent finite sets of objects indexed by arbitrary index sets.
 
+     - ~a[k]~ :: selects the item indexed by ~k~ from the mapping ~a~
+     - ~len()~ :: returns the number of items in a mapping
+
+    There is currently a single intrinsic mapping type:
+
+**** Dictionaries
+     Dictionaries represent finite sets of objects indexed by nearly arbitrary
+     values.  The only types of values not acceptable as keys are values
+     containing lists or dictionaries or other mutable types that are compared
+     by value rather than by object identity because the efficient
+     implementation of dictionaries requires a key’s hash value to remain
+     constant.  They are mutable.
+      - ~{ ... }~ :: dictionary constructor
+
+     The [[https://docs.python.org/3/library/collections.html#module-collections][collections]] module provides additional mapping types.
 *** Callable
-
+:CI:
+#+CINDEX: functions, user-defined, callable
+#+CINDEX: functions, built-in, callable
+#+CINDEX: functions, generator, callable
+#+CINDEX: functions, coroutine, callable
+#+CINDEX: methods, instance, callable
+#+CINDEX: methods, build-in, callable
+#+CINDEX: classes, callable
+#+CINDEX: instance, class, callable
+:END:
+    These are the types to which the function call operation (see section
+    Calls) can be applied.  (A call calls a callable object (e.g., a function)
+    with a possibly empty series of arguments.)
+**** User-defined functions
+     A user-defined function object is created by a function definition.  It
+     should be called with an argument list containing the same number of items
+     as the function’s formal parameter list.
+**** Instance methods
+     An instance method object combines a class, a class instance and any
+     callable object (normally a user-defined function).
+**** Generator functions
+     A /generator function/ is a function or method which uses the ~yield~
+     statement.  Such a function, when called, always returns an iterator
+     object which can be used to execute the body of the function:
+      - calling the iterator’s ~iterator.__next__()~ method will cause the
+        function to execute until it provides a value using the ~yield~ statement.
+      - When the function executes a ~return~ statement or falls off the end, a
+        ~StopIteration~ exception is raised and the iterator will have reached
+        the end of the set of values to be returned.
+**** Coroutine functions
+     A /coroutine function/ is a function or method which is defined using
+     ~async def~.  Such a function, when called, returns a ~coroutine~ object.
+      - ~coroutine~ :: Coroutines is a more generalized form of
+                       subroutines. Subroutines are entered at one point and
+                       exited at another point. Coroutines can be entered,
+                       exited, and resumed at many different points. They can
+                       be implemented with the async def statement.
+**** Asynchronous generator functions
+     An /asynchronous generator function/ is function or method which is
+     defined using ~async def~ and which uses the ~yield~ statement.  Such a
+     function, when called, returns an ~asynchronous iterator object~ which can
+     be used in an ~async for~ statement to execute the body of the function.
+**** Built-in functions
+     A built-in function object is a wrapper around a C function.  Examples of
+     built-in functions are ~len()~ and ~math.sin()~.  The number and type of
+     the arguments are determined by the C function.
+**** Built-in methods
+     This is really a different disguise of a built-in function, this time
+     containing an object passed to the C function as an implicit extra
+     argument.  An example of a built-in method is ~alist.append()~, assuming
+     ~alist~ is a list object.
+**** Classes
+     Classes are callable.  These objects normally act as factories for new
+     instances of themselves, but variations are possible for class types that
+     override ~__new__()~.  The arguments of the call are passed to ~__new__()~
+     and, in the typical case, to ~__init__()~ to initialize the new instance.
+**** Class Instances
+     Instances of arbitrary classes can be made callable by defining a
+     ~__call__()~ method in their class.
 *** Modules
+    Modules are a basic organizational unit of Python code.
+**** Creating Modules
+     Modules are created using the:
+      - import system :: invoked either by
+        * the ~import~ statement; or
+        * calling functions such as:
+          - ~importlib.import_module()~; and
+          - built-in ~__import__()~
+**** Module Namespace
+     A module object has a namespace implemented by a dictionary object
+      + this is the dictionary referenced by the ~__globals__~ attribute of
+       functions defined in the module
+      + Attribute references are translated to lookups in this dictionary,
+      + e.g., ~m.x~ is equivalent to ~m.__dict__["x"]~.
+      + Attribute assignment updates the module’s namespace dictionary, e.g.,
+        ~m.x = 1~ is equivalent to ~m.__dict__["x"] = 1~.
+*** Custom Classes
+    Custom class types are typically created by class definitions.  A class has
+    a namespace implemented by a dictionary object.  Class attribute references
+    are translated to lookups in this dictionary,
+     + e.g., ~C.x~ is translated to ~C.__dict__["x"]~
+     + When the attribute name is not found there, the attribute search
+       continues in the base classes.
 
-*** Custom
+    When a class attribute reference (for class ~C~, say) would yield a class
+    method object, it is transformed into an instance method object whose
+    ~__self__~ attribute is ~C~.
 
+    When it would yield a static method object, it is transformed into the
+    object wrapped by the static method object.
 *** Class Instance
-
+    A class instance is created by calling a class object.  A class instance
+    has a namespace implemented as a dictionary which is the first place in
+    which attribute references are searched.  When an attribute is not found
+    there, and the instance’s class has an attribute by that name, the search
+    continues with the class attributes. If a class attribute is found that is
+    a user-defined function object, it is transformed into an instance method
+    object whose ~__self__~ attribute is the instance.  If no class attribute
+    is found, and the object’s class has a ~__getattr__()~ method, that is
+    called to satisfy the lookup.
 *** I/O Objects
+    A file object represents an open file.  Various shortcuts are available to
+    create file objects:
+     - ~open()~ built-in function
+     - ~os.open()~
+     - ~os.fdopen()~
+     - ~makefile()~ method of socket objects
 
+    The objects are initialized to file objects corresponding to the
+    interpreter’s
+     - ~sys.stdin~ --- standard input
+     - ~sys.stdout~ --- standard output
+     - ~sys.stderr~ --- standard error
+
+    They are all open in text mode and therefore follow the interface defined
+    by the ~io.TextIOBase~ abstract class.
 *** Internal
+    A few types used internally by the interpreter are exposed to the user.
+**** Code objects
+     Code objects represent byte-compiled executable Python code, or bytecode.
+**** Frame objects
+     Frame objects represent execution frames.
+**** Traceback objects
+     Traceback objects represent a stack trace of an exception.
+**** Slice objects
+     Slice objects are used to represent slices for ~__getitem__()~ methods.
+     They are also created by the built-in ~slice()~ function.
+**** Static method objects
+     Static method objects provide a way of defeating the transformation of
+     function objects to method objects described above.
+**** Class method objects
+     A class method object, like a static method object, is a wrapper around
+     another object that alters the way in which that object is retrieved from
+     classes and class instances.
 
