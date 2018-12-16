@@ -2,8 +2,8 @@
 
 #+TITLE: Python the Language
 #+AUTHOR: WLHarvey4
-#+DATE: <2018-12-15 Sat 13:27>
-#+MACRO: version 0.2.2
+#+DATE: <2018-12-16 Sun 15:09>
+#+MACRO: version 0.2.3
 
 #+TEXINFO_FILENAME:python-the-language.info
 #+TEXINFO_CLASS: info
