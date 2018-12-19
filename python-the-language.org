@@ -3,7 +3,7 @@
 #+TITLE: Python the Language
 #+AUTHOR: WLHarvey4
 #+DATE: <2018-12-16 Sun 15:09>
-#+MACRO: version 0.2.3
+#+MACRO: version 0.2.4
 
 #+TEXINFO_FILENAME:python-the-language.info
 #+TEXINFO_CLASS: info
@@ -24,6 +24,8 @@
 - and
 - as
 - assert
+- async
+- await
 - break
 - class
 - continue
@@ -814,7 +816,9 @@ used to build Python supports C ~long long~, or, on Windows, ~__int64~.
 
 *** Implicit Line Joining Rules
     Expressions in parentheses, square brackets or curly braces can be split
-    over more than one physical line without using backslashes.
+    over more than one physical line without using backslashes.  Implicitly
+    continued lines can carry comments.  The indentation of the continuation
+    lines is not important.  Blank continuation lines are allowed.
 
 #+BEGIN_EXPORT  texinfo
 @tex
@@ -835,10 +839,169 @@ month_names = [`Januari', `Februari', `Maart',      # These are the
 @end tex
 #+END_EXPORT
 
-** Comments
-   A comment starts with a hash character (#) that is not part of a string
-   literal, and ends at the end of the physical line.  A comment signifies the
-   end of the logical line unless the implicit line joining rules are invoked.
-   A line ending in a backslash cannot carry a comment.  A backslash does not
-   continue a comment.
+*** Blank Lines
+    + A logical line that contains only spaces, tabs, formfeeds and possibly a
+      comment, is ignored (i.e., no NEWLINE token is generated).
+*** Comments
+    A comment starts with a hash character (#) that is not part of a string
+    literal, and ends at the end of the physical line.  A comment signifies the
+    end of the logical line unless the implicit line joining rules are invoked.
+    A line ending in a backslash cannot carry a comment.  A backslash does not
+    continue a comment.
+*** Indentation
+    Leading whitespace (spaces and tabs) at the beginning of a logical line is
+    used to compute the indentation level of the line, which in turn is used to
+    determine the grouping of statements.
+**** Tabs
+     Tabs are replaced by spaces to produce groups of eight.  The total number
+     of spaces preceding the first non-blank character then determines the
+     line’s indentation.
+**** TabError
+     Indentation is rejected as inconsistent if a source file mixes tabs and
+     spaces in a way that makes the meaning dependent on the worth of a tab in
+     spaces; a ~TabError~ is raised in that case.
+**** Formfeed
+     A formfeed character may be present at the start of the line; it will be
+     ignored for the indentation calculations above. Formfeed characters
+     occurring elsewhere in the leading whitespace have an undefined effect
+**** ~INDENT~ and ~DEDENT~ Tokens
+     The indentation levels of consecutive lines are used to generate ~INDENT~
+     and ~DEDENT~ tokens, using a stack, as follows.
+***** Zero
+      Before the first line of the file is read, a single zero is pushed on the
+      stack; this will never be popped off again.
+***** Numbers Pushed On
+      The numbers pushed on the stack will always be strictly increasing from
+      bottom to top.  At the beginning of each logical line, the line’s
+      indentation level is compared to the top of the stack. If it is equal,
+      nothing happens. If it is larger, it is pushed on the stack, and one
+      ~INDENT~ token is generated.
+***** Numbers Pushed Off
+      If it is smaller, it must be one of the numbers occurring on the stack;
+      all numbers on the stack that are larger are popped off, and for each
+      number popped off a ~DEDENT~ token is generated.
+***** End Of File
+      At the end of the file, a ~DEDENT~ token is generated for each number
+      remaining on the stack that is larger than zero.
+** Tokens
+   - ~NEWLINE~
+   - ~INDENT~
+   - ~DEDENT~
+   - ~IDENTIFIERS~
+   - ~KEYWORDS~
+   - ~LITERALS~
+   - ~OPERATORS~
+   - ~DELIMITERS~
+*** Identifiers
+    Also referred to as /names/.
 
+    Within the ASCII range (U+0001..U+007F), the valid characters for
+    identifiers are the same as in Python 2.x: the uppercase and lowercase
+    letters A through Z, the underscore _ and, except for the first character,
+    the digits 0 through 9.
+
+    Python 3.0 introduces additional characters from outside the ASCII range
+    (see [[https://www.python.org/dev/peps/pep-3131][PEP 3131]]).
+
+    Identifiers are unlimited in length. Case is significant.
+*** Keywords
+    Also referred to as /reserved words/.
+
+    Reserved words cannot be used as ordinary identifiers.
+*** Reserved Classes of Identifiers
+    Certain classes of identifiers (besides keywords) have special
+    meanings. These classes are identified by the patterns of leading and
+    trailing underscore characters:
+
+    - ~_*~ :: These identifiers are not imported by the statement ~from module
+              import *~.
+    - ~__*__~ :: System-defined names.  These names are defined by the
+                 interpreter and its implementation (including the standard
+                 library).  Current system names are discussed in the [[https://docs.python.org/3/reference/datamodel.html#specialnames][Special
+                 method names]] section and elsewhere.
+    - ~__*~ :: Class-private names.  Names in this category, when used within
+               the context of a class definition, are re-written to use a
+               mangled form to help avoid name clashes between “private”
+               attributes of base and derived classes.
+** Literals
+   Literals are notations for constant values of some built-in types.
+*** Bytes Literals
+    Whitespace is not allowed between the bytesprefix and the rest of the
+    literal.  They can be enclosed in matching single quotes (') or double
+    quotes ("). They can also be enclosed in matching groups of three single or
+    double quotes.  The backslash (\) character is used to escape characters
+    that otherwise have a special meaning, such as newline, backslash itself,
+    or the quote character.
+
+    Bytes literals are always prefixed with 'b' or 'B'; they produce an
+    instance of the ~bytes~ type instead of the ~str~ type. They may only
+    contain ASCII characters; bytes with a numeric value of 128 or greater must
+    be expressed with escapes.
+*** String Literals
+    Whitespace is not allowed between the stringprefix and the rest of the
+    literal.  They can be enclosed in matching single quotes (') or double
+    quotes ("). They can also be enclosed in matching groups of three single or
+    double quotes.  The backslash (\) character is used to escape characters
+    that otherwise have a special meaning, such as newline, backslash itself,
+    or the quote character.
+*** Raw Strings
+    Both string and bytes literals may optionally be prefixed with a letter 'r'
+    or 'R'; such strings are called /raw strings/ and treat backslashes as
+    literal characters.  As a result, in string literals, '\U' and '\u' escapes
+    in raw strings are not treated specially.
+
+    *New in version 3.3:* The 'rb' prefix of raw bytes literals has been added
+    as a synonym of 'br'.
+*** Formatted String Literals
+    A string literal with 'f' or 'F' in its prefix is a formatted string
+    literal; the 'f' may be combined with 'r', but not with 'b' or 'u',
+    therefore raw formatted strings are possible, but formatted bytes literals
+    are not.
+
+    In triple-quoted literals, unescaped newlines and quotes are allowed (and
+    are retained), except that three unescaped quotes in a row terminate the
+    literal.
+
+    Unless an 'r' or 'R' prefix is present, escape sequences in string and
+    bytes literals are interpreted according to rules similar to those used by
+    Standard C.
+    - ~\newline~ :: ignored
+    - ~\\~ :: backslash
+    - ~\'~ :: single quote
+    - \"~ :: double quote
+    - ~\a~ :: ~BEL~
+    - ~\b~ :: ~BS~
+    - ~\f~ :: ~FF~
+    - ~\n~ :: ~LF~
+    - ~\r~ :: ~CR~
+    - ~\t~ :: ~TAB~
+    - ~\v~ :: ~VT~
+    - ~\ooo~ :: char with octal value ~ooo~
+    - ~\xhh~ :: char with hex value ~hh~
+
+    Escape sequences only recognized in string literals are:
+    - ~\N{name}~ :: Character named name in the Unicode database
+    - ~\uxxxx~ :: char with 16-bit hex value ~xxxx~
+    - ~\Uxxxxxxxx~ :: char with 32-bit hex value ~xxxxxxxx~
+*** Unrecognized Escape Sequences
+    All unrecognized escape sequences are left in the string unchanged, i.e.,
+    the backslash is left in the result. (This behavior is useful when
+    debugging: if an escape sequence is mistyped, the resulting output is more
+    easily recognized as broken.) It is also important to note that the escape
+    sequences only recognized in string literals fall into the category of
+    unrecognized escapes for bytes literals.
+
+    *Changed in version 3.6*: Unrecognized escape sequences produce a
+    ~DeprecationWarning~. In some future version of Python they will be a
+    ~SyntaxError~.
+*** Raw Strings and Backslashes
+    Even in a raw literal, quotes can be escaped with a backslash, but the
+    backslash remains in the result;
+
+    A raw literal cannot end in a single backslash (since the backslash would
+    escape the following quote character).
+
+    Note also that a single backslash followed by a newline is interpreted as
+    those two characters as part of the literal, not as a line continuation.
+*** Numeric Literals
+***
