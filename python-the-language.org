@@ -2,8 +2,8 @@
 
 #+TITLE: Python the Language
 #+AUTHOR: WLHarvey4
-#+DATE: <2018-12-14 Fri 11:07>
-#+MACRO: version 0.2.0
+#+DATE: <2018-12-18 Tue 23:44>
+#+MACRO: version 0.2.1
 
 #+TEXINFO_FILENAME:python-the-language.info
 #+TEXINFO_CLASS: info
@@ -354,3 +354,81 @@ be retrieved through the read-only attributes:
 
 *** Internal
 
+* Syntax
+  - Lexical analysis :: The lexical analyzer reads source code and creates a
+       stream of tokens that are fed into the parser, which runs the program.
+       This section describes how the lexical analyzer breaks a file's contents
+       into tokens.
+
+** Source Encoding---Unicode UTF-8
+:CI:
+#+CINDEX: Unicode
+#+CINDEX: source encoding
+#+CINDEX: UTF-8
+:END:
+   The lexical analyzer reads source code as Unicode code points; the source
+   encoding, by default, is UTF-8.  The source file can give an encoding
+   declaration on the first or second line, as:
+   : # -*- coding: <encoding-name> -*-
+   which must be a comment line that matches the regular expression:
+   : coding[=:]\s*([-\w.]+)
+   If an encoding is declared, the encoding name must be recognized by Python.
+
+** Lines
+
+*** Logical Lines
+:CI:
+#+CINDEX: logical line
+:END:
+    A Python program is divided into logical lines.  The end of logical line is
+    represented by the token ~<NEWLINE>~.  A logical line is constructed from
+    one or more physical lines by following the explicit or implicit line
+    joining rules.
+
+*** Physical Lines
+:CI:
+#+CINDEX: physical line
+:END:
+    A physical line is a sequence of characters terminated by an end-of-line
+    sequence---the Unix form using ASCII ~LF~ (linefeed), the Windows form
+    using the ASCII sequence ~CR LF~ (return followed by linefeed), or the old
+    Macintosh form using the ASCII ~CR~ (return) character---or end of input.
+
+*** Explicit Line Joining Rules
+    Two or more physical lines may be joined into logical lines using backslash
+    characters (~\~), according to the following rule:
+
+    When a physical line ends in a backslash that is not part of a string
+    literal or comment, it is joined with the following forming a single
+    logical line, deleting the backslash and the following end-of-line
+    character.
+
+*** Implicit Line Joining Rules
+    Expressions in parentheses, square brackets or curly braces can be split
+    over more than one physical line without using backslashes.
+
+#+BEGIN_EXPORT  texinfo
+@tex
+\bigskip\hrule height 1pt \relax\bigskip
+@end tex
+#+END_EXPORT
+-----
+#+BEGIN_EXAMPLE
+month_names = [`Januari', `Februari', `Maart',      # These are the
+               `April',   `Mei',      `Juni',       # Dutch names
+               `Juli',    `Augustus', `September',  # for the months
+               `Oktober', `November', `December']   # of the year
+#+END_EXAMPLE
+-----
+#+BEGIN_EXPORT texinfo
+@tex
+\bigskip\hrule height 1pt\relax\bigskip
+@end tex
+#+END_EXPORT
+
+** Comments
+   A comment starts with a hash character (#) that is not part of a string
+   literal, and ends at the end of the physical line.  A comment signifies the
+   end of the logical line unless the implicit line joining rules are invoked.
+   A line ending in a backslash cannot carry a comment.  A backslash does not
+   continue a comment.
