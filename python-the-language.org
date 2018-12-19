@@ -2,8 +2,8 @@
 
 #+TITLE: Python the Language
 #+AUTHOR: WLHarvey4
-#+DATE: <2018-12-18 Tue 23:44>
-#+MACRO: version 0.2.1
+#+DATE: <2018-12-16 Sun 15:09>
+#+MACRO: version 0.2.3
 
 #+TEXINFO_FILENAME:python-the-language.info
 #+TEXINFO_CLASS: info
@@ -130,7 +130,7 @@ as strings, lists, or tuples.
                 the specified sequence and false otherwise.
 
 #+NAME: membership
-#+BEGIN_SRC python -n :results output :tangle membership.py :exports both
+#+BEGIN_SRC python -n :results output :tangle membership.py :exports both :eval no-export
 
   a = 10
   b = 20
@@ -175,7 +175,7 @@ Identity operators compare the memory locations of two objects.
                not equal to ~id(y)~.
 
 #+NAME: identity
-#+BEGIN_SRC python -n :results output :exports both :tangle identity.py
+#+BEGIN_SRC python -n :results output :exports both :tangle identity.py :eval no-export
 
 #!/usr/bin/python3
 
@@ -306,7 +306,7 @@ A discussion of the types built into Python.
                  the literal ... or the name ~Ellipsis~.  It's *truth*
                  value is /true/.
 
-*** ~numbers.Number~
+*** numbers.Number
 These types are created by numeric literals and returned as results by
 arithmetic operators and arithmetic built-in functions.  They are
 immutable.  Python distinguishes between integers, floating point
@@ -337,22 +337,431 @@ be retrieved through the read-only attributes:
  - ~z.imag~
 
 *** Sequences
+:CI:
+#+CINDEX: select, sequence
+#+CINDEX: slice, sequence
+#+CINDEX: slice, extended, sequence
+:END:
+Sequences represent finite ordered sets indexed by non-negative numbers.
 
-*** Sets
+ - ~len()~ :: function that returns the number of items of a sequence (zero
+              indexed).
+ - selecting :: ~a[i]~ selects item ~i~ of sequence ~a~
+ - slicing :: ~a[i:j]~ selects all items with index k such that ~i <= k < j~.
+ - extended slicing :: ~a[i:j:k]~ selects all items of ~a~ with index ~x~ where
+      ~x = i + n*k~, ~n >= 0~ and ~i <= x < j~.
+**** Immutable Sequences
+     An object of an immutable sequence type cannot change once it is created.
+***** Strings
+      A sequence of values that represent Unicode code points.  All the code
+      points in the range =U+0000 - U+10FFFF= can be represented in a string.
+      There is no ~char~ type.
+      - ~ord()~ :: converts a code point from its string form to an integer in
+                   the range =0 - 10FFFF=
+      - ~chr()~ :: converts an integer in the range =0 - 10FFFF= to the
+                   corresponding length 1 string object.
+      - ~str.encode()~ :: used to convert a ~str~ to ~bytes~ using the given
+                          text encoding
+      - ~bytes.encode()~ :: used to convert ~bytes~ to ~str~ using the given
+           text encoding
+***** Tuples
+      Tuples of two or more items are formed by comma-separated lists of
+      expressions.  The items of a tuple are arbitrary Python objects.  A tuple
+      of one item (a /singleton/) can be formed by affixing a comma to an
+      expression.  An empty tuple can be formed by an empty pair of
+      parentheses.
+***** Bytes
+      A ~bytes~ object is an immutable array.  The items are 8-bit bytes,
+      represented by integers in the range ~0 <= x < 256~.  To construct a
+      ~bytes~ object, use:
+      - ~b'abc'~ :: ~bytes~ literal
+      - ~bytes()~ :: ~bytes~ constructor
+      - ~decode()~ :: method to convert a ~bytes~ object to a string
+**** Mutable Sequences
+     Mutable sequences can be changed after they are created.  There are two
+      built-in mutable sequence types.  The extension module ~array~ provides
+      an additional example of a mutable sequence type.
+***** Lists
+      Lists are formed by placing a comma-separated list of expressions in
+      square brackets.  The items of a list are arbitrary Python objects.
+***** Byte Arrays
+      A mutable array.  Provide the same interface and functionality as
+      immutable ~bytes~ object.  Since a ~bytearray~ is mutable, it is also
+      unhashable.
+      - ~bytearray()~ :: constructor
+***** Arrays
+      The ~array~ extension module provides efficient arrays of basic numeric
+      values:
+       + characters
+       + integers
+       + floating point numbers
+
+      Arrays are /sequence types/ and behave very much like lists, except that
+      the type of objects stored in them is constrained.  The type is specified
+      at object creation time by using a type code, which is a single
+      character.
+****** Sequence Operations
+      Array objects support the ordinary sequence operations of
+       + indexing
+       + slicing
+       + concatenation
+       + multiplication
+****** Buffer Interface
+       Array objects also implement the buffer interface, and may be used
+       wherever ~bytes~-like objects are supported.
+****** Slice Assignment
+      When using slice assignment, the assigned value must be an array object
+      with the same type code; in all other cases, ~TypeError~ is raised.
+****** Type Codes
+      The following type codes are defined:
+
+      | Type Code | C Type               | Python Type       | Min Size (bytes) | Notes  |
+      |-----------+----------------------+-------------------+------------------+--------|
+      | 'b'       | signed ~char~        | ~int~             |                1 |        |
+      | 'B'       | unsigned ~char~      | ~int~             |                1 |        |
+      | 'u'       | ~Py_UNICODE~         | Unicode character |                2 | [fn:1] |
+      | 'h'       | signed ~short~       | ~int~             |                2 |        |
+      | 'H'       | unsigned ~short~     | ~int~             |                2 |        |
+      | 'i'       | signed ~int~         | ~int~             |                2 |        |
+      | 'I'       | unsigned ~int~       | ~int~             |                2 |        |
+      | 'l'       | signed ~long~        | ~int~             |                4 |        |
+      | 'L'       | unsigned ~long~      | ~int~             |                4 |        |
+      | 'q'       | signed ~long long~   | ~int~             |                8 | [fn:2] |
+      | 'Q'       | unsigned ~long long~ | ~int~             |                8 | [fn:2] |
+      | 'f'       | ~float~              | ~float~           |                4 |        |
+      | 'd'       | ~double~             | ~float~           |                8 |        |
+      |-----------+----------------------+-------------------+------------------+--------|
+****** Standard Library Reference
+       [[https://docs.python.org/3/library/array.html#module-array][array]]
+
+[fn:1] The 'u' type code corresponds to Python’s obsolete unicode character
+(~Py_UNICODE~ which is ~wchar_t~).  Depending on the platform, it can be 16 bits or
+32 bits.  'u' will be removed together with the rest of the ~Py_UNICODE~ API in
+4.0.
+[fn:2] The 'q' and 'Q' type codes are available only if the platform C compiler
+used to build Python supports C ~long long~, or, on Windows, ~__int64~.
+****** Defined Array Types
+       - class array.array(/typecode/[, /initializer/]) :: A new array whose
+            items are restricted by /typecode/, and initialized from the
+            optional /initializer/ value, which must be a list, a ~bytes~-like
+            object, or iterable over elements of the appropriate type.  If
+            given a list or string, the initializer is passed to the new
+            array’s ~fromlist()~, ~frombytes()~, or ~fromunicode()~ method to
+            add initial items to the array.
+       - array.typecodes :: a string with all available type codes.
+
+*** Set Types
+:CI:
+#+CINDEX: sets
+#+CINDEX: frozen sets
+:END:
+    Sets represent unordered, finite sets of unique, immutable objects.  They
+    cannot be indexed by any subscript.  They can be iterated over.
+     - ~len()~ :: returns the number of items in a set. 
+
+    Common uses for sets are:
+     - fast membership testing
+     - removing duplicates from a sequence
+     - computing mathematical operations such as intersection, union,
+       difference, and symmetric difference
+
+    There are currently two intrinsic set types:
+
+**** Sets
+     These represent a mutable set.
+      - ~set()~ :: constructor
+
+**** Frozen Sets
+     These represent an immutable set.  They are hashable, and therefore can be
+     used again as an element of another set, or as a dictionary key.
+      - ~frozenset()~ :: constructor
 
 *** Mappings
+    Mappings represent finite sets of objects indexed by arbitrary index sets.
 
+     - ~a[k]~ :: selects the item indexed by ~k~ from the mapping ~a~
+     - ~len()~ :: returns the number of items in a mapping
+
+    There is currently a single intrinsic mapping type:
+
+**** Dictionaries
+     Dictionaries represent finite sets of objects indexed by nearly arbitrary
+     values.  The only types of values not acceptable as keys are values
+     containing lists or dictionaries or other mutable types that are compared
+     by value rather than by object identity because the efficient
+     implementation of dictionaries requires a key’s hash value to remain
+     constant.  They are mutable.
+      - ~{ ... }~ :: dictionary constructor
+
+     The [[https://docs.python.org/3/library/collections.html#module-collections][collections]] module provides additional mapping types.
 *** Callable
-
+:CI:
+#+CINDEX: functions, user-defined, callable
+#+CINDEX: functions, built-in, callable
+#+CINDEX: functions, generator, callable
+#+CINDEX: functions, coroutine, callable
+#+CINDEX: methods, instance, callable
+#+CINDEX: methods, build-in, callable
+#+CINDEX: classes, callable
+#+CINDEX: instance, class, callable
+:END:
+    These are the types to which the function call operation (see section
+    Calls) can be applied.  (A call calls a callable object (e.g., a function)
+    with a possibly empty series of arguments.)
+**** User-defined functions
+     A user-defined function object is created by a function definition.  It
+     should be called with an argument list containing the same number of items
+     as the function’s formal parameter list.
+**** Instance methods
+     An instance method object combines a class, a class instance and any
+     callable object (normally a user-defined function).
+**** Generator functions
+     A /generator function/ is a function or method which uses the ~yield~
+     statement.  Such a function, when called, always returns an iterator
+     object which can be used to execute the body of the function:
+      - calling the iterator’s ~iterator.__next__()~ method will cause the
+        function to execute until it provides a value using the ~yield~ statement.
+      - When the function executes a ~return~ statement or falls off the end, a
+        ~StopIteration~ exception is raised and the iterator will have reached
+        the end of the set of values to be returned.
+**** Coroutine functions
+     A /coroutine function/ is a function or method which is defined using
+     ~async def~.  Such a function, when called, returns a ~coroutine~ object.
+      - ~coroutine~ :: Coroutines is a more generalized form of
+                       subroutines. Subroutines are entered at one point and
+                       exited at another point. Coroutines can be entered,
+                       exited, and resumed at many different points. They can
+                       be implemented with the async def statement.
+**** Asynchronous generator functions
+     An /asynchronous generator function/ is function or method which is
+     defined using ~async def~ and which uses the ~yield~ statement.  Such a
+     function, when called, returns an ~asynchronous iterator object~ which can
+     be used in an ~async for~ statement to execute the body of the function.
+**** Built-in functions
+     A built-in function object is a wrapper around a C function.  Examples of
+     built-in functions are ~len()~ and ~math.sin()~.  The number and type of
+     the arguments are determined by the C function.
+**** Built-in methods
+     This is really a different disguise of a built-in function, this time
+     containing an object passed to the C function as an implicit extra
+     argument.  An example of a built-in method is ~alist.append()~, assuming
+     ~alist~ is a list object.
+**** Classes
+     Classes are callable.  These objects normally act as factories for new
+     instances of themselves, but variations are possible for class types that
+     override ~__new__()~.  The arguments of the call are passed to ~__new__()~
+     and, in the typical case, to ~__init__()~ to initialize the new instance.
+**** Class Instances
+     Instances of arbitrary classes can be made callable by defining a
+     ~__call__()~ method in their class.
 *** Modules
+    Modules are a basic organizational unit of Python code.
+**** Creating Modules
+     Modules are created using the:
+      - import system :: invoked either by
+        * the ~import~ statement; or
+        * calling functions such as:
+          - ~importlib.import_module()~; and
+          - built-in ~__import__()~
+**** Module Namespace
+     A module object has a namespace implemented by a dictionary object
+      + this is the dictionary referenced by the ~__globals__~ attribute of
+       functions defined in the module
+      + Attribute references are translated to lookups in this dictionary,
+      + e.g., ~m.x~ is equivalent to ~m.__dict__["x"]~.
+      + Attribute assignment updates the module’s namespace dictionary, e.g.,
+        ~m.x = 1~ is equivalent to ~m.__dict__["x"] = 1~.
+*** Custom Classes
+    Custom class types are typically created by class definitions.  A class has
+    a namespace implemented by a dictionary object.  Class attribute references
+    are translated to lookups in this dictionary,
+     + e.g., ~C.x~ is translated to ~C.__dict__["x"]~
+     + When the attribute name is not found there, the attribute search
+       continues in the base classes.
 
-*** Custom
+    When a class attribute reference (for class ~C~, say) would yield a class
+    method object, it is transformed into an instance method object whose
+    ~__self__~ attribute is ~C~.
 
+    When it would yield a static method object, it is transformed into the
+    object wrapped by the static method object.
 *** Class Instance
-
+    A class instance is created by calling a class object.  A class instance
+    has a namespace implemented as a dictionary which is the first place in
+    which attribute references are searched.  When an attribute is not found
+    there, and the instance’s class has an attribute by that name, the search
+    continues with the class attributes. If a class attribute is found that is
+    a user-defined function object, it is transformed into an instance method
+    object whose ~__self__~ attribute is the instance.  If no class attribute
+    is found, and the object’s class has a ~__getattr__()~ method, that is
+    called to satisfy the lookup.
 *** I/O Objects
+    A file object represents an open file.  Various shortcuts are available to
+    create file objects:
+     - ~open()~ built-in function
+     - ~os.open()~
+     - ~os.fdopen()~
+     - ~makefile()~ method of socket objects
 
+    The objects are initialized to file objects corresponding to the
+    interpreter’s
+     - ~sys.stdin~ --- standard input
+     - ~sys.stdout~ --- standard output
+     - ~sys.stderr~ --- standard error
+
+    They are all open in text mode and therefore follow the interface defined
+    by the ~io.TextIOBase~ abstract class.
 *** Internal
+    A few types used internally by the interpreter are exposed to the user.
+**** Code objects
+     Code objects represent byte-compiled executable Python code, or bytecode.
+**** Frame objects
+     Frame objects represent execution frames.
+**** Traceback objects
+     Traceback objects represent a stack trace of an exception.
+**** Slice objects
+     Slice objects are used to represent slices for ~__getitem__()~ methods.
+     They are also created by the built-in ~slice()~ function.
+**** Static method objects
+     Static method objects provide a way of defeating the transformation of
+     function objects to method objects described above.
+**** Class method objects
+     A class method object, like a static method object, is a wrapper around
+     another object that alters the way in which that object is retrieved from
+     classes and class instances.
+     
+* Execution
+
+** Program Structure
+:CI:
+#+CINDEX: program
+#+CINDEX: code block
+#+CINDEX: block of code
+#+CINDEX: execution frame
+:END:
+*** Program
+    - program :: is constructed from code blocks
+*** Code Block
+    - block :: is a piece of Python program text that is executed as a unit.
+      + module
+      + function body
+      + class definition
+      + command typed interactively
+      + script file (a file given as standard input to the interpreter or
+        specified as a command line argument to the interpreter)
+      + script command (a command specified on the interpreter command line
+        with the -c option)
+      + The string argument passed to the built-in functions ~eval()~ and
+        ~exec()~ is a code block.
+*** Execution Frame
+    - execution frame :: where a code block is executed.  A frame contains some
+         administrative information (used for debugging) and determines where
+         and how execution continues after the code block’s execution has
+         completed.
+
+** Naming and Binding
+   - name :: refers to an object; introduced by name binding operations.
+
+*** Name Binding
+    - formal parameters to functions
+    - ~import~ statements
+    - class and function definitions
+    - targets that are identifiers if occurring in an assignmetn
+    - ~for~ loop header
+    - ~as~ after a ~with~ statement or ~except~ clause
+    - ~from ... import *~ binds all names defined in the imported module,
+      except those beginning with an underscore.
+    - target occurring in a ~del~ statement is considered bound
+
+**** Where Binding Occurs
+     - where occurs :: Each assignment or import statement occurs within a
+                       block defined by a class or function definition or at
+                       the module level (the top-level code block).
+     - local variable :: If a name is bound in a block, it is a local variable
+                         of that block
+     - ~nonlocal~ or ~global~ declaration :: unless declared as nonlocal or
+          global
+     - global variable :: If a name is bound at the module level, it is a
+          global variable.
+     - module level :: The variables of the module code block are local and
+                       global.
+     - free variable :: a variable used in a code block but not defined there
+
+*** Name Resolution
+    Python lacks declarations and allows name binding operations to occur
+    anywhere within a code block.
+
+    Each occurrence of a name in the program text refers to the binding of that
+    name established by the following name resolution rules.
+
+    - scope :: defines the visibility of a name within a block
+      + local variable :: If a local variable is defined in a block, its scope
+                          includes that block.  If the definition occurs in a
+                          function block, the scope extends to any blocks
+                          contained within the defining one, unless a contained
+                          block introduces a different binding for the name.
+    - resolution :: When a name is used in a code block, it is resolved using
+                    the nearest enclosing scope.
+    - block environment :: The set of all such scopes visible to a code block
+         is called the block’s environment.
+    - ~NameError~ Exception :: the exception raised when a name is not found at
+         all.
+    - ~UnboundLocalError~ Exception :: the error raised when if the current
+         scope is a function scope, and the name refers to a local variable
+         that has not yet been bound to a value at the point where the name is
+         used.  This is a subclass of ~NameError~ exception.
+
+**** References to the Current Block
+     If a name binding operation occurs anywhere within a code block, all uses
+     of the name within the block are treated as references to the current
+     block.  This can lead to errors when a name is used within a block before
+     it is bound.  This rule is subtle.
+
+     The /local variables/ of a code block can be determined by scanning the
+     entire text of the block for name binding operations.
+
+**** Global Variables
+     - global statement :: If the ~global~ statement occurs within a block, all
+          uses of the name specified in the statement refer to the binding of
+          that name in the top-level namespace.  Names are resolved in the
+          top-level namespace by searching the global namespace, i.e. the
+          namespace of the module containing the code block, and the builtins
+          namespace, the namespace of the module ~builtins~.  The global
+          namespace is searched first.  If the name is not found there, the
+          builtins namespace is searched.  The ~global~ statement must precede
+          all uses of the name.  The ~global~ statement has the same scope as a
+          name binding operation in the same block. If the nearest enclosing
+          scope for a free variable contains a global statement, the free
+          variable is treated as a global.
+     - nonlocal statement :: The ~nonlocal~ statement causes corresponding names
+          to refer to previously bound variables in the nearest enclosing
+          function scope.  ~SyntaxError~ is raised at compile time if the given
+          name does not exist in any enclosing function scope.
+
+
+**** Module Namespace
+     The namespace for a module is automatically created the first time a module
+     is imported.
+
+     - ~__main__~ :: The main module for a script is always called ~__main__~.
+
+**** Class Definition Blocks • Arguments to exec and eval
+     These are special in the context of name resolution.
+
+     A class definition is an executable statement that may use and define
+     names.  These references follow the normal rules for name resolution
+
+     with an exception that /unbound local variables/ are looked up in the
+     global namespace.
+
+     The namespace of the class definition becomes the /attribute dictionary/
+     of the class.
+
+*** Builtins
+
+*** Dynamic Feature Interaction
+
+** Exceptions
 
 * Syntax
   - Lexical analysis :: The lexical analyzer reads source code and creates a
@@ -432,3 +841,4 @@ month_names = [`Januari', `Februari', `Maart',      # These are the
    end of the logical line unless the implicit line joining rules are invoked.
    A line ending in a backslash cannot carry a comment.  A backslash does not
    continue a comment.
+
