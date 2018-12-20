@@ -2,8 +2,8 @@
 
 #+TITLE: Python the Language
 #+AUTHOR: WLHarvey4
-#+DATE: <2018-12-16 Sun 15:09>
-#+MACRO: version 0.2.4
+#+DATE: <2018-12-19 Wed 20:36>
+#+MACRO: version 0.2.5
 
 #+TEXINFO_FILENAME:python-the-language.info
 #+TEXINFO_CLASS: info
@@ -1004,4 +1004,27 @@ month_names = [`Januari', `Februari', `Maart',      # These are the
     Note also that a single backslash followed by a newline is interpreted as
     those two characters as part of the literal, not as a line continuation.
 *** Numeric Literals
-***
+    There are three types of numeric literals: integers, floating point
+    numbers, and imaginary numbers.  Complex numbers can be formed by adding a
+    real number and an imaginary number.  Note that numeric literals do not
+    include a sign.  To create a negative literal, use the unary operator ~-~.
+*** Integer Literals
+    Integer literals are:
+    - decimal integer :: 123_456_789
+    - binary integer :: 0b0101 | 0B0101
+    - octal integer :: 0o123 | 0O123
+    - hex integer :: 0x10af | 0X10AF
+
+    There is no limit for the length of integer literals apart from what can be
+    stored in available memory.  Underscores can be used to group digits for
+    readability, and are ignored for determining value.
+*** Floating Point Literals
+    The integer and exponent parts are always interpreted using radix 10.  The
+    allowed range of floating point literals is implementation-dependent.
+    Underscores are supported for digit grouping.
+*** Imaginary Literals
+    An imaginary literal is a floating point literal followed by the letter
+    ~j|J~.  An imaginary literal yields a complex number with a real part of
+    0.0.  Complex numbers are represented as a pair of floating point numbers.
+    To create a complex number with a nonzero real part, add a floating point
+    number to it, e.g., (~3+4j~).
