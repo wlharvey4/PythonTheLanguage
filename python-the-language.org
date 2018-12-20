@@ -2,8 +2,8 @@
 
 #+TITLE: Python the Language
 #+AUTHOR: WLHarvey4
-#+DATE: <2018-12-19 Wed 20:36>
-#+MACRO: version 0.2.5
+#+DATE: <2018-12-19 Wed 20:49>
+#+MACRO: version 0.2.6
 
 #+TEXINFO_FILENAME:python-the-language.info
 #+TEXINFO_CLASS: info
@@ -229,6 +229,23 @@ else:
 12. ~in not in~ Membership operators
 13. ~not or and~ Logical operators
 
+* Delimiters
+  - ~( )~
+  - ~[ ]~
+  - ~{ }~
+  - ~'~
+  - ~: . ;~
+  - ~@~
+  - ~=~
+  - ~->~
+  - ~+= -= *= /= //= %= @= &= |= ^= >>= **=~
+
+  The augmented assignment operators serve lexically as delimiters, but also
+  perform an operation.
+
+  ~' " # \~ have special meaning in Python.
+
+  ~$ ? `~ are not used and their use outside of a string constitutes an error.
 * Data
 
 ** Data Model
@@ -1028,3 +1045,6 @@ month_names = [`Januari', `Februari', `Maart',      # These are the
     0.0.  Complex numbers are represented as a pair of floating point numbers.
     To create a complex number with a nonzero real part, add a floating point
     number to it, e.g., (~3+4j~).
+*** Ellipsis Literals
+    ~...~ :: A sequence of three periods has a special meaning as an ellipsis
+    literal.
