@@ -1,21 +1,29 @@
 # -*- fill-column: 79 -*-
 
 #+TITLE: Python the Language
+#+SUBTITLE: Version {{{version}}} {{{time(%F %R)}}}
 #+AUTHOR: WLHarvey4
-#+DATE: <2018-12-19 Wed 20:49>
-#+MACRO: version 0.2.6
+#+DATE: <2018-12-21 Fri 03:26>
+#+MACRO: version 0.2.7
 
 #+TEXINFO_FILENAME:python-the-language.info
 #+TEXINFO_CLASS: info
 #+TEXINFO_HEADER:
 #+TEXINFO_POST_HEADER:
-#+SUBTITLE: Version {{{version}}} {{{time(%F %R)}}}
 #+SUBAUTHOR:
 #+TEXINFO_DIR_CATEGORY:Python
 #+TEXINFO_DIR_TITLE:Python
 #+TEXINFO_DIR_DESC:Python the Language
 #+TEXINFO_PRINTED_TITLE: Python the Language
 #+OPTIONS: H:4
+
+#+LATEX_CLASS: report
+#+LATEX_CLASS_OPTIONS:
+#+LATEX_HEADER:
+#+LATEX_HEADER_EXTRA:
+#+DESCRIPTION:
+#+KEYWORDS:
+#+LATEX_COMPILER: pdflatex
 
 * Keywords
 - False
@@ -1048,3 +1056,55 @@ month_names = [`Januari', `Februari', `Maart',      # These are the
 *** Ellipsis Literals
     ~...~ :: A sequence of three periods has a special meaning as an ellipsis
     literal.
+
+* Import System
+  - module :: An *object* that serves as an organizational unit of Python code.
+              Modules have a *namespace* containing arbitrary Python
+              objects.  Modules are loaded into Python by the process of
+              *importing*.
+  - package :: A Python *module* which can contain submodules or recursively,
+               subpackages.  Technically, a *package* is a Python *module* with
+               an ~__path__~ attribute.
+
+
+  One module gains access to code from another module by the process of
+  /importing/ it.  There are several different mechanisms that can be used to
+  import code.
+  - ~import~ Statement :: combines a search for a named module using the
+       ~__import__()~ function, then binds the results of that search, the
+       return value of ~__import__()~, to a name in the local scope.
+  - ~builtins.__import__()~ :: a direct call can be made to ~__import__()~,
+       which will perform a search for a module; if a module is found, it
+       creates the module.  No name-binding operation occurs, however.
+  - ~importlib.import_module()~ :: may choose to bypass ~__import__()~ and use
+       its own solutions to implement import semantics.
+
+
+  - When a module is first imported, Python /searches/ for the module and if
+    found, it /creates a module object/ (see ~types.ModuleType()~),
+    initializing it.
+  - If the named module cannot be found, a ~ModuleNotFoundError~ is raised.
+  - Python implements various strategies to search for the named module when
+    the import machinery is invoked.
+  - These strategies can be modified and extended by using various /hooks/.
+
+** ~importlib~ Module
+   The [[https://docs.python.org/3/library/importlib.html#module-importlib][importlib module]] provides a rich API for interacting with the import
+   system.
+
+   The Standard Library ~importlib.import_module()~ provides a recommended,
+   simpler API than built-in ~__import__()~ for invoking the import machinery.
+
+** Packages
+   Python has only one type of module object, and all modules are of this type.
+   To help organize modules and provide a naming hierarchy, Python has a
+   concept of *packages*.
+
+   #+TEXINFO: @heading Packages and Modules Similar to File System
+   #+LATEX: \subsection*{Packages and Modules Similar to File System}
+   You can think of /packages/ as the directories on a file system and
+   /modules/ as files within directories, but don’t take this analogy too
+   literally since packages and modules need not originate from the file
+   system.  Like file system directories, /packages/ are organized
+   hierarchically, and /packages/ may themselves contain /subpackages/, as well
+   as regular /modules/.
