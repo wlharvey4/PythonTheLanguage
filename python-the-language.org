@@ -3,8 +3,8 @@
 #+TITLE: Python the Language
 #+SUBTITLE: Version {{{version}}} {{{time(%F %R)}}}
 #+AUTHOR: WLHarvey4
-#+DATE: <2018-12-21 Fri 03:26>
-#+MACRO: version 0.2.7
+#+DATE: <2018-12-22 Sat 07:02>
+#+MACRO: version 0.2.8
 
 #+TEXINFO_FILENAME:python-the-language.info
 #+TEXINFO_CLASS: info
@@ -1058,6 +1058,13 @@ month_names = [`Januari', `Februari', `Maart',      # These are the
     literal.
 
 * Import System
+:CI:
+#+CINDEX: import
+#+CINDEX: module
+#+CINDEX: package
+#+CINDEX: namespace
+#+CINDEX: @file{__PATH__} attribute
+:END:
   - module :: An *object* that serves as an organizational unit of Python code.
               Modules have a *namespace* containing arbitrary Python
               objects.  Modules are loaded into Python by the process of
@@ -1080,6 +1087,15 @@ month_names = [`Januari', `Februari', `Maart',      # These are the
        its own solutions to implement import semantics.
 
 
+:CI:
+#+CINDEX: module object
+#+CINDEX: @file{types.ModuleType()}
+#+CINDEX: hooks, import
+#+CINDEX: PEP 302
+#+CINDEX: PEP 420
+#+CINDEX: @file{sys.meta_path}
+#+CINDEX: namespace, package
+:END:
   - When a module is first imported, Python /searches/ for the module and if
     found, it /creates a module object/ (see ~types.ModuleType()~),
     initializing it.
@@ -1087,6 +1103,39 @@ month_names = [`Januari', `Februari', `Maart',      # These are the
   - Python implements various strategies to search for the named module when
     the import machinery is invoked.
   - These strategies can be modified and extended by using various /hooks/.
+  - The import system has been updated to fully implement the second phase of
+    [[https://www.python.org/dev/peps/pep-0302][PEP 302.]]
+  - There is no longer any implicit import machinery - the full import system
+    is exposed through [[https://docs.python.org/3/library/sys.html#sys.meta_path][sys.meta_path]].
+  - In addition, native namespace package support has been implemented (see [[https://www.python.org/dev/peps/pep-0420][PEP
+    420]]).
+
+
+:CI:
+#+CINDEX: @file{sys.meta_path}
+#+CINDEX: meta path finder object
+#+CINDEX: finder object
+#+CINDEX: loader object
+#+CINDEX: path entry finder object
+#+CINDEX: path entry hook
+:END:
+    + ~sys.meta_path~ :: A list of /meta path finder/ objects that have their
+         ~find_spec()~ methods called to see if one of the objects can find the
+         module to be imported.
+    + meta path finder object :: A /finder/ returned by a search of
+         ~sys.meta_path~.  Meta path finders are related to, but different
+         from [[https://docs.python.org/3/glossary.html#term-path-entry-finder][path entry finders]].
+    + finder object :: An object that tries to find the /loader/ for a module
+                       that is being imported.
+    + loader :: An object that loads a module.  It must define a method named
+                ~load_module()~.  See [[https://www.python.org/dev/peps/pep-0302][PEP 302]] for details and
+                [[https://docs.python.org/3/library/importlib.html#importlib.abc.Loader][importlib.abc.Loader]] for an abstract base class.
+    + path entry finder :: A finder returned by a callable on
+         ~sys.path_hooks~ (i.e. a path entry hook) which knows how to locate
+         modules given a path entry.
+    + path entry hook :: A callable on the ~sys.path_hook~ list which returns
+         a path entry finder if it knows how to find modules on a specific
+         path entry.
 
 ** ~importlib~ Module
    The [[https://docs.python.org/3/library/importlib.html#module-importlib][importlib module]] provides a rich API for interacting with the import
@@ -1108,3 +1157,30 @@ month_names = [`Januari', `Februari', `Maart',      # These are the
    system.  Like file system directories, /packages/ are organized
    hierarchically, and /packages/ may themselves contain /subpackages/, as well
    as regular /modules/.
+
+** Import Hooks --- PEP 302
+   There are two types of import hooks: Meta hooks and Path hooks.
+
+   - Meta Hooks :: called at the start of import processing, before any other
+                   import processing (so that meta hooks can override
+                   ~sys.path~ processing, frozen modules, or even built-in
+                   modules).  To register a meta hook, simply add the finder
+                   object to ~sys.meta_path~ (the list of registered meta
+                   hooks).
+   - Path Hooks :: called as part of ~sys.path~ (or ~package.__path__~)
+                   processing, at the point where their associated path item is
+                   encountered.  A path hook is registered by adding an
+                   importer factory to ~sys.path_hooks~ list.
+   - ~sys.path_hooks~ :: is a list of callables, which will be checked in
+        sequence to determine if they can handle a given path item.  The
+        callable is called with one argument, the path item.  The callable must
+        raise ~ImportError~ if it is unable to handle the path item, and return
+        an importer object if it can handle the path item.
+   - ~__path__~ :: If a module has a ~__path__~ attribute, the import mechanism
+                   will treat it as a package.  The ~__path__~ variable is used
+                   instead of ~sys.path~ when importing submodules of the
+                   package.
+* Concept Index
+  :PROPERTIES:
+  :index:    cp
+  :END:
