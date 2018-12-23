@@ -3,8 +3,8 @@
 #+TITLE: Python the Language
 #+SUBTITLE: Version {{{version}}} {{{time(%F %R)}}}
 #+AUTHOR: WLHarvey4
-#+DATE: <2018-12-22 Sat 07:02>
-#+MACRO: version 0.2.8
+#+DATE: <2018-12-22 Sat 17:25>
+#+MACRO: version 0.2.9
 
 #+TEXINFO_FILENAME:python-the-language.info
 #+TEXINFO_CLASS: info
@@ -1065,10 +1065,15 @@ month_names = [`Januari', `Februari', `Maart',      # These are the
 #+CINDEX: namespace
 #+CINDEX: @file{__PATH__} attribute
 :END:
-  - module :: An *object* that serves as an organizational unit of Python code.
-              Modules have a *namespace* containing arbitrary Python
-              objects.  Modules are loaded into Python by the process of
-              *importing*.
+  - module (informal) :: A file containing Python definitions and statements.
+       The module name is the file name without the suffix ~.py~.  Within the
+       module, the module's string name is available as the global variable
+       ~__name__~.  The statement ~import <module>~ enters the module name the
+       symbol table, and one can access the module's attributes using dot
+       notation.
+  - module (formal) :: An *object* that serves as an organizational unit of
+       Python code.  Modules have a *namespace* containing arbitrary Python
+       objects.  Modules are loaded into Python by the process of *importing*.
   - package :: A Python *module* which can contain submodules or recursively,
                subpackages.  Technically, a *package* is a Python *module* with
                an ~__path__~ attribute.
@@ -1137,6 +1142,59 @@ month_names = [`Januari', `Februari', `Maart',      # These are the
          a path entry finder if it knows how to find modules on a specific
          path entry.
 
+
+** Module Details
+:CI:
+#+CINDEX: executable statements in modules
+#+CINDEX: module initialization
+#+CINDEX: symbol table, modules
+#+CINDEX: import, module in module
+#+CINDEX: @code{importlib.reload()}
+:END:
+
+*** Executable Statements
+    A module can contain executable statements as well as function
+    definitions. These statements are intended to initialize the module. They
+    are executed only the first time the module name is encountered in an
+    import statement.  They are also run if the file is executed as a script.
+    In fact function definitions are also ‘statements’ that are ‘executed’; the
+    execution of a module-level function definition enters the function name in
+    the module’s global symbol table.
+
+*** Module Symbol Table
+    Each module has its own private symbol table, which is used as the global
+    symbol table by all functions defined in the module. Thus, the author of a
+    module can use global variables in the module without worrying about
+    accidental clashes with a user’s global variables.
+
+*** Importing Modules and Module Attributes
+    Modules can import other modules.  The imported module names are placed in
+    the importing module’s global symbol table.  If the module name is followed
+    by ~as~, then the name following as is bound directly to the imported
+    module, i.e., ~import <module> as <alias>~.
+
+    There is a variant of the import statement (~from <module> import <name1>,
+    <name2>~) that imports names from a module directly into the importing
+    module’s symbol table.  This does not introduce the module name from which
+    the imports are taken in the local symbol table.  ~as~ can also be used in
+    this variant.
+
+    There is even a variant to import all names that a module defines: ~from
+    <module> import *~.  This imports all names except those beginning with an
+    underscore (~_~)[fn:import-star].
+
+*** Interpreter Session
+    For efficiency reasons, each module is only imported once per interpreter
+    session.  Therefore, if you change your modules, you must restart the
+    interpreter --- or, if it’s just one module you want to test interactively,
+    use ~importlib.reload()~, e.g. ~import importlib;
+    importlib.reload(modulename)~.
+
+
+[fn:import-star] In most cases Python programmers do not use this facility
+since it introduces an unknown set of names into the interpreter, possibly
+hiding some things you have already defined.
+
 ** ~importlib~ Module
    The [[https://docs.python.org/3/library/importlib.html#module-importlib][importlib module]] provides a rich API for interacting with the import
    system.
@@ -1180,6 +1238,7 @@ month_names = [`Januari', `Februari', `Maart',      # These are the
                    will treat it as a package.  The ~__path__~ variable is used
                    instead of ~sys.path~ when importing submodules of the
                    package.
+
 * Concept Index
   :PROPERTIES:
   :index:    cp
