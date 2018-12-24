@@ -3,8 +3,8 @@
 #+TITLE: Python the Language
 #+SUBTITLE: Version {{{version}}} {{{time(%F %R)}}}
 #+AUTHOR: WLHarvey4
-#+DATE: <2018-12-23 Sun 18:09>
-#+MACRO: version 0.2.10
+#+DATE: <2018-12-23 Sun 21:50>
+#+MACRO: version 0.2.11
 
 #+TEXINFO_FILENAME:python-the-language.info
 #+TEXINFO_CLASS: info
@@ -1309,6 +1309,37 @@ search path.
       non-source (compiled only) distribution, the compiled module must be in
       the source directory, and there must not be a source module.
 
+** Standard Modules
+:CI:
+#+CINDEX: standard library
+#+CINDEX: library reference
+:END:
+   Python comes with a library of standard modules, described in the Python
+   [[https://docs.python.org/3/library/index.html][Library Reference]].
+
+*** Built-in Modules
+:CI:
+#+CINDEX: @code{sys}
+#+CINDEX: @code{sys.path}
+#+CINDEX: @env{PYTHONPATH}
+:END:
+    Some modules are built into the interpreter, to provide access to
+    operations that are not part of the core language but are needed for
+    efficiency or to provide access to operating system primitives, such as
+    system calls.
+
+    ~sys~ is an important built-in module that provides the
+    ~sys.path~ list.  Its default falue is obtained from the environment
+    variable ~PYTHONPATH~.  ~sys.path~ can be modified:
+    #+BEGIN_EXAMPLE
+    import sys
+    sys.path.append('<new-path>')
+    #+END_EXAMPLE
+
+    ~dir()~ is a build-in function that lists which names a module defines.
+    Without argument, it lists names you have currently defined.  It lists all
+    types of names: variables, modules, functions.  It does not list built-in
+    names.  To do so, give it the argument ~__builtins__~.
 * Concept Index
   :PROPERTIES:
   :index:    cp
