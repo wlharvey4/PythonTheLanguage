@@ -3,8 +3,8 @@
 #+TITLE: Python the Language
 #+SUBTITLE: Version {{{version}}} {{{time(%F %R)}}}
 #+AUTHOR: WLHarvey4
-#+DATE: <2018-12-23 Sun 21:50>
-#+MACRO: version 0.2.11
+#+DATE: <2018-12-24 Mon 04:31>
+#+MACRO: version 0.2.12
 
 #+TEXINFO_FILENAME:python-the-language.info
 #+TEXINFO_CLASS: info
@@ -1215,6 +1215,78 @@ hiding some things you have already defined.
    system.  Like file system directories, /packages/ are organized
    hierarchically, and /packages/ may themselves contain /subpackages/, as well
    as regular /modules/.
+
+   #+TEXINFO: @heading Submodules
+   #+LATEX: \subsection*{Submodules}
+   Packages are a way of structuring Python’s module namespace by using
+   ``dotted module names''.  The module name ~A.B~ designates a submodule named
+   ~B~ in a package name ~A~.
+
+   Modules within a package can be imported using dotted syntax:
+   : import A.B
+   This loads ~B~, which must be referenced with its full name:
+   : A.B.some_function()
+
+   When importing using the pattern ~from <package> import <item>~, as
+   described below, ~<item>~ can be either a submodule or subpackage or some
+   name defined in ~<package>~, like a function, class or variable.  The
+   ~import~ statement first looks for a defined name in ~<package>~; if it is
+   not found, then it is assumed to be a module and the interpreter attempts to
+   load it.
+
+   Alternatively, the submodule ~B~ can be imported as:
+   : from A import B
+   ~B~ can be used directly, as:
+   : B.some_function()
+
+   A function can be imported directly, as:
+   : from A.B import some_function
+   and it can be accessed directly as:
+   : some_function()
+
+*** ~__init__.py~ Files
+:CI:
+#+CINDEX: @file{__init__.py}
+:END:
+    The ~__init__.py~ files are required to make Python treat the directories
+    as containing packages; this is done to prevent directories with a common
+    name, such as string, from unintentionally hiding valid modules that occur
+    later on the module search path.  In the simplest case, ~__init__.py~ can
+    just be an empty file, but it can also execute initialization code for the
+    package or set the ~__all__~ variable, described later.
+
+*** ~__all__~ List
+:CI:
+#+CINDEX: @code{__all__}
+:END:
+    If a package's ~__init__.py~ defines a list named ~__all__~, then the list
+    should contain a list of module names that should be imported using the
+    code:
+    : from <package> import *
+    If ~__all__~ is not defined, then the above code does /not/ import all
+    submodules from the package; it rather ensures that the package has been
+    imported (and initialized by running initialization code from
+    ~__init__.py~) before importing names defined in the package, including
+    submodules loaded by previous import statements.
+
+*** Relative Imports
+    #+BEGIN_EXAMPLE
+    from . import <item>
+    from .. import <item>
+    from ..<package> import <item>
+    #+END_EXAMPLE
+
+    Relative imports are based upon the name of the current module.  Modules
+    intended as the ~main~ module must always used absolute imports.
+
+*** Multi-Directory Packages
+:CI:
+#+CINDEX: @code{__path__}
+:END:
+    Packages support the special attribute ~__path__~ variable.  This variable
+    is initialied to hold the name of the directory holding the package's
+    ~__init__.py~.  This variable can be modified; doing so affects future
+    searches for modules and packages contained in the package.
 
 ** Import Hooks --- PEP 302
    There are two types of import hooks: Meta hooks and Path hooks.
