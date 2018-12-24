@@ -3,8 +3,8 @@
 #+TITLE: Python the Language
 #+SUBTITLE: Version {{{version}}} {{{time(%F %R)}}}
 #+AUTHOR: WLHarvey4
-#+DATE: <2018-12-22 Sat 17:25>
-#+MACRO: version 0.2.9
+#+DATE: <2018-12-23 Sun 18:09>
+#+MACRO: version 0.2.10
 
 #+TEXINFO_FILENAME:python-the-language.info
 #+TEXINFO_CLASS: info
@@ -1238,6 +1238,76 @@ hiding some things you have already defined.
                    will treat it as a package.  The ~__path__~ variable is used
                    instead of ~sys.path~ when importing submodules of the
                    package.
+
+** Module as Script
+:CI:
+#+CINDEX: script, running module as
+#+CINDEX: @code{__name__}
+#+CINDEX: @code{__main__}
+#+CINDEX: module, test script
+:END:
+   When you run a Python module with
+   : python fibo.py <arguments>
+   the code in the module will be executed, just as if you imported it, but
+   with the ~__name__~ set to ~__main__~.  That means that by adding this code
+   at the end of your module, you can make the file usable as a script as well
+   as an importable module.
+   #+BEGIN_EXAMPLE
+   if __name__ == "__main__":
+     import sys
+     fib(int(sys.argv[1]))
+   #+END_EXAMPLE
+   This is often used either to provide a convenient user interface to a
+   module, or for testing purposes (running the module as a script executes a
+   test suite).
+
+** Module Search Path
+:CI:
+#+CINDEX: search path, module
+#+CINDEX: ~sys.path~ variable
+   When a module is imported, the interpreter searches:
+   - for a built-in module with the given name
+   - for a file of the given name in a list of directories given by the
+     variable ~sys.path~, which is initialized with:
+     + the current directory;
+     + the directory containing the input script[fn:script-dir];
+     + @@texinfo:@env{PYTHONPATH}@@
+     + the installation-dependent default
+
+
+   After initialization, Python programs can modify ~sys.path~. The directory
+   containing the script being run is placed at the beginning of the search
+   path, ahead of the standard library path.  This means that scripts in that
+   directory will be loaded instead of modules of the same name in the library
+   directory.  This is an error unless the replacement is intended. See section
+   [[https://docs.python.org/3/tutorial/modules.html#tut-standardmodules][Standard Modules]] for more information.
+
+[fn:script-dir] On file systems which support symlinks, the directory
+containing the input script is calculated after the symlink is followed. In
+other words the directory containing the symlink is not added to the module
+search path.
+
+** Compile Python Files
+:CI:
+#+CINDEX: @code{__pycache__}
+:END:
+   To speed up loading modules, Python caches the compiled version of each
+   module in the ~__pycache__~ directory under the name ~module.version.pyc~,
+   where the version encodes the format of the compiled file; it generally
+   contains the Python version number.  Python checks the modification date of
+   the source against the compiled version to see if it’s out of date and needs
+   to be recompiled. This is a completely automatic process.  A program doesn’t
+   run any faster when it is read from a ~.pyc~ file than when it is read from
+   a ~.py~ file; the only thing that’s faster about ~.pyc~ files is the speed
+   with which they are loaded.  The module ~compileall~ can create ~.pyc~ files
+   for all modules in a directory.
+
+   Python does not check the cache in two circumstances.
+   1. it always recompiles and does not store the result for the module that’s
+      loaded directly from the command line.
+   2. it does not check the cache if there is no source module.  To support a
+      non-source (compiled only) distribution, the compiled module must be in
+      the source directory, and there must not be a source module.
 
 * Concept Index
   :PROPERTIES:
