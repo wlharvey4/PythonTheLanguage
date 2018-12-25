@@ -3,8 +3,8 @@
 #+TITLE: Python the Language
 #+SUBTITLE: Version {{{version}}} {{{time(%F %R)}}}
 #+AUTHOR: WLHarvey4
-#+DATE: <2018-12-24 Mon 04:31>
-#+MACRO: version 0.2.12
+#+DATE: <2018-12-24 Mon 18:26>
+#+MACRO: version 0.2.13
 
 #+TEXINFO_FILENAME:python-the-language.info
 #+TEXINFO_CLASS: info
@@ -1412,6 +1412,143 @@ search path.
     Without argument, it lists names you have currently defined.  It lists all
     types of names: variables, modules, functions.  It does not list built-in
     names.  To do so, give it the argument ~__builtins__~.
+
+* Expressions
+
+** Arithmetic Conversions
+   The phrase “the numeric arguments are converted to a common type,” this
+   means that the operator implementation for built-in types works as follows:
+   - If either argument is a complex number, the other is converted to complex;
+   - otherwise, if either argument is a floating point number, the other is
+     converted to floating point;
+   - otherwise, both must be integers and no conversion is necessary.
+
+
+** Atoms
+   - Atoms :: most basic element of an expression
+   - Simplist Atoms :: identifiers or literals; forms enclosed in parentheses,
+                       brackets or braces
+
+
+*** Identifiers
+    - An /identifier/ occurring as an atom is a *name*.
+    - When the *name* is bound to an /object/, *evaluation* of the atom yields
+      that object.
+    - When a name is not bound, an attempt to evaluate it raises a ~NameError~
+      exception.
+    - *Private name mangling* --- When an identifier that textually occurs in a
+      class definition begins with two or more underscore characters and does
+      not end in two or more underscores, it is considered a ~private name~ of
+      that class.  Private names are transformed to a longer form before code
+      is generated for them.  The transformation inserts the class name, with
+      leading underscores removed and a single underscore inserted, in front of
+      the name.  For example, the identifier ~__spam~ occurring in a class
+      named ~Ham~ will be transformed to ~_Ham__spam~.
+
+
+*** Literals
+    - Python supports string and bytes literals and various numeric literals
+    - Evaluation of a literal yields an object of the given type (string,
+      bytes, integer, floating point number, complex number) with the given
+      value.
+    - All literals correspond to immutable data types, and hence the object’s
+      identity is less important than its value.
+
+
+*** Parenthesized Forms
+    - A parenthesized form is an optional expression list enclosed in
+      parentheses;
+    - A parenthesized expression list yields whatever that expression list
+      yields: if the list contains at least one comma, it yields a tuple;
+      otherwise, it yields the single expression that makes up the expression
+      list.
+    - An empty pair of parentheses yields an empty tuple object.
+    - Note that tuples are not formed by the parentheses, but rather by use of
+      the comma operator. The exception is the empty tuple, for which
+      parentheses are required.
+
+
+*** Displays for Lists • Sets • Dictionaries
+:CI:
+#+CINDEX: display
+#+CINDEX: comprehension, list
+:END:
+    For constructing a list, a set or a dictionary Python provides special
+    syntax called
+    @@texinfo:@dfn{@@@@latex:\textbf{@@displays@@texinfo:}@@@@latex:}@@, each
+    of them in two flavors:
+    - either the container contents are listed explicitly, or
+    - they are computed via a set of looping and filtering instructions, called
+      a /comprehension/.
+    - The comprehension consists of a single expression followed by at least
+      one ~for~ clause and zero or more ~for~ or ~if~ clauses.
+    - In this case, the elements of the new container are those that would be
+      produced by considering each of the ~for~ or ~if~ clauses a block,
+      nesting from left to right, and evaluating the expression to produce an
+      element each time the innermost block is reached.
+    - Example:
+      : [x*y for x in range(10) for y in range(x, x+10)]
+    - To ensure the comprehension always results in a container of the
+      appropriate type, ~yield~ and ~yield from~ expressions are prohibited in
+      the implicitly nested scope;
+    - Since Python 3.6, in an ~async def~ function, an ~async for~ clause may
+      be used to iterate over an asynchronous iterator.
+
+
+**** List Comprehensions
+     List comprehensions provide a concise way to create lists.
+
+     For example, to create a list of squares:
+     : squares = list(map(lambda x: x**2, range(10)))
+     but better is, as more concise and readable:
+     : squares = [x**2 for x in range(10)]
+
+***** Common applications
+     - to make new lists where each element is the result of some operations
+       applied to each member of another sequence or iterable; or
+     - to create a subsequence of those elements that satisfy a certain
+       condition.
+
+
+***** General Definition
+     - List comprehension: :: consists of brackets containing an expression
+          followed by a ~for~ clause, then zero or more ~for~ or ~if~ clauses.
+     - Result: :: a new list resulting from evaluating the expression in the
+                 context of the ~for~ and ~if~ clauses which follow it.
+     - Example: :: this listcomp combines the elements of two lists if they are
+                  not equal:
+       : >>> [(x, y) for x in [1,2,3] for y in [3,1,4] if x != y]
+       : [(1, 3), (1, 4), (2, 3), (2, 1), (2, 4), (3, 1), (3, 4)]
+
+     The above comprehension is equivalent to:
+
+     #+BEGIN_SRC python
+     combs = []
+     for x in [1,2,3]:
+         for y in [3,1,4]:
+             if x != y:
+                 combs.append((x, y))
+     combs
+     [(1, 3), (1, 4), (2, 3), (2, 1), (2, 4), (3, 1), (3, 4)]
+     #+END_SRC
+
+***** About
+
+    The order of the ~for~ and ~if~ statements is the same in both these
+    snippets.  If the expression is a tuple (e.g. the ~(x, y)~ in the previous
+    example), it must be parenthesized.  List comprehensions can contain
+    complex expressions and nested functions.
+    : from math import pi
+    : [str(round(pi, i)) for i in range(1, 6)]
+    : ['3.1', '3.14', '3.142', '3.1416', '3.14159']
+
+
+**** Nested List Comprehensions
+     The initial expression in a list comprehension can be any arbitrary
+     expression, including another list comprehension.
+
+
+
 * Concept Index
   :PROPERTIES:
   :index:    cp
