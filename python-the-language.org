@@ -1,29 +1,10 @@
-# -*- fill-column: 79 -*-
+# -*- mode: org; fill-column: 79 -*-
 
 #+TITLE: Python the Language
 #+SUBTITLE: Version {{{version}}} {{{time(%F %R)}}}
 #+AUTHOR: WLHarvey4
-#+DATE: <2018-12-24 Mon 18:26>
-#+MACRO: version 0.2.13
-
-#+TEXINFO_FILENAME:python-the-language.info
-#+TEXINFO_CLASS: info
-#+TEXINFO_HEADER:
-#+TEXINFO_POST_HEADER:
-#+SUBAUTHOR:
-#+TEXINFO_DIR_CATEGORY:Python
-#+TEXINFO_DIR_TITLE:Python
-#+TEXINFO_DIR_DESC:Python the Language
-#+TEXINFO_PRINTED_TITLE: Python the Language
-#+OPTIONS: H:4
-
-#+LATEX_CLASS: report
-#+LATEX_CLASS_OPTIONS:
-#+LATEX_HEADER:
-#+LATEX_HEADER_EXTRA:
-#+DESCRIPTION:
-#+KEYWORDS:
-#+LATEX_COMPILER: pdflatex
+#+DATE: <2019-01-01 Tue 14:04>
+#+MACRO: version 0.2.14
 
 * Keywords
 - False
@@ -1547,9 +1528,28 @@ search path.
      The initial expression in a list comprehension can be any arbitrary
      expression, including another list comprehension.
 
-
-
 * Concept Index
   :PROPERTIES:
   :index:    cp
   :END:
+
+* Texinfo Setup                                                    :noexport:
+  #+TEXINFO_FILENAME:python-the-language.info
+  #+TEXINFO_CLASS: info
+  #+TEXINFO_HEADER:
+  #+TEXINFO_POST_HEADER:
+  #+SUBAUTHOR:
+  #+TEXINFO_DIR_CATEGORY:Python
+  #+TEXINFO_DIR_TITLE:Python
+  #+TEXINFO_DIR_DESC:Python the Language
+  #+TEXINFO_PRINTED_TITLE: Python the Language
+  #+OPTIONS: H:4
+
+* LaTeX Setup                                                      :noexport:
+  #+LATEX_CLASS: report
+  #+LATEX_CLASS_OPTIONS:
+  #+LATEX_HEADER:
+  #+LATEX_HEADER_EXTRA:
+  #+DESCRIPTION:
+  #+KEYWORDS:
+  #+LATEX_COMPILER: pdflatex
