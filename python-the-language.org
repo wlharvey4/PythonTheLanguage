@@ -3,8 +3,8 @@
 #+TITLE: Python the Language
 #+SUBTITLE: Version {{{version}}} {{{time(%F %R)}}}
 #+AUTHOR: WLHarvey4
-#+DATE: <2019-01-01 Tue 14:04>
-#+MACRO: version 0.2.14
+#+DATE: <2019-01-02 Wed 18:30>
+#+MACRO: version 0.2.15
 
 * Keywords
 - False
@@ -638,6 +638,78 @@ used to build Python supports C ~long long~, or, on Windows, ~__int64~.
      another object that alters the way in which that object is retrieved from
      classes and class instances.
      
+** Iteration
+
+*** Iterable
+    #+cindex: iterable
+    #+cindex: sequence types
+    #+cindex: ~__iter()__~ method
+    #+cindex: ~__getitem()__~ method
+    #+cindex: Sequence semantics
+    An {{{dfn(iterable)}}} is an object capable of returning its members one at
+    a time. Examples of iterables include:
+    - all sequence types (such as list, str, and tuple) and
+    - some non-sequence types like dict, file objects, and
+    - objects of any classes you define with an ~__iter__()~ method or
+    - with a ~__getitem__()~ method that implements Sequence semantics.
+
+
+    #+cindex: ~zip()~
+    #+cindex: ~map()~
+    Iterables can be used in a ~for~ loop and in many other places where a
+    sequence is needed (~zip()~, ~map()~, …).
+
+*** Iterator
+    #+cindex: iterator
+    #+cindex: iterable
+    #+cindex: ~iter()~
+    An {{{dfn(iterator)}}} is an object representing a stream of data.
+    Repeated calls to the iterator’s ~__next__()~ method (or passing it to the
+    built-in function ~next()~) return successive items in the stream.  When no
+    more data are available a ~StopIteration~ exception is raised instead. At
+    this point, the iterator object is exhausted and any further calls to its
+    ~__next__()~ method just raise ~StopIteration~ again.
+
+    Iterators are required to have an ~__iter__()~ method that returns the
+    iterator object itself so every iterator is also iterable and may be used
+    in most places where other iterables are accepted.
+
+    When an iterable object is passed as an argument to the built-in function
+    ~iter()~, it returns an /iterator/ for the object.  This iterator is good
+    for one pass over the set of values.
+
+*** Iterator Type
+    #+cindex: iterator, iteration
+    #+cindex: containers, iteration
+    Python supports a concept of {{{dfn(iteration)}}} over containers. This is
+    implemented using two distinct methods.  User-defined classes need to
+    implement these two methods in order to support iteration.
+    - ~container.__iter__()~ ::
+
+         the method that needs to be defined for container objects to provide
+         *iteration support*.  This method returns an iterator object.  This
+         object is required to support the /iterator protocol/, defined by the
+         following two methods.
+
+    - ~iterator.__iter__()~ ::
+
+         method that returns the iterator object.  This is required to allow
+         both containers and iterators to be used with the ~for~ and ~in~
+         statements.
+
+    - ~iterator.__next__()~ ::
+
+         method that returns the next item from the container, or raise the
+         ~StopIteration~ exception if there are no further items.
+
+
+    Python defines several iterator objects to support iteration over general
+    and specific sequence types, dictionaries, and other more specialized
+    forms. The specific types are not important beyond their implementation of
+    the iterator protocol.  Once an iterator’s ~__next__()~ method raises
+    ~StopIteration~, it must continue to do so on subsequent
+    calls. Implementations that do not obey this property are deemed broken.
+
 * Execution
 
 ** Program Structure
@@ -1528,6 +1600,139 @@ search path.
      The initial expression in a list comprehension can be any arbitrary
      expression, including another list comprehension.
 
+** Primaries
+   #+cindex: primary
+   {{{dfn(Primaries)}}} represent the most tightly bound operations of the
+   language.
+   : primary ::=  atom | attributeref | subscription | slicing | call
+
+*** Attribute References
+    #+cindex: attribute reference
+    An {{{dfn(attribute reference)}}} is a primary followed by a period and a
+    name:
+    : attributeref ::=  primary "." identifier
+    - The /primary/ must evaluate to an object of a type that supports attribute
+      references, which most objects do.
+    - This object is then asked to produce the attribute whose name is the
+      /identifier/.
+      #+cindex: ~__getattr__()~ method
+    - This production can be customized by overriding the ~__getattr__()~
+      method.
+
+*** Subscriptions
+    #+cindex: subscription
+    A {{{dfn(subscription)}}} selects an item of a sequence (string, tuple or
+    list) or mapping (dictionary) object:
+    : subscription ::=  primary "[" expression_list "]"
+    - The primary must evaluate to an object that supports subscription (lists
+      or dictionaries for example).
+      #+cindex: ~__getitem__()~ method
+    - User-defined objects can support subscription by defining a
+      ~__getitem__()~ method.
+    - For built-in objects, there are two types of objects that support
+      subscription:
+      1. If the primary is a *mapping*, the expression list must evaluate to an
+         object whose value is one of the keys of the mapping, and the
+         subscription selects the value in the mapping that corresponds to that
+         key. (The expression list is a tuple except if it has exactly one
+         item.)
+      2. If the primary is a *sequence*, the expression list must evaluate to
+         an integer or a slice (as discussed in the following section).
+      #+subscriptions, negative indices
+    - Built-in sequences all provide a ~__getitem__()~ method that interprets
+      negative indices by adding the length of the sequence to the index (so
+      that =x[-1]= selects the last item of x).  The resulting value must be a
+      nonnegative integer less than the number of items in the sequence, and
+      the subscription selects the item whose index is that value (counting
+      from zero).
+    - Since the support for negative indices and slicing occurs in the object’s
+      ~__getitem__()~ method, subclasses overriding this method will need to
+      explicitly add that support.
+
+*** Slicings
+    #+cindex: slicing
+    A {{{dfn(slicing)}}} selects a range of items in a sequence object (e.g., a
+    string, tuple or list).  Slicings may be used as expressions or as targets
+    in assignment or ~del~ statements.
+    : slicing      ::=  primary "[" slice_list "]"
+    : slice_list   ::=  slice_item ("," slice_item)* [","]
+    : slice_item   ::=  expression | proper_slice
+    : proper_slice ::=  [lower_bound] ":" [upper_bound] [ ":" [stride] ]
+
+
+**** Slicing Semantics
+     - The primary is indexed (using the same ~__getitem__()~ method as normal
+       subscription) with a key that is constructed from the slice list, as
+       follows.
+       + If the slice list contains at least one comma, the key is a tuple
+         containing the conversion of the slice items;
+       + otherwise, the conversion of the lone slice item is the key.
+     - The conversion of a slice item that is an expression is that expression.
+     - The conversion of a proper slice is a slice object (see section The
+       standard type hierarchy) whose ~start~, ~stop~ and ~step~ attributes are
+       the values of the expressions given as lower bound, upper bound and
+       stride, respectively, substituting ~None~ for missing expressions.
+
+*** Calls
+    #+cindex: callable object
+    #+cindex: object, callable
+    #+cindex: function, callable object
+    A call /calls/ a {{{dfn(callable object)}}} (e.g., a function) with a
+    possibly empty series of arguments.  A call always returns some value,
+    possibly ~None~, unless it raises an exception.
+    : call                 ::=  primary "(" [argument_list [","] | comprehension] ")"
+    : argument_list        ::=  positional_arguments ["," starred_and_keywords] ["," keywords_arguments]
+    :                           | starred_and_keywords ["," keywords_arguments]
+    :                           | keywords_arguments
+    : positional_arguments ::=  ["*"] expression ("," ["*"] expression)*
+    : starred_and_keywords ::=  ("*" expression | keyword_item) ("," "*" expression | "," keyword_item)*
+    : keywords_arguments   ::=  (keyword_item | "**" expression) ("," keyword_item | "," "**" expression)*
+    : keyword_item         ::=  identifier "=" expression
+
+    - The primary must evaluate to a /callable object/ (user-defined functions,
+      built-in functions, methods of built-in objects, class objects, methods
+      of class instances, and all objects having a ~__call__()~ method are
+      /callable/).
+    - All argument expressions are evaluated before the call is attempted.
+    - If /keyword arguments/ are present, they are first converted to
+      positional arguments.
+    - If there are more /positional arguments/ than there are formal parameter
+      slots, a ~TypeError~ exception is raised, unless a formal parameter using
+      the syntax ~*identifier~ is present; in this case, that formal parameter
+      receives a *tuple* containing the excess positional arguments (or an
+      empty tuple if there were no excess positional arguments).
+    - If any /keyword argument/ does not correspond to a formal parameter name, a
+      ~TypeError~ exception is raised, unless a formal parameter using the
+      syntax ~**identifier~ is present; in this case, that formal parameter
+      receives a *dictionary* containing the excess keyword arguments (using
+      the keywords as keys and the argument values as corresponding values), or
+      a (new) empty dictionary if there were no excess keyword arguments.
+    - If the syntax ~*expression~ appears in the function call, expression must
+      evaluate to an /iterable/.
+    - Functions can be called using /keyword arguments/ of the form
+      ~kwarg=value~.  In a function call, keyword arguments must follow
+      positional arguments.
+    - When a final formal parameter of the form ~**name~ is present, it
+      receives a dictionary (see Mapping Types — dict) containing all /keyword
+      arguments/ except for those corresponding to a formal parameter.
+    - This may be combined with a formal parameter of the form ~*name~ which
+      receives a tuple containing the positional arguments beyond the formal
+      parameter list. (~*name~ must occur before ~**name~.)
+    - If the syntax ~*expression~ appears in the function call, ~expression~
+      must evaluate to an iterable. Elements from these iterables are treated
+      as if they were additional positional arguments.
+    - although the ~*expression~ syntax may appear after explicit keyword
+      arguments, it is processed before the keyword arguments (and any
+      ~**expression~ arguments).
+    - dictionaries can deliver keyword arguments with the ~**-operator~.
+    - If the syntax ~**expression~ appears in the function call, ~expression~
+      must evaluate to a mapping, the contents of which are treated as
+      additional keyword arguments. If a keyword is already present (as an
+      explicit keyword argument, or from another unpacking), a ~TypeError~
+      exception is raised.
+
+
+
 * Concept Index
   :PROPERTIES:
   :index:    cp
@@ -1544,6 +1749,8 @@ search path.
   #+TEXINFO_DIR_DESC:Python the Language
   #+TEXINFO_PRINTED_TITLE: Python the Language
   #+OPTIONS: H:4
+
+  #+MACRO: dfn @@texinfo:@dfn{@@$1@@texinfo:}@@
 
 * LaTeX Setup                                                      :noexport:
   #+LATEX_CLASS: report
