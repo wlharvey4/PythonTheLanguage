@@ -3,8 +3,8 @@
 #+TITLE: Python the Language
 #+SUBTITLE: Version {{{version}}} {{{time(%F %R)}}}
 #+AUTHOR: WLHarvey4
-#+DATE: <2019-01-02 Wed 18:30>
-#+MACRO: version 0.2.15
+#+DATE: <2019-01-02 Wed 18:51>
+#+MACRO: version 0.2.16
 
 * Keywords
 - False
@@ -49,17 +49,48 @@ Operators are the constructs which can manipulate the value of operands.
 Python language supports the following types of operators.
 
 ** Arithmetic
+   - unary operators :: ~+~ (unchanged), ~-~ (negation), =~= (bitwise
+        inversion)
    - addition (+) :: Adds values on either side of the operator.
    - subtraction (-) :: Subtracts right hand operand from left hand operand.
    - multiplication (*) :: Multiplies values on either side of the operator
+     + The arguments must either both be numbers, or one argument must be an
+       integer and the other must be a sequence.
+     + In the former case, the numbers are converted to a common type and then
+       multiplied together.
+     + In the latter case, sequence repetition is performed; a negative
+       repetition factor yields an empty sequence.
    - division (/) :: Divides left hand operand by right hand operand
-   - modulus (%) :: Divides left hand operand by right hand operand and returns remainder
-   - exponent (**) :: Performs exponential (power) calculation on operators
+   - modulus (%) :: Divides left hand operand by right hand operand and returns
+                    remainder
+   - power (**) :: Performs exponential (power) calculation on operators
+     + The power operator binds more tightly than unary operators on its left;
+       it binds less tightly than unary operators on its right.
+     + Thus, in an unparenthesized sequence of power and unary operators, the
+       operators are evaluated from right to left.
+     + The power operator has the same semantics as the built-in ~pow()~
+       function, when called with two arguments: it yields its left argument
+       raised to the power of its right argument. The numeric arguments are
+       first converted to a common type, and the result is of that type.
+     + For ~int~ operands, the result has the same type as the operands unless
+       the second argument is negative; in that case, all arguments are
+       converted to ~float~ and a ~float~ result is delivered.
+       : 10**2 := 100
+       : 10**-2 := 0.01
+     + Raising ~0.0~ to a negative power results in a ~ZeroDivisionError~.
+     + Raising a negative number to a fractional power results in a ~complex~
+       number.
    - floor division (//) :: Floor Division - The division of operands
         where the result is the quotient in which the digits after the
         decimal point are removed. But if one of the operands is
         negative, the result is floored, i.e., rounded away from zero
         (towards negative infinity)
+
+
+   - The floor division and modulo operators are connected by the following
+     identity: =x == (x//y)*y + (x%y)=
+   - Floor division and modulo are also connected with the built-in function
+     ~divmod()~: =divmod(x, y) == (x//y, x%y)=.
 
 ** Relational
 These operators compare the values on either sides of them and decide
