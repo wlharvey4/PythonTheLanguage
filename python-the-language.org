@@ -3,50 +3,50 @@
 #+TITLE: Python the Language
 #+SUBTITLE: Version {{{version}}} {{{time(%F %R)}}}
 #+AUTHOR: WLHarvey4
-#+DATE: <2019-01-03 Thu 17:56>
-#+MACRO: version 0.2.17
+#+DATE: <2019-01-03 Thu 18:52>
+#+MACRO: version 0.2.18
 
 * Keywords
-- False
-- None
-- True
-- and
-- as
-- assert
-- async
-- await
-- break
-- class
-- continue
-- def
-- del
-- elif
-- else
-- except
-- finally
-- for
-- from
-- global
-- if
-- import
-- in
-- is
-- lambda
-- nonlocal
-- not
-- or
-- pass
-- raise
-- return
-- try
-- while
-- with
-- yield
+  - False
+  - None
+  - True
+  - and
+  - as
+  - assert
+  - async
+  - await
+  - break
+  - class
+  - continue
+  - def
+  - del
+  - elif
+  - else
+  - except
+  - finally
+  - for
+  - from
+  - global
+  - if
+  - import
+  - in
+  - is
+  - lambda
+  - nonlocal
+  - not
+  - or
+  - pass
+  - raise
+  - return
+  - try
+  - while
+  - with
+  - yield
 
 * Operators
-Operators are the constructs which can manipulate the value of operands.
+  Operators are the constructs which can manipulate the value of operands.
 
-Python language supports the following types of operators.
+  Python language supports the following types of operators.
 
 ** Arithmetic
    - unary operators :: ~+~ (unchanged), ~-~ (negation), =~= (bitwise
@@ -54,32 +54,32 @@ Python language supports the following types of operators.
    - addition (+) :: Adds values on either side of the operator.
    - subtraction (-) :: Subtracts right hand operand from left hand operand.
    - multiplication (*) :: Multiplies values on either side of the operator
-     + The arguments must either both be numbers, or one argument must be an
-       integer and the other must be a sequence.
-     + In the former case, the numbers are converted to a common type and then
-       multiplied together.
-     + In the latter case, sequence repetition is performed; a negative
-       repetition factor yields an empty sequence.
+        + The arguments must either both be numbers, or one argument must be an
+          integer and the other must be a sequence.
+        + In the former case, the numbers are converted to a common type and then
+          multiplied together.
+        + In the latter case, sequence repetition is performed; a negative
+          repetition factor yields an empty sequence.
    - division (/) :: Divides left hand operand by right hand operand
    - modulus (%) :: Divides left hand operand by right hand operand and returns
                     remainder
    - power (**) :: Performs exponential (power) calculation on operators
-     + The power operator binds more tightly than unary operators on its left;
-       it binds less tightly than unary operators on its right.
-     + Thus, in an unparenthesized sequence of power and unary operators, the
-       operators are evaluated from right to left.
-     + The power operator has the same semantics as the built-in ~pow()~
-       function, when called with two arguments: it yields its left argument
-       raised to the power of its right argument. The numeric arguments are
-       first converted to a common type, and the result is of that type.
-     + For ~int~ operands, the result has the same type as the operands unless
-       the second argument is negative; in that case, all arguments are
-       converted to ~float~ and a ~float~ result is delivered.
-       : 10**2 := 100
-       : 10**-2 := 0.01
-     + Raising ~0.0~ to a negative power results in a ~ZeroDivisionError~.
-     + Raising a negative number to a fractional power results in a ~complex~
-       number.
+                   + The power operator binds more tightly than unary operators on its left;
+                     it binds less tightly than unary operators on its right.
+                   + Thus, in an unparenthesized sequence of power and unary operators, the
+                     operators are evaluated from right to left.
+                   + The power operator has the same semantics as the built-in ~pow()~
+                     function, when called with two arguments: it yields its left argument
+                     raised to the power of its right argument. The numeric arguments are
+                     first converted to a common type, and the result is of that type.
+                   + For ~int~ operands, the result has the same type as the operands unless
+                     the second argument is negative; in that case, all arguments are
+                     converted to ~float~ and a ~float~ result is delivered.
+                     : 10**2 := 100
+                     : 10**-2 := 0.01
+                   + Raising ~0.0~ to a negative power results in a ~ZeroDivisionError~.
+                   + Raising a negative number to a fractional power results in a ~complex~
+                     number.
    - floor division (//) :: Floor Division - The division of operands
         where the result is the quotient in which the digits after the
         decimal point are removed. But if one of the operands is
@@ -93,13 +93,13 @@ Python language supports the following types of operators.
      ~divmod()~: =divmod(x, y) == (x//y, x%y)=.
 
 ** Comparison (Relational)
-Objects have a value (in addition to type and identity).  The value of an
-object is a rather abstract notion in Python.  These operators /compare/ the
-values on either sides of them and decide the /relation/ among them.
-Comparison operators implement a particular notion of what the value of an
-object is. One can think of them as defining the value of an object indirectly,
-by means of their comparison implementation.  Comparisons yield boolean values:
-~True~ or ~False~.
+   Objects have a value (in addition to type and identity).  The value of an
+   object is a rather abstract notion in Python.  These operators /compare/ the
+   values on either sides of them and decide the /relation/ among them.
+   Comparison operators implement a particular notion of what the value of an
+   object is. One can think of them as defining the value of an object indirectly,
+   by means of their comparison implementation.  Comparisons yield boolean values:
+   ~True~ or ~False~.
 
    - == :: If the values of two operands are equal, then the condition becomes
            true.
@@ -116,30 +116,30 @@ by means of their comparison implementation.  Comparisons yield boolean values:
    - <= :: If the value of left operand is less than or equal to the
            value of right operand, then condition becomes true.
 
-Because all types are (direct or indirect) subtypes of object, they inherit the
-default comparison behavior from object.  Types can customize their comparison
-behavior by implementing rich comparison methods like ~__lt__()~.
+   Because all types are (direct or indirect) subtypes of object, they inherit the
+   default comparison behavior from object.  Types can customize their comparison
+   behavior by implementing rich comparison methods like ~__lt__()~.
 
-The default behavior for equality comparison (~==~ and ~!=~) is based on the
-identity of the objects. Hence, equality comparison of instances with the same
-identity results in equality, and equality comparison of instances with
-different identities results in inequality. A motivation for this default
-behavior is the desire that all objects should be reflexive.
+   The default behavior for equality comparison (~==~ and ~!=~) is based on the
+   identity of the objects. Hence, equality comparison of instances with the same
+   identity results in equality, and equality comparison of instances with
+   different identities results in inequality. A motivation for this default
+   behavior is the desire that all objects should be reflexive.
 
-A default order comparison (~<~, ~>~, ~<=~, and ~>=~) is not provided; an
-attempt raises ~TypeError~.  A motivation for this default behavior is the lack
-of a similar invariant as for equality.
+   A default order comparison (~<~, ~>~, ~<=~, and ~>=~) is not provided; an
+   attempt raises ~TypeError~.  A motivation for this default behavior is the lack
+   of a similar invariant as for equality.
 
-Comparisons can be /chained/ arbitrarily, e.g., ~x < y <= z~ is equivalent to
-~x < y and y <= z~, except that ~y~ is evaluated only once (but in both cases
-~z~ is not evaluated at all when ~x < y~ is found to be false).
+   Comparisons can be /chained/ arbitrarily, e.g., ~x < y <= z~ is equivalent to
+   ~x < y and y <= z~, except that ~y~ is evaluated only once (but in both cases
+   ~z~ is not evaluated at all when ~x < y~ is found to be false).
 
 *** Comparison Behavior of some Built-in Types
     - Numeric Types (~int~, ~float~, ~complex~) :: can be compared within and
          across their types, with the restriction that complex numbers do not
          support order comparison.
     - ~NaN~ Values :: Any ordered comparison of a number to a not-a-number value
-                    is false.  Not-a-number values are not equal to themselves.
+                      is false.  Not-a-number values are not equal to themselves.
     - Binary sequences (~bytes~, ~bytearray~) :: can be compared within and
          across their types. They compare lexicographically using the numeric
          values of their elements.
@@ -155,12 +155,12 @@ Comparisons can be /chained/ arbitrarily, e.g., ~x < y <= z~ is equivalent to
          enforced.  Element identity is compared first, and element comparison
          is performed only for distinct elements.  Lexicographical comparison
          between built-in collections works as follows:
-      + For two collections to compare equal, they must be of the same type,
-        have the same length, and each pair of corresponding elements must
-        compare equal
-      + Collections that support order comparison are ordered the same as their
-        first unequal elements.  If a corresponding element does not exist, the
-        shorter collection is ordered first.
+         + For two collections to compare equal, they must be of the same type,
+           have the same length, and each pair of corresponding elements must
+           compare equal
+         + Collections that support order comparison are ordered the same as their
+           first unequal elements.  If a corresponding element does not exist, the
+           shorter collection is ordered first.
     - Mappings (~dict~) :: compare equal if and only if they have equal (key,
          value) pairs. Equality comparison of the keys and values enforces
          reflexivity.  Order comparisons (~<~, ~>~, ~<=~, and ~>=~) raise
@@ -212,28 +212,28 @@ Comparisons can be /chained/ arbitrarily, e.g., ~x < y <= z~ is equivalent to
            value is returned.
    - not :: Used to reverse the logical state of its operand.
 
-Note that neither ~and~ nor ~or~ restrict the value and type they return to
-~False~ and ~True~, but rather return the last evaluated argument.  If ~s~ is a
-string that should be replaced by a default value if it is empty, the
-expression ~s or 'foo'~ yields the desired value.
+   Note that neither ~and~ nor ~or~ restrict the value and type they return to
+   ~False~ and ~True~, but rather return the last evaluated argument.  If ~s~ is a
+   string that should be replaced by a default value if it is empty, the
+   expression ~s or 'foo'~ yields the desired value.
 
-The operator ~not~ yields ~True~ if its argument is false, ~False~ otherwise.
-Because ~not~ has to create a new value, it returns a boolean value regardless
-of the type of its argument (for example, ~not 'foo'~ produces ~False~ rather
-than ''.)
+   The operator ~not~ yields ~True~ if its argument is false, ~False~ otherwise.
+   Because ~not~ has to create a new value, it returns a boolean value regardless
+   of the type of its argument (for example, ~not 'foo'~ produces ~False~ rather
+   than ''.)
 
-In the context of Boolean operations, and also when expressions are used by
-control flow statements, the following values are interpreted as ~False~:
-  - ~False~,
-  - ~None~,
-  - numeric zero of all types, and
-  - empty strings and containers (including strings, tuples, lists,
-    dictionaries, sets and frozensets).
+   In the context of Boolean operations, and also when expressions are used by
+   control flow statements, the following values are interpreted as ~False~:
+   - ~False~,
+   - ~None~,
+   - numeric zero of all types, and
+   - empty strings and containers (including strings, tuples, lists,
+     dictionaries, sets and frozensets).
 
-All other values are interpreted as ~True~.
+   All other values are interpreted as ~True~.
 
-User-defined objects can customize their truth value by providing a
-~__bool__()~ method.
+   User-defined objects can customize their truth value by providing a
+   ~__bool__()~ method.
 
 ** Bitwise
    - & :: AND Operator copies a bit to the result if it exists in both
@@ -249,42 +249,42 @@ User-defined objects can customize their truth value by providing a
            by the number of bits specified by the right operand.
 
 ** Membership
-Python’s membership operators test for membership in a sequence, such as
-strings, lists, or tuples.  ~x in s~ evaluates to ~True~ if ~x~ is a /member/
-of ~s~, and ~False~ otherwise.  ~x not in s~ returns the negation of ~x in s~.
-    - in :: Evaluates to true if it finds a variable in the specified
-            sequence and false otherwise.
-    - not in :: Evaluates to true if it does not finds a variable in
-                the specified sequence and false otherwise.
+   Python’s membership operators test for membership in a sequence, such as
+   strings, lists, or tuples.  ~x in s~ evaluates to ~True~ if ~x~ is a /member/
+   of ~s~, and ~False~ otherwise.  ~x not in s~ returns the negation of ~x in s~.
+   - in :: Evaluates to true if it finds a variable in the specified
+           sequence and false otherwise.
+   - not in :: Evaluates to true if it does not finds a variable in
+               the specified sequence and false otherwise.
 
-All built-in sequences and set types support this as well as dictionary, for
-which in tests whether the dictionary has a given key.
+   All built-in sequences and set types support this as well as dictionary, for
+   which in tests whether the dictionary has a given key.
 
-For container types such as ~list~, ~tuple~, ~set~, ~frozenset~, ~dict~, or
-~collections.deque~, the expression ~x in y~ is equivalent to ~any(x is e or x
-== e for e in y)~.
+   For container types such as ~list~, ~tuple~, ~set~, ~frozenset~, ~dict~, or
+   ~collections.deque~, the expression ~x in y~ is equivalent to ~any(x is e or x
+   == e for e in y)~.
 
-For the string and bytes types, ~x in y~ is ~True~ if and only if ~x~ is a substring
-of ~y~.
+   For the string and bytes types, ~x in y~ is ~True~ if and only if ~x~ is a substring
+   of ~y~.
 
-For user-defined classes which define the ~__contains__()~ method, ~x in y~
-returns ~True~ if ~y.__contains__(x)~ returns a true value, and ~False~
-otherwise.
+   For user-defined classes which define the ~__contains__()~ method, ~x in y~
+   returns ~True~ if ~y.__contains__(x)~ returns a true value, and ~False~
+   otherwise.
 
-For user-defined classes which do not define ~__contains__()~ but do define
-~__iter__()~, ~x in y~ is ~True~ if some value ~z~ with ~x == z~ is produced while
-iterating over ~y~.  If an exception is raised during the iteration, it is as if
-~in~ raised that exception.
+   For user-defined classes which do not define ~__contains__()~ but do define
+   ~__iter__()~, ~x in y~ is ~True~ if some value ~z~ with ~x == z~ is produced while
+   iterating over ~y~.  If an exception is raised during the iteration, it is as if
+   ~in~ raised that exception.
 
-Lastly, the old-style iteration protocol is tried: if a class defines
-~__getitem__()~, ~x in y~ is ~True~ if and only if there is a non-negative
-integer index ~i~ such that ~x == y[i]~, and all lower integer indices do not
-raise ~IndexError~ exception.
+   Lastly, the old-style iteration protocol is tried: if a class defines
+   ~__getitem__()~, ~x in y~ is ~True~ if and only if there is a non-negative
+   integer index ~i~ such that ~x == y[i]~, and all lower integer indices do not
+   raise ~IndexError~ exception.
 
-The operator ~not in~ is defined to have the inverse true value of ~in~.
+   The operator ~not in~ is defined to have the inverse true value of ~in~.
 
-#+NAME: membership
-#+BEGIN_SRC python -n :results output :tangle membership.py :exports both :eval no-export
+   #+NAME: membership
+   #+BEGIN_SRC python -n :results output :tangle membership.py :exports both :eval no-export
 
   a = 10
   b = 20
@@ -306,19 +306,19 @@ The operator ~not in~ is defined to have the inverse true value of ~in~.
   else:
      print ("Line 3 - a is not available in the given list")
 
-#+END_SRC
+   #+END_SRC
 
-#+RESULTS: membership
-: Line 1 - a is not available in the given list
-: Line 2 - b is not available in the given list
-: Line 3 - a is available in the given list
-: done
+   #+RESULTS: membership
+   : Line 1 - a is not available in the given list
+   : Line 2 - b is not available in the given list
+   : Line 3 - a is available in the given list
+   : done
 
 ** Identity
-The operators ~is~ and ~is not~ test for object identity.  Object identity is
-determined using the ~id()~ function.
+   The operators ~is~ and ~is not~ test for object identity.  Object identity is
+   determined using the ~id()~ function.
 
-Identity operators compare the memory locations of two objects.
+   Identity operators compare the memory locations of two objects.
    - is :: Evaluates to true if the variables on either side of the
            operator point to the same object and false otherwise.
 
@@ -331,8 +331,8 @@ Identity operators compare the memory locations of two objects.
                ~x is not y~, here ~is not~ results in 1 if ~id(x)~ is
                not equal to ~id(y)~.
 
-#+NAME: identity
-#+BEGIN_SRC python -n :results output :exports both :tangle identity.py :eval no-export
+   #+NAME: identity
+   #+BEGIN_SRC python -n :results output :exports both :tangle identity.py :eval no-export
 
 #!/usr/bin/python3
 
@@ -360,29 +360,60 @@ if ( a is not b ):
 else:
    print ("Line 4 - a and b have same identity")
 
-#+END_SRC
+   #+END_SRC
 
-#+RESULTS:
-: Line 1 - a and b have same identity
-: Line 2 - a and b have same identity
-: Line 3 - a and b do not have same identity
-: Line 4 - a and b do not have same identity
+   #+RESULTS:
+   : Line 1 - a and b have same identity
+   : Line 2 - a and b have same identity
+   : Line 3 - a and b do not have same identity
+   : Line 4 - a and b do not have same identity
 
 ** Precedence
-1. ~**~ Exponentiation
-2. ~~ + -~ Complement, unary plus and minus (method names for the last
-   two are +@ and -@)
-3. ~* / % //~ Multiply, divide, modulo and floor division
-4. ~+ -~ Addition and subtraction
-5. ~>> <<~ Right and left bitwise shift
-6. ~&~ Bitwise 'And'
-7. ~^ |~ Bitwise exclusive `OR' and regular `OR'
-8. ~<= < > >=~ Comparison operators
-9. ~<> == !=~ Equality operators
-10. ~= %= /= //= -= += *= **=~ Assignment operators
-11. ~is is not~ Identity operators
-12. ~in not in~ Membership operators
-13. ~not or and~ Logical operators
+   1. ~**~ Exponentiation
+   2. ~~ + -~ Complement, unary plus and minus (method names for the last
+      two are +@ and -@)
+   3. ~* / % //~ Multiply, divide, modulo and floor division
+   4. ~+ -~ Addition and subtraction
+   5. ~>> <<~ Right and left bitwise shift
+   6. ~&~ Bitwise 'And'
+   7. ~^ |~ Bitwise exclusive `OR' and regular `OR'
+   8. ~<= < > >=~ Comparison operators
+   9. ~<> == !=~ Equality operators
+   10. ~= %= /= //= -= += *= **=~ Assignment operators
+   11. ~is is not~ Identity operators
+   12. ~in not in~ Membership operators
+   13. ~not or and~ Logical operators
+
+
+   The following table summarizes the operator precedence in Python, from
+   lowest precedence (least binding) to highest precedence (most
+   binding). Operators in the same box have the same precedence. Unless the
+   syntax is explicitly given, operators are binary. Operators in the same box
+   group left to right (except for exponentiation, which groups from right to
+   left).
+   #+ATTR_TEXINFO: :columns .5 .5
+   #+NAME: tab:precedence
+   #+CAPTION: Operator Precedence
+   | Operator                                                              | Description                                                                |
+   |-----------------------------------------------------------------------+----------------------------------------------------------------------------|
+   | lambda                                                                | Lambda expression                                                          |
+   | ~if - else~                                                           | Conditional expression                                                     |
+   | ~or~                                                                  | Boolean OR                                                                 |
+   | ~and~                                                                 | Boolean AND                                                                |
+   | ~not~                                                                 | Boolean NOT                                                                |
+   | ~in~, ~not in~, ~is~, ~is not~, ~<~, ~<=~, ~>~, ~>=~, ~!=~, ~==~      | Comparisons, including membership tests and identity tests                 |
+   | \vbar                                                                 | Bitwise OR                                                                 |
+   | ~^~                                                                   | Bitwise XOR                                                                |
+   | ~&~                                                                   | Bitwise AND                                                                |
+   | ~<< >>~                                                               | Shifts                                                                     |
+   | ~+ -~                                                                 | Addition and Subtraction                                                   |
+   | ~*, @, /, //, %~                                                      | Multiplication, matrix multiplication, division, floor division, remainder |
+   | ~+x, -x, ~x~                                                          | Positive, negative, bitwise NOT                                            |
+   | ~**~                                                                  | Exponentiation                                                             |
+   | ~await x~                                                             | Await expression                                                           |
+   | ~x[index], x[index:index], x(arguments...), x.attribute~              | Subscription, slicing, call, attribute reference                           |
+   | (expressions...), [expressions...], {key: value...}, {expressions...} | Binding or tuple display, list display, dictionary display, set display    |
+   |-----------------------------------------------------------------------+----------------------------------------------------------------------------|
 
 * Delimiters
   - ~( )~
@@ -404,126 +435,126 @@ else:
 * Data
 
 ** Data Model
-:CI:
-#+CINDEX: data model
-#+CINDEX: objects as data
-:END:
+   :CI:
+   #+CINDEX: data model
+   #+CINDEX: objects as data
+   :END:
 
 *** Objects --- Identity • Type • Value
-:CI:
-#+CINDEX: identity
-#+CINDEX: type
-#+CINDEX: value
-#+CINDEX: ~is~ operator
-#+CINDEX: ~id()~ function
-#+CINDEX: ~type()~ function
-#+CINDEX: garbage collection
-:END:
+    :CI:
+    #+CINDEX: identity
+    #+CINDEX: type
+    #+CINDEX: value
+    #+CINDEX: ~is~ operator
+    #+CINDEX: ~id()~ function
+    #+CINDEX: ~type()~ function
+    #+CINDEX: garbage collection
+    :END:
 
-/Objects/ are Python’s  abstraction for *data*.  All data  in a Python
-program is represented by objects or by relations between objects.
-Every object has an:
+    /Objects/ are Python’s  abstraction for *data*.  All data  in a Python
+    program is represented by objects or by relations between objects.
+    Every object has an:
 
- - identity :: immutable; an object's place in memory
-   - ~is~ :: operator to compare the identity of two objects
-   - ~id()~  :: function that returns an integer representing
-                      the object's identity.
- - type :: determines the operations that the object supports, and the
-           possible values for objects of that type.
-   - ~type()~ :: function returns an object's type (an object itself);
-                 type is immutable
- - value :: values can be either mutable or immutable, which is
-            determined by its type.  Numbers, strings, and tuples are
-            /immutable/, while dictionaries and lists are /mutable/.
+    - identity :: immutable; an object's place in memory
+                  - ~is~ :: operator to compare the identity of two objects
+                  - ~id()~  :: function that returns an integer representing
+                               the object's identity.
+    - type :: determines the operations that the object supports, and the
+              possible values for objects of that type.
+              - ~type()~ :: function returns an object's type (an object itself);
+                            type is immutable
+    - value :: values can be either mutable or immutable, which is
+               determined by its type.  Numbers, strings, and tuples are
+               /immutable/, while dictionaries and lists are /mutable/.
 
-Objects are nevery explicitly destroyed; rather, they are
-garbage-collected when they become unreachable.
+    Objects are nevery explicitly destroyed; rather, they are
+    garbage-collected when they become unreachable.
 
 *** Container Objects
-:CI:
-#+CINDEX: container objects
-#+CINDEX: containers
-#+CINDEX: containers, mutability
-:END:
+    :CI:
+    #+CINDEX: container objects
+    #+CINDEX: containers
+    #+CINDEX: containers, mutability
+    :END:
 
-/Container objects/ are objects that contain references to other
-objects.  Examples are:
- - tuples
- - lists
- - dictionaries
+    /Container objects/ are objects that contain references to other
+    objects.  Examples are:
+    - tuples
+    - lists
+    - dictionaries
 
-The references are part of a container’s value.  When referring to the
-/mutability/ of a container, the identities of the immediately
-contained objects are implied.  Thus, if an immutable container (like
-a tuple) contains a reference to a mutable object, its value changes
-if that mutable object is changed.
+    The references are part of a container’s value.  When referring to the
+    /mutability/ of a container, the identities of the immediately
+    contained objects are implied.  Thus, if an immutable container (like
+    a tuple) contains a reference to a mutable object, its value changes
+    if that mutable object is changed.
 
 ** Type Hierarchy
-A discussion of the types built into Python.
+   A discussion of the types built into Python.
 
 *** None
- - ~None~ :: single object with a single value, accessed through the
-             name ~None~.  It signifies /the absence of a value/,
-             i.e., it would be returned from a function that did not
-             explicitly return anything.  It's *truth* value is
-             /false/.
+    - ~None~ :: single object with a single value, accessed through the
+                name ~None~.  It signifies /the absence of a value/,
+                i.e., it would be returned from a function that did not
+                explicitly return anything.  It's *truth* value is
+                /false/.
 
 *** NotImplemented
- - ~NotImplemented~ :: single object with a single value, accessed
-      through the name ~NotImplemented~.  Numeric methods and rich
-      comparison methods should return this value if they do not
-      implement the operation for the operands provided.  It's *truth*
-      value is /true/.
+    - ~NotImplemented~ :: single object with a single value, accessed
+         through the name ~NotImplemented~.  Numeric methods and rich
+         comparison methods should return this value if they do not
+         implement the operation for the operands provided.  It's *truth*
+         value is /true/.
 
 *** Ellipsis
- - ~Ellipsis~ :: single  object with a single  value, accessed through
-                 the literal ... or the name ~Ellipsis~.  It's *truth*
-                 value is /true/.
+    - ~Ellipsis~ :: single  object with a single  value, accessed through
+                    the literal ... or the name ~Ellipsis~.  It's *truth*
+                    value is /true/.
 
 *** numbers.Number
-These types are created by numeric literals and returned as results by
-arithmetic operators and arithmetic built-in functions.  They are
-immutable.  Python distinguishes between integers, floating point
-numbers, and complex numbers.
+    These types are created by numeric literals and returned as results by
+    arithmetic operators and arithmetic built-in functions.  They are
+    immutable.  Python distinguishes between integers, floating point
+    numbers, and complex numbers.
 
 **** ~numbers.Integral~
-These are integers.  There are two types:
+     These are integers.  There are two types:
 
 ***** Integers ~int~
-These represent numbers in an unlimited range, subject to available
-(virtual) memory only.
+      These represent numbers in an unlimited range, subject to available
+      (virtual) memory only.
 
 ***** Booleans ~bool~
-These represent the truth values ~False~ and ~True~.  The Boolean type is a
-subtype of the integer type, and Boolean values behave like the values 0 and 1,
-respectively, in almost all contexts, the exception being that when converted
-to a string, the strings "False" or "True" are returned, respectively.
+      These represent the truth values ~False~ and ~True~.  The Boolean type is a
+      subtype of the integer type, and Boolean values behave like the values 0 and 1,
+      respectively, in almost all contexts, the exception being that when converted
+      to a string, the strings "False" or "True" are returned, respectively.
 
 **** ~numbers.Real~ • Float
-These represent machine-level double precision floating point numbers.  Python
-does not support single-precision floating point numbers;
+     These represent machine-level double precision floating point numbers.  Python
+     does not support single-precision floating point numbers;
 
 **** ~numbers.Complex~ • Complex
-These represent complex numbers as a pair of machine-level double precision
-floating point numbers.  The real and imaginary parts of a complex number z can
-be retrieved through the read-only attributes:
- - ~z.real~
- - ~z.imag~
+     These represent complex numbers as a pair of machine-level double precision
+     floating point numbers.  The real and imaginary parts of a complex number z can
+     be retrieved through the read-only attributes:
+     - ~z.real~
+     - ~z.imag~
 
 *** Sequences
-:CI:
-#+CINDEX: select, sequence
-#+CINDEX: slice, sequence
-#+CINDEX: slice, extended, sequence
-:END:
-Sequences represent finite ordered sets indexed by non-negative numbers.
+    :CI:
+    #+CINDEX: select, sequence
+    #+CINDEX: slice, sequence
+    #+CINDEX: slice, extended, sequence
+    :END:
+    Sequences represent finite ordered sets indexed by non-negative numbers.
 
- - ~len()~ :: function that returns the number of items of a sequence (zero
-              indexed).
- - selecting :: ~a[i]~ selects item ~i~ of sequence ~a~
- - slicing :: ~a[i:j]~ selects all items with index k such that ~i <= k < j~.
- - extended slicing :: ~a[i:j:k]~ selects all items of ~a~ with index ~x~ where
-      ~x = i + n*k~, ~n >= 0~ and ~i <= x < j~.
+    - ~len()~ :: function that returns the number of items of a sequence (zero
+                 indexed).
+    - selecting :: ~a[i]~ selects item ~i~ of sequence ~a~
+    - slicing :: ~a[i:j]~ selects all items with index k such that ~i <= k < j~.
+    - extended slicing :: ~a[i:j:k]~ selects all items of ~a~ with index ~x~ where
+         ~x = i + n*k~, ~n >= 0~ and ~i <= x < j~.
 **** Immutable Sequences
      An object of an immutable sequence type cannot change once it is created.
 ***** Strings
@@ -553,8 +584,8 @@ Sequences represent finite ordered sets indexed by non-negative numbers.
       - ~decode()~ :: method to convert a ~bytes~ object to a string
 **** Mutable Sequences
      Mutable sequences can be changed after they are created.  There are two
-      built-in mutable sequence types.  The extension module ~array~ provides
-      an additional example of a mutable sequence type.
+     built-in mutable sequence types.  The extension module ~array~ provides
+     an additional example of a mutable sequence type.
 ***** Lists
       Lists are formed by placing a comma-separated list of expressions in
       square brackets.  The items of a list are arbitrary Python objects.
@@ -566,16 +597,16 @@ Sequences represent finite ordered sets indexed by non-negative numbers.
 ***** Arrays
       The ~array~ extension module provides efficient arrays of basic numeric
       values:
-       + characters
-       + integers
-       + floating point numbers
+      + characters
+      + integers
+      + floating point numbers
 
       Arrays are /sequence types/ and behave very much like lists, except that
       the type of objects stored in them is constrained.  The type is specified
       at object creation time by using a type code, which is a single
       character.
 ****** Sequence Operations
-      Array objects support the ordinary sequence operations of
+       Array objects support the ordinary sequence operations of
        + indexing
        + slicing
        + concatenation
@@ -584,27 +615,27 @@ Sequences represent finite ordered sets indexed by non-negative numbers.
        Array objects also implement the buffer interface, and may be used
        wherever ~bytes~-like objects are supported.
 ****** Slice Assignment
-      When using slice assignment, the assigned value must be an array object
-      with the same type code; in all other cases, ~TypeError~ is raised.
+       When using slice assignment, the assigned value must be an array object
+       with the same type code; in all other cases, ~TypeError~ is raised.
 ****** Type Codes
-      The following type codes are defined:
+       The following type codes are defined:
 
-      | Type Code | C Type               | Python Type       | Min Size (bytes) | Notes  |
-      |-----------+----------------------+-------------------+------------------+--------|
-      | 'b'       | signed ~char~        | ~int~             |                1 |        |
-      | 'B'       | unsigned ~char~      | ~int~             |                1 |        |
-      | 'u'       | ~Py_UNICODE~         | Unicode character |                2 | [fn:1] |
-      | 'h'       | signed ~short~       | ~int~             |                2 |        |
-      | 'H'       | unsigned ~short~     | ~int~             |                2 |        |
-      | 'i'       | signed ~int~         | ~int~             |                2 |        |
-      | 'I'       | unsigned ~int~       | ~int~             |                2 |        |
-      | 'l'       | signed ~long~        | ~int~             |                4 |        |
-      | 'L'       | unsigned ~long~      | ~int~             |                4 |        |
-      | 'q'       | signed ~long long~   | ~int~             |                8 | [fn:2] |
-      | 'Q'       | unsigned ~long long~ | ~int~             |                8 | [fn:2] |
-      | 'f'       | ~float~              | ~float~           |                4 |        |
-      | 'd'       | ~double~             | ~float~           |                8 |        |
-      |-----------+----------------------+-------------------+------------------+--------|
+       | Type Code | C Type               | Python Type       | Min Size (bytes) | Notes  |
+       |-----------+----------------------+-------------------+------------------+--------|
+       | 'b'       | signed ~char~        | ~int~             |                1 |        |
+       | 'B'       | unsigned ~char~      | ~int~             |                1 |        |
+       | 'u'       | ~Py_UNICODE~         | Unicode character |                2 | [fn:1] |
+       | 'h'       | signed ~short~       | ~int~             |                2 |        |
+       | 'H'       | unsigned ~short~     | ~int~             |                2 |        |
+       | 'i'       | signed ~int~         | ~int~             |                2 |        |
+       | 'I'       | unsigned ~int~       | ~int~             |                2 |        |
+       | 'l'       | signed ~long~        | ~int~             |                4 |        |
+       | 'L'       | unsigned ~long~      | ~int~             |                4 |        |
+       | 'q'       | signed ~long long~   | ~int~             |                8 | [fn:2] |
+       | 'Q'       | unsigned ~long long~ | ~int~             |                8 | [fn:2] |
+       | 'f'       | ~float~              | ~float~           |                4 |        |
+       | 'd'       | ~double~             | ~float~           |                8 |        |
+       |-----------+----------------------+-------------------+------------------+--------|
 ****** Standard Library Reference
        [[https://docs.python.org/3/library/array.html#module-array][array]]
 
@@ -625,36 +656,36 @@ used to build Python supports C ~long long~, or, on Windows, ~__int64~.
        - array.typecodes :: a string with all available type codes.
 
 *** Set Types
-:CI:
-#+CINDEX: sets
-#+CINDEX: frozen sets
-:END:
+    :CI:
+    #+CINDEX: sets
+    #+CINDEX: frozen sets
+    :END:
     Sets represent unordered, finite sets of unique, immutable objects.  They
     cannot be indexed by any subscript.  They can be iterated over.
-     - ~len()~ :: returns the number of items in a set. 
+    - ~len()~ :: returns the number of items in a set. 
 
     Common uses for sets are:
-     - fast membership testing
-     - removing duplicates from a sequence
-     - computing mathematical operations such as intersection, union,
-       difference, and symmetric difference
+    - fast membership testing
+    - removing duplicates from a sequence
+    - computing mathematical operations such as intersection, union,
+      difference, and symmetric difference
 
     There are currently two intrinsic set types:
 
 **** Sets
      These represent a mutable set.
-      - ~set()~ :: constructor
+     - ~set()~ :: constructor
 
 **** Frozen Sets
      These represent an immutable set.  They are hashable, and therefore can be
      used again as an element of another set, or as a dictionary key.
-      - ~frozenset()~ :: constructor
+     - ~frozenset()~ :: constructor
 
 *** Mappings
     Mappings represent finite sets of objects indexed by arbitrary index sets.
 
-     - ~a[k]~ :: selects the item indexed by ~k~ from the mapping ~a~
-     - ~len()~ :: returns the number of items in a mapping
+    - ~a[k]~ :: selects the item indexed by ~k~ from the mapping ~a~
+    - ~len()~ :: returns the number of items in a mapping
 
     There is currently a single intrinsic mapping type:
 
@@ -665,20 +696,20 @@ used to build Python supports C ~long long~, or, on Windows, ~__int64~.
      by value rather than by object identity because the efficient
      implementation of dictionaries requires a key’s hash value to remain
      constant.  They are mutable.
-      - ~{ ... }~ :: dictionary constructor
+     - ~{ ... }~ :: dictionary constructor
 
      The [[https://docs.python.org/3/library/collections.html#module-collections][collections]] module provides additional mapping types.
 *** Callable
-:CI:
-#+CINDEX: functions, user-defined, callable
-#+CINDEX: functions, built-in, callable
-#+CINDEX: functions, generator, callable
-#+CINDEX: functions, coroutine, callable
-#+CINDEX: methods, instance, callable
-#+CINDEX: methods, build-in, callable
-#+CINDEX: classes, callable
-#+CINDEX: instance, class, callable
-:END:
+    :CI:
+    #+CINDEX: functions, user-defined, callable
+    #+CINDEX: functions, built-in, callable
+    #+CINDEX: functions, generator, callable
+    #+CINDEX: functions, coroutine, callable
+    #+CINDEX: methods, instance, callable
+    #+CINDEX: methods, build-in, callable
+    #+CINDEX: classes, callable
+    #+CINDEX: instance, class, callable
+    :END:
     These are the types to which the function call operation (see section
     Calls) can be applied.  (A call calls a callable object (e.g., a function)
     with a possibly empty series of arguments.)
@@ -693,19 +724,19 @@ used to build Python supports C ~long long~, or, on Windows, ~__int64~.
      A /generator function/ is a function or method which uses the ~yield~
      statement.  Such a function, when called, always returns an iterator
      object which can be used to execute the body of the function:
-      - calling the iterator’s ~iterator.__next__()~ method will cause the
-        function to execute until it provides a value using the ~yield~ statement.
-      - When the function executes a ~return~ statement or falls off the end, a
-        ~StopIteration~ exception is raised and the iterator will have reached
-        the end of the set of values to be returned.
+     - calling the iterator’s ~iterator.__next__()~ method will cause the
+       function to execute until it provides a value using the ~yield~ statement.
+     - When the function executes a ~return~ statement or falls off the end, a
+       ~StopIteration~ exception is raised and the iterator will have reached
+       the end of the set of values to be returned.
 **** Coroutine functions
      A /coroutine function/ is a function or method which is defined using
      ~async def~.  Such a function, when called, returns a ~coroutine~ object.
-      - ~coroutine~ :: Coroutines is a more generalized form of
-                       subroutines. Subroutines are entered at one point and
-                       exited at another point. Coroutines can be entered,
-                       exited, and resumed at many different points. They can
-                       be implemented with the async def statement.
+     - ~coroutine~ :: Coroutines is a more generalized form of
+                      subroutines. Subroutines are entered at one point and
+                      exited at another point. Coroutines can be entered,
+                      exited, and resumed at many different points. They can
+                      be implemented with the async def statement.
 **** Asynchronous generator functions
      An /asynchronous generator function/ is function or method which is
      defined using ~async def~ and which uses the ~yield~ statement.  Such a
@@ -732,26 +763,26 @@ used to build Python supports C ~long long~, or, on Windows, ~__int64~.
     Modules are a basic organizational unit of Python code.
 **** Creating Modules
      Modules are created using the:
-      - import system :: invoked either by
-        * the ~import~ statement; or
-        * calling functions such as:
-          - ~importlib.import_module()~; and
-          - built-in ~__import__()~
+     - import system :: invoked either by
+                        * the ~import~ statement; or
+                        * calling functions such as:
+                          - ~importlib.import_module()~; and
+                          - built-in ~__import__()~
 **** Module Namespace
      A module object has a namespace implemented by a dictionary object
-      + this is the dictionary referenced by the ~__globals__~ attribute of
+     + this is the dictionary referenced by the ~__globals__~ attribute of
        functions defined in the module
-      + Attribute references are translated to lookups in this dictionary,
-      + e.g., ~m.x~ is equivalent to ~m.__dict__["x"]~.
-      + Attribute assignment updates the module’s namespace dictionary, e.g.,
-        ~m.x = 1~ is equivalent to ~m.__dict__["x"] = 1~.
+     + Attribute references are translated to lookups in this dictionary,
+     + e.g., ~m.x~ is equivalent to ~m.__dict__["x"]~.
+     + Attribute assignment updates the module’s namespace dictionary, e.g.,
+       ~m.x = 1~ is equivalent to ~m.__dict__["x"] = 1~.
 *** Custom Classes
     Custom class types are typically created by class definitions.  A class has
     a namespace implemented by a dictionary object.  Class attribute references
     are translated to lookups in this dictionary,
-     + e.g., ~C.x~ is translated to ~C.__dict__["x"]~
-     + When the attribute name is not found there, the attribute search
-       continues in the base classes.
+    + e.g., ~C.x~ is translated to ~C.__dict__["x"]~
+    + When the attribute name is not found there, the attribute search
+      continues in the base classes.
 
     When a class attribute reference (for class ~C~, say) would yield a class
     method object, it is transformed into an instance method object whose
@@ -772,16 +803,16 @@ used to build Python supports C ~long long~, or, on Windows, ~__int64~.
 *** I/O Objects
     A file object represents an open file.  Various shortcuts are available to
     create file objects:
-     - ~open()~ built-in function
-     - ~os.open()~
-     - ~os.fdopen()~
-     - ~makefile()~ method of socket objects
+    - ~open()~ built-in function
+    - ~os.open()~
+    - ~os.fdopen()~
+    - ~makefile()~ method of socket objects
 
     The objects are initialized to file objects corresponding to the
     interpreter’s
-     - ~sys.stdin~ --- standard input
-     - ~sys.stdout~ --- standard output
-     - ~sys.stderr~ --- standard error
+    - ~sys.stdin~ --- standard input
+    - ~sys.stdout~ --- standard output
+    - ~sys.stderr~ --- standard error
 
     They are all open in text mode and therefore follow the interface defined
     by the ~io.TextIOBase~ abstract class.
@@ -879,26 +910,26 @@ used to build Python supports C ~long long~, or, on Windows, ~__int64~.
 * Execution
 
 ** Program Structure
-:CI:
-#+CINDEX: program
-#+CINDEX: code block
-#+CINDEX: block of code
-#+CINDEX: execution frame
-:END:
+   :CI:
+   #+CINDEX: program
+   #+CINDEX: code block
+   #+CINDEX: block of code
+   #+CINDEX: execution frame
+   :END:
 *** Program
     - program :: is constructed from code blocks
 *** Code Block
     - block :: is a piece of Python program text that is executed as a unit.
-      + module
-      + function body
-      + class definition
-      + command typed interactively
-      + script file (a file given as standard input to the interpreter or
-        specified as a command line argument to the interpreter)
-      + script command (a command specified on the interpreter command line
-        with the -c option)
-      + The string argument passed to the built-in functions ~eval()~ and
-        ~exec()~ is a code block.
+               + module
+               + function body
+               + class definition
+               + command typed interactively
+               + script file (a file given as standard input to the interpreter or
+                 specified as a command line argument to the interpreter)
+               + script command (a command specified on the interpreter command line
+                 with the -c option)
+               + The string argument passed to the built-in functions ~eval()~ and
+                 ~exec()~ is a code block.
 *** Execution Frame
     - execution frame :: where a code block is executed.  A frame contains some
          administrative information (used for debugging) and determines where
@@ -941,11 +972,11 @@ used to build Python supports C ~long long~, or, on Windows, ~__int64~.
     name established by the following name resolution rules.
 
     - scope :: defines the visibility of a name within a block
-      + local variable :: If a local variable is defined in a block, its scope
-                          includes that block.  If the definition occurs in a
-                          function block, the scope extends to any blocks
-                          contained within the defining one, unless a contained
-                          block introduces a different binding for the name.
+               + local variable :: If a local variable is defined in a block, its scope
+                                   includes that block.  If the definition occurs in a
+                                   function block, the scope extends to any blocks
+                                   contained within the defining one, unless a contained
+                                   block introduces a different binding for the name.
     - resolution :: When a name is used in a code block, it is resolved using
                     the nearest enclosing scope.
     - block environment :: The set of all such scopes visible to a code block
@@ -1016,11 +1047,11 @@ used to build Python supports C ~long long~, or, on Windows, ~__int64~.
        into tokens.
 
 ** Source Encoding---Unicode UTF-8
-:CI:
-#+CINDEX: Unicode
-#+CINDEX: source encoding
-#+CINDEX: UTF-8
-:END:
+   :CI:
+   #+CINDEX: Unicode
+   #+CINDEX: source encoding
+   #+CINDEX: UTF-8
+   :END:
    The lexical analyzer reads source code as Unicode code points; the source
    encoding, by default, is UTF-8.  The source file can give an encoding
    declaration on the first or second line, as:
@@ -1032,18 +1063,18 @@ used to build Python supports C ~long long~, or, on Windows, ~__int64~.
 ** Lines
 
 *** Logical Lines
-:CI:
-#+CINDEX: logical line
-:END:
+    :CI:
+    #+CINDEX: logical line
+    :END:
     A Python program is divided into logical lines.  The end of logical line is
     represented by the token ~<NEWLINE>~.  A logical line is constructed from
     one or more physical lines by following the explicit or implicit line
     joining rules.
 
 *** Physical Lines
-:CI:
-#+CINDEX: physical line
-:END:
+    :CI:
+    #+CINDEX: physical line
+    :END:
     A physical line is a sequence of characters terminated by an end-of-line
     sequence---the Unix form using ASCII ~LF~ (linefeed), the Windows form
     using the ASCII sequence ~CR LF~ (return followed by linefeed), or the old
@@ -1064,24 +1095,24 @@ used to build Python supports C ~long long~, or, on Windows, ~__int64~.
     continued lines can carry comments.  The indentation of the continuation
     lines is not important.  Blank continuation lines are allowed.
 
-#+BEGIN_EXPORT  texinfo
-@tex
-\bigskip\hrule height 1pt \relax\bigskip
-@end tex
-#+END_EXPORT
------
-#+BEGIN_EXAMPLE
-month_names = [`Januari', `Februari', `Maart',      # These are the
-               `April',   `Mei',      `Juni',       # Dutch names
-               `Juli',    `Augustus', `September',  # for the months
-               `Oktober', `November', `December']   # of the year
-#+END_EXAMPLE
------
-#+BEGIN_EXPORT texinfo
-@tex
-\bigskip\hrule height 1pt\relax\bigskip
-@end tex
-#+END_EXPORT
+    #+BEGIN_EXPORT  texinfo
+    @tex
+    \bigskip\hrule height 1pt \relax\bigskip
+    @end tex
+    #+END_EXPORT
+    -----
+    #+BEGIN_EXAMPLE
+    month_names = [`Januari', `Februari', `Maart',      # These are the
+                   `April',   `Mei',      `Juni',       # Dutch names
+                   `Juli',    `Augustus', `September',  # for the months
+                   `Oktober', `November', `December']   # of the year
+    #+END_EXAMPLE
+    -----
+    #+BEGIN_EXPORT texinfo
+    @tex
+    \bigskip\hrule height 1pt\relax\bigskip
+    @end tex
+    #+END_EXPORT
 
 *** Blank Lines
     + A logical line that contains only spaces, tabs, formfeeds and possibly a
@@ -1277,13 +1308,13 @@ month_names = [`Januari', `Februari', `Maart',      # These are the
     literal.
 
 * Import System
-:CI:
-#+CINDEX: import
-#+CINDEX: module
-#+CINDEX: package
-#+CINDEX: namespace
-#+CINDEX: @file{__PATH__} attribute
-:END:
+  :CI:
+  #+CINDEX: import
+  #+CINDEX: module
+  #+CINDEX: package
+  #+CINDEX: namespace
+  #+CINDEX: @file{__PATH__} attribute
+  :END:
   - module (informal) :: A file containing Python definitions and statements.
        The module name is the file name without the suffix ~.py~.  Within the
        module, the module's string name is available as the global variable
@@ -1311,15 +1342,15 @@ month_names = [`Januari', `Februari', `Maart',      # These are the
        its own solutions to implement import semantics.
 
 
-:CI:
-#+CINDEX: module object
-#+CINDEX: @file{types.ModuleType()}
-#+CINDEX: hooks, import
-#+CINDEX: PEP 302
-#+CINDEX: PEP 420
-#+CINDEX: @file{sys.meta_path}
-#+CINDEX: namespace, package
-:END:
+  :CI:
+  #+CINDEX: module object
+  #+CINDEX: @file{types.ModuleType()}
+  #+CINDEX: hooks, import
+  #+CINDEX: PEP 302
+  #+CINDEX: PEP 420
+  #+CINDEX: @file{sys.meta_path}
+  #+CINDEX: namespace, package
+  :END:
   - When a module is first imported, Python /searches/ for the module and if
     found, it /creates a module object/ (see ~types.ModuleType()~),
     initializing it.
@@ -1335,41 +1366,41 @@ month_names = [`Januari', `Februari', `Maart',      # These are the
     420]]).
 
 
-:CI:
-#+CINDEX: @file{sys.meta_path}
-#+CINDEX: meta path finder object
-#+CINDEX: finder object
-#+CINDEX: loader object
-#+CINDEX: path entry finder object
-#+CINDEX: path entry hook
-:END:
-    + ~sys.meta_path~ :: A list of /meta path finder/ objects that have their
-         ~find_spec()~ methods called to see if one of the objects can find the
-         module to be imported.
-    + meta path finder object :: A /finder/ returned by a search of
-         ~sys.meta_path~.  Meta path finders are related to, but different
-         from [[https://docs.python.org/3/glossary.html#term-path-entry-finder][path entry finders]].
-    + finder object :: An object that tries to find the /loader/ for a module
-                       that is being imported.
-    + loader :: An object that loads a module.  It must define a method named
-                ~load_module()~.  See [[https://www.python.org/dev/peps/pep-0302][PEP 302]] for details and
-                [[https://docs.python.org/3/library/importlib.html#importlib.abc.Loader][importlib.abc.Loader]] for an abstract base class.
-    + path entry finder :: A finder returned by a callable on
-         ~sys.path_hooks~ (i.e. a path entry hook) which knows how to locate
-         modules given a path entry.
-    + path entry hook :: A callable on the ~sys.path_hook~ list which returns
-         a path entry finder if it knows how to find modules on a specific
-         path entry.
+  :CI:
+  #+CINDEX: @file{sys.meta_path}
+  #+CINDEX: meta path finder object
+  #+CINDEX: finder object
+  #+CINDEX: loader object
+  #+CINDEX: path entry finder object
+  #+CINDEX: path entry hook
+  :END:
+  + ~sys.meta_path~ :: A list of /meta path finder/ objects that have their
+       ~find_spec()~ methods called to see if one of the objects can find the
+       module to be imported.
+  + meta path finder object :: A /finder/ returned by a search of
+       ~sys.meta_path~.  Meta path finders are related to, but different
+       from [[https://docs.python.org/3/glossary.html#term-path-entry-finder][path entry finders]].
+  + finder object :: An object that tries to find the /loader/ for a module
+                     that is being imported.
+  + loader :: An object that loads a module.  It must define a method named
+              ~load_module()~.  See [[https://www.python.org/dev/peps/pep-0302][PEP 302]] for details and
+              [[https://docs.python.org/3/library/importlib.html#importlib.abc.Loader][importlib.abc.Loader]] for an abstract base class.
+  + path entry finder :: A finder returned by a callable on
+       ~sys.path_hooks~ (i.e. a path entry hook) which knows how to locate
+       modules given a path entry.
+  + path entry hook :: A callable on the ~sys.path_hook~ list which returns
+       a path entry finder if it knows how to find modules on a specific
+       path entry.
 
 
 ** Module Details
-:CI:
-#+CINDEX: executable statements in modules
-#+CINDEX: module initialization
-#+CINDEX: symbol table, modules
-#+CINDEX: import, module in module
-#+CINDEX: @code{importlib.reload()}
-:END:
+   :CI:
+   #+CINDEX: executable statements in modules
+   #+CINDEX: module initialization
+   #+CINDEX: symbol table, modules
+   #+CINDEX: import, module in module
+   #+CINDEX: @code{importlib.reload()}
+   :END:
 
 *** Executable Statements
     A module can contain executable statements as well as function
@@ -1464,9 +1495,9 @@ hiding some things you have already defined.
    : some_function()
 
 *** ~__init__.py~ Files
-:CI:
-#+CINDEX: @file{__init__.py}
-:END:
+    :CI:
+    #+CINDEX: @file{__init__.py}
+    :END:
     The ~__init__.py~ files are required to make Python treat the directories
     as containing packages; this is done to prevent directories with a common
     name, such as string, from unintentionally hiding valid modules that occur
@@ -1475,9 +1506,9 @@ hiding some things you have already defined.
     package or set the ~__all__~ variable, described later.
 
 *** ~__all__~ List
-:CI:
-#+CINDEX: @code{__all__}
-:END:
+    :CI:
+    #+CINDEX: @code{__all__}
+    :END:
     If a package's ~__init__.py~ defines a list named ~__all__~, then the list
     should contain a list of module names that should be imported using the
     code:
@@ -1499,9 +1530,9 @@ hiding some things you have already defined.
     intended as the ~main~ module must always used absolute imports.
 
 *** Multi-Directory Packages
-:CI:
-#+CINDEX: @code{__path__}
-:END:
+    :CI:
+    #+CINDEX: @code{__path__}
+    :END:
     Packages support the special attribute ~__path__~ variable.  This variable
     is initialied to hold the name of the directory holding the package's
     ~__init__.py~.  This variable can be modified; doing so affects future
@@ -1531,12 +1562,12 @@ hiding some things you have already defined.
                    package.
 
 ** Module as Script
-:CI:
-#+CINDEX: script, running module as
-#+CINDEX: @code{__name__}
-#+CINDEX: @code{__main__}
-#+CINDEX: module, test script
-:END:
+   :CI:
+   #+CINDEX: script, running module as
+   #+CINDEX: @code{__name__}
+   #+CINDEX: @code{__main__}
+   #+CINDEX: module, test script
+   :END:
    When you run a Python module with
    : python fibo.py <arguments>
    the code in the module will be executed, just as if you imported it, but
@@ -1553,9 +1584,9 @@ hiding some things you have already defined.
    test suite).
 
 ** Module Search Path
-:CI:
-#+CINDEX: search path, module
-#+CINDEX: ~sys.path~ variable
+   :CI:
+   #+CINDEX: search path, module
+   #+CINDEX: ~sys.path~ variable
    When a module is imported, the interpreter searches:
    - for a built-in module with the given name
    - for a file of the given name in a list of directories given by the
@@ -1579,9 +1610,9 @@ other words the directory containing the symlink is not added to the module
 search path.
 
 ** Compile Python Files
-:CI:
-#+CINDEX: @code{__pycache__}
-:END:
+   :CI:
+   #+CINDEX: @code{__pycache__}
+   :END:
    To speed up loading modules, Python caches the compiled version of each
    module in the ~__pycache__~ directory under the name ~module.version.pyc~,
    where the version encodes the format of the compiled file; it generally
@@ -1601,19 +1632,19 @@ search path.
       the source directory, and there must not be a source module.
 
 ** Standard Modules
-:CI:
-#+CINDEX: standard library
-#+CINDEX: library reference
-:END:
+   :CI:
+   #+CINDEX: standard library
+   #+CINDEX: library reference
+   :END:
    Python comes with a library of standard modules, described in the Python
    [[https://docs.python.org/3/library/index.html][Library Reference]].
 
 *** Built-in Modules
-:CI:
-#+CINDEX: @code{sys}
-#+CINDEX: @code{sys.path}
-#+CINDEX: @env{PYTHONPATH}
-:END:
+    :CI:
+    #+CINDEX: @code{sys}
+    #+CINDEX: @code{sys.path}
+    #+CINDEX: @env{PYTHONPATH}
+    :END:
     Some modules are built into the interpreter, to provide access to
     operations that are not part of the core language but are needed for
     efficiency or to provide access to operating system primitives, such as
@@ -1633,7 +1664,6 @@ search path.
     names.  To do so, give it the argument ~__builtins__~.
 
 * Expressions
-
 ** Arithmetic Conversions
    The phrase “the numeric arguments are converted to a common type,” this
    means that the operator implementation for built-in types works as follows:
@@ -1641,7 +1671,6 @@ search path.
    - otherwise, if either argument is a floating point number, the other is
      converted to floating point;
    - otherwise, both must be integers and no conversion is necessary.
-
 
 ** Atoms
    - Atoms :: most basic element of an expression
@@ -1688,10 +1717,10 @@ search path.
 
 
 *** Displays for Lists • Sets • Dictionaries
-:CI:
-#+CINDEX: display
-#+CINDEX: comprehension, list
-:END:
+    :CI:
+    #+CINDEX: display
+    #+CINDEX: comprehension, list
+    :END:
     For constructing a list, a set or a dictionary Python provides special
     syntax called
     @@texinfo:@dfn{@@@@latex:\textbf{@@displays@@texinfo:}@@@@latex:}@@, each
@@ -1723,25 +1752,25 @@ search path.
      : squares = [x**2 for x in range(10)]
 
 ***** Common applications
-     - to make new lists where each element is the result of some operations
-       applied to each member of another sequence or iterable; or
-     - to create a subsequence of those elements that satisfy a certain
-       condition.
+      - to make new lists where each element is the result of some operations
+        applied to each member of another sequence or iterable; or
+      - to create a subsequence of those elements that satisfy a certain
+        condition.
 
 
 ***** General Definition
-     - List comprehension: :: consists of brackets containing an expression
-          followed by a ~for~ clause, then zero or more ~for~ or ~if~ clauses.
-     - Result: :: a new list resulting from evaluating the expression in the
-                 context of the ~for~ and ~if~ clauses which follow it.
-     - Example: :: this listcomp combines the elements of two lists if they are
-                  not equal:
-       : >>> [(x, y) for x in [1,2,3] for y in [3,1,4] if x != y]
-       : [(1, 3), (1, 4), (2, 3), (2, 1), (2, 4), (3, 1), (3, 4)]
+      - List comprehension: :: consists of brackets containing an expression
+           followed by a ~for~ clause, then zero or more ~for~ or ~if~ clauses.
+      - Result: :: a new list resulting from evaluating the expression in the
+                   context of the ~for~ and ~if~ clauses which follow it.
+      - Example: :: this listcomp combines the elements of two lists if they are
+                    not equal:
+                    : >>> [(x, y) for x in [1,2,3] for y in [3,1,4] if x != y]
+                    : [(1, 3), (1, 4), (2, 3), (2, 1), (2, 4), (3, 1), (3, 4)]
 
-     The above comprehension is equivalent to:
+      The above comprehension is equivalent to:
 
-     #+BEGIN_SRC python
+      #+BEGIN_SRC python
      combs = []
      for x in [1,2,3]:
          for y in [3,1,4]:
@@ -1749,17 +1778,17 @@ search path.
                  combs.append((x, y))
      combs
      [(1, 3), (1, 4), (2, 3), (2, 1), (2, 4), (3, 1), (3, 4)]
-     #+END_SRC
+      #+END_SRC
 
 ***** About
 
-    The order of the ~for~ and ~if~ statements is the same in both these
-    snippets.  If the expression is a tuple (e.g. the ~(x, y)~ in the previous
-    example), it must be parenthesized.  List comprehensions can contain
-    complex expressions and nested functions.
-    : from math import pi
-    : [str(round(pi, i)) for i in range(1, 6)]
-    : ['3.1', '3.14', '3.142', '3.1416', '3.14159']
+      The order of the ~for~ and ~if~ statements is the same in both these
+      snippets.  If the expression is a tuple (e.g. the ~(x, y)~ in the previous
+      example), it must be parenthesized.  List comprehensions can contain
+      complex expressions and nested functions.
+      : from math import pi
+      : [str(round(pi, i)) for i in range(1, 6)]
+      : ['3.1', '3.14', '3.142', '3.1416', '3.14159']
 
 
 **** Nested List Comprehensions
@@ -1897,7 +1926,44 @@ search path.
       explicit keyword argument, or from another unpacking), a ~TypeError~
       exception is raised.
 
+** Conditional Expressions
+   #+cindex: ternary operator
+   Conditional expressions (sometimes called a “ternary operator”) have the
+   lowest priority of all Python operations.  The expression ~x if C else y~
+   first evaluates the condition, ~C~ rather than ~x~.  If ~C~ is true, ~x~ is
+   evaluated and its value is returned; otherwise, ~y~ is evaluated and its
+   value is returned.
 
+** Lambda Expressions (lambda form)
+   #+cindex: lambda expression (form)
+   Lambda expressions (sometimes called lambda forms) are used to create
+   anonymous functions. The expression ~lambda parameters: expression~ yields a
+   function object.  Note that functions created with lambda expressions cannot
+   contain statements or annotations.
+
+** Expression Lists
+   An expression list containing at least one comma yields a tuple. The length
+   of the tuple is the number of expressions in the list. The expressions are
+   evaluated from left to right.
+
+   #+cindex: iterable unpacking
+   An asterisk ~*~ denotes {{{dfn(iterable unpacking)}}}. Its operand must be
+   an iterable. The iterable is expanded into a sequence of items, which are
+   included in the new tuple, list, or set, at the site of the unpacking.
+
+   #+cindex: singleton
+   #+cindex: tuple single
+   #+cindex: tuple, empty
+   The trailing comma is required only to create a single tuple (a.k.a. a
+   {{{dfn(singleton)}}}; it is optional in all other cases.  A single
+   expression without a trailing comma doesn’t create a tuple, but rather
+   yields the value of that expression.  To create an empty tuple, use an empty
+   pair of parentheses: ~()~.
+* List of Tables
+  :PROPERTIES:
+  :UNNUMBERED: t
+  :END:
+  #+TEXINFO: @listoffloats Table
 * Concept Index
   :PROPERTIES:
   :index:    cp
