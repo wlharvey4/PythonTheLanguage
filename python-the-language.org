@@ -3,8 +3,8 @@
 #+TITLE: Python the Language
 #+SUBTITLE: Version {{{version}}} {{{time(%F %R)}}}
 #+AUTHOR: WLHarvey4
-#+DATE: <2019-01-03 Thu 18:52>
-#+MACRO: version 0.2.18
+#+DATE: <2019-01-07 Mon 21:50>
+#+MACRO: version 0.2.19
 
 * Keywords
   - False
@@ -1959,6 +1959,42 @@ search path.
    expression without a trailing comma doesn’t create a tuple, but rather
    yields the value of that expression.  To create an empty tuple, use an empty
    pair of parentheses: ~()~.
+* Statements
+  A simple statement is comprised within a single logical line. Several simple
+  statements may occur on a single line separated by semicolons.
+** Syntax
+     #+cindex: expression, definition
+     #+cindex: procedure, definition
+   - Expression statement ::
+        {{{dfn(Expression statements)}}} are used (mostly interactively) to
+        compute and write a value, or (usually) to call a {{{dfn(procedure)}}}
+        (a function that returns no meaningful result; in Python, procedures
+        return the value ~None~).  An expression statement evaluates the
+        expression list (which may be a single expression).
+
+        #+cindex: interactive mode
+        #+cindex: @command{repr}
+        In *interactive mode*, if the value is not ~None~, it is converted to a
+        string using the built-in ~repr()~ function and the resulting string is
+        written to standard output on a line by itself (except if the result is
+        ~None~, so that procedure calls do not cause any output.)
+
+   - assert statement
+   - assignment statement
+     + augmented assignment statement
+     + annotated assignment statement
+   - pass statement
+   - delete statement
+   - return statement
+   - yield statement
+   - raise statement
+   - break statement
+   - continue statement
+   - import statement
+   - future statement
+   - global statement
+   - nonlocal statement
+
 * List of Tables
   :PROPERTIES:
   :UNNUMBERED: t
