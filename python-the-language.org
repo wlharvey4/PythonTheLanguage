@@ -3,8 +3,8 @@
 #+TITLE: Python the Language
 #+SUBTITLE: Version {{{version}}} {{{time(%F %R)}}}
 #+AUTHOR: WLHarvey4
-#+DATE: <2019-01-07 Mon 21:50>
-#+MACRO: version 0.2.19
+#+DATE: <2019-01-14 Mon 10:29>
+#+MACRO: version 0.2.20
 
 * Keywords
   - False
@@ -1995,6 +1995,25 @@ search path.
    - global statement
    - nonlocal statement
 
+* Resources
+  :PROPERTIES:
+  :APPENDIX: t
+  :END:
+
+** Python's Class Development Toolkit
+
+   - [[https://www.youtube.com/watch?v=HTLu2DFOdTg][Link]]
+
+   - [[https://speakerdeck.com/pyconslides/pythons-class-development-toolkit-@/by-raymond-hettinger][Slides]]
+
+   #+cindex: class toolset
+   #+cindex: toolset, class creation
+   #+attr_texinfo: :indic b
+   - Pub Date: :: Published on Mar 20, 2013
+   - Presenter: :: Raymond Hettinger
+   - About: :: This is a short, but thorough tutorial on the Python's built-in
+              toolset for creating classes.  We look at commonly encountered
+              challenges and how to solve them using Python.
 * List of Tables
   :PROPERTIES:
   :UNNUMBERED: t
