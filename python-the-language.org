@@ -3,8 +3,8 @@
 #+TITLE: Python the Language
 #+SUBTITLE: Version {{{version}}} {{{time(%F %R)}}}
 #+AUTHOR: WLHarvey4
-#+DATE:2019-05-14 11:00
-#+MACRO: version 0.3.1
+#+DATE:2019-05-14 12:13
+#+MACRO: version 0.3.2
 
 * Keywords
   - False
@@ -2085,6 +2085,227 @@ When commands are read from a =tty=, the interpreter is said to be in
 {{{dfn(interactive mode)}}}.  In this mode it prompts for the next command with
 the primary prompt, usually three greater-than signs =(>>>=); for continuation
 lines it prompts with the secondary prompt, by default three dots (=...=).
+
+#+CINDEX:@code{_} variable
+In interactive mode, the last printed expression is assigned to the variable ~_~.
+
+*** Numbers
+
+#+CINDEX:Number types
+#+CINDEX:division operators
+- int
+- float
+- Decimal
+- Fraction
+- Complex
+- ~/~ division (float)
+- ~//~ floor division (int)
+- ~%~ remainder division
+
+**** Numeric Literals
+There are three types of numeric literals:
+- integers,
+- floating point numbers, and
+- imaginary numbers.
+
+
+There are no complex literals (complex numbers can be formed by adding a real
+number and an imaginary number).
+
+Note that numeric literals do not include a sign; a phrase like =-1= is
+actually an expression composed of the unary operator =-= and the literal =1=.
+
+***** Interger Literals
+- decimal =123=
+- binary =0b1001=
+- octal =0o777=
+- hex =0xA5F=
+
+
+There is no limit for the length of integer literals apart from what can be
+stored in available memory.  Underscores can be used to group digits for
+enhanced readability.
+
+***** Floating Point Literals
+- =3.14=
+- =10.=
+- =.001=
+- =1e100=
+- =3.14e-10=
+- =0e0=
+- =3.14_15_93=
+
+***** Imaginary Literals
+- 3.14j
+- 10.j
+- 10j
+- .001j
+- 1e00j
+
+
+An imaginary literal yields a complex number with a real part of 0.0.  To
+create a complex number with a nonzero real part, add a floating point number
+to it:
+: (3+4j)
+
+*** Strings
+
+Python strings cannot be changed — they are immutable.  Strings may also be
+created from other objects using the ~str~ constructor.  There is no separate
+“character” type.
+
+: '...'
+: "..."
+
+The only difference between the two is that within single quotes you don’t need
+to escape ="= (but you have to escape =\'=) and vice versa.
+
+String literals may span mulitple lines:
+: '''...'''
+: """..."""
+
+End of lines are automatically included in the string, but it’s possible to
+prevent this by adding a =\= at the end of the line.
+: print("""\
+: Usage: ...
+: """)
+
+Raw strings ignores special characters:
+: r"..."
+
+**** Some String Functions
+
+- ~len()~
+
+#+CINDEX:@code{len()} function
+The built-in function ~len()~ returns the length of a string:
+
+- ~print()~
+
+#+CINDEX:@code{print()} function
+The ~print()~ function produces a more readable output, by omitting the
+enclosing quotes and by printing escaped and special characters.
+
+**** String Operators
+
+#+CINDEX:concatenate, string
+#+CINDEX:repeat, string
+- concatenate =+=
+- repeat =*=
+
+
+Two or more string literals (i.e. the ones enclosed between quotes) next to
+each other are automatically concatenated.  This feature is particularly useful
+when you want to break long strings:
+: text = ('Put several strings within parentheses '
+:         'to have them joined together.')
+
+**** Indexing and Slicing
+
+- ~str[4]~ fifth position (0,1,2,3,4)
+- ~str[-1]~ last
+- ~str[1:4]~ position 1 up to but not including position 4
+- ~str[:4]~ starts at zero
+- ~str[1:]~ ends at last character
+
+**** Sequence Type
+- https://docs.python.org/3/library/stdtypes.html#textseq
+
+Strings are examples of /sequence types/, and support the common operations
+supported by such types.
+
+**** String Methods
+- https://docs.python.org/3/library/stdtypes.html#string-methods
+
+Strings support a large number of methods for basic transformations and
+searching.
+
+**** Formatted String Literals
+
+#+CINDEX:formatted string literals
+#+CINDEX:f-string
+Also known as an =f-string=, a string literal that is prefixed with =f= or =F=.
+
+These strings may contain replacement fields, which are expressions delimited
+by curly braces ={}=.  While other string literals always have a constant
+value, *formatted strings* are really /expressions/ evaluated at run time.
+
+- ={{= or =}}= are replaced with the corresponding single curly brace.
+- A single opening curly bracket ={= marks a replacement field, which starts
+  with a Python expression.
+- After the expression, there may be a conversion field, introduced by an
+  exclamation point =!=.
+- A format specifier may also be appended, introduced by a colon =:=
+- A replacement field ends with a closing curly bracket =}=.
+- Expressions in formatted string literals are treated like regular Python
+  expressions surrounded by parentheses, with a few exceptions.
+  - An empty expression is not allowed
+  - a lambda expression must be surrounded by explicit parentheses.
+  - Replacement expressions can contain line breaks (e.g. in triple-quoted
+    strings)
+  - but they cannot contain comments
+- Each expression is evaluated in the context where the formatted string
+  literal appears, in order from left to right.
+- If a conversion is specified, the result of evaluating the expression is
+  converted before formatting.
+  - Conversion =!s= calls ~str()~ on the result
+  - =!r= calls ~repr()~
+  - and =!a= calls ~ascii()~
+- The result is then formatted using the ~format()~ protocol.
+  - The format specifier is passed to the =__format__()= method of the
+    expression or conversion result.
+  - An empty string is passed when the format specifier is omitted.
+  - The formatted result is then included in the final value of the whole
+    string.
+  - Top-level format specifiers may include nested replacement fields.
+- [[https://docs.python.org/3/library/string.html#formatspec][Format Specification Mini-Language]]
+
+: f"He said his name is {name!r}."
+: f"He said his name is {repr(name)}." # equivalent
+
+: width = 10
+: precision = 4
+: value = decimal.Decimal("12.34567")
+: f"result: {value:{width}.{precision}}" # nested fields
+: 'result:      12.35'
+
+: today = datetime(year=2017, month=1, day=27)
+: f"{today:%B %d, %Y}"  # using date format specifier
+: 'January 27, 2017'
+
+*** Lists
+#+CINDEX:list
+A {{[dfn(list)}}} is a mutable list of comma-separated values (items) between
+square brackets.  Lists might contain items of different types.
+: squares = [1, 4, 9, 16, 25]
+
+Lists can be indexed and sliced:
+: squares[0]
+: squares[-1]
+: squares[-3:] # slicing returns a new list
+: squares[:] # returns a new (shallow) copy of the list:
+
+Lists also support operations like concatenation:
+: squares + [36, 49, 64, 81, 100]
+
+and methods like ~append()~:
+: squares.append(11 ** 2)
+
+List items can be changed:
+: cubes = [1, 8, 27, 65, 125]
+: cubes[3] = 4 ** 3 # replace the wrong value
+
+Assignment to slices is also possible:
+: letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
+: letters[2:5] = ['C', 'D', 'E']
+: ['a', 'b', 'C', 'D', 'E', 'f', 'g']
+: letters[2:5] = []
+: ['a', 'b', 'f', 'g']
+: letters[:] = [] # clear the list
+
+Lists can be nested:
+: x = [['a', 'b', 'c'], [1, 2, 3]]
+: x[0][1] # 'b'
 
 ** Resources for Programmers
 - https://wiki.python.org/moin/BeginnersGuide/Programmers
