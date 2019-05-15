@@ -3,8 +3,8 @@
 #+TITLE: Python the Language
 #+SUBTITLE: Version {{{version}}} {{{time(%F %R)}}}
 #+AUTHOR: WLHarvey4
-#+DATE:2019-05-14 12:13
-#+MACRO: version 0.3.2
+#+DATE:2019-05-14 17:40
+#+MACRO: version 0.3.3
 
 * Keywords
   - False
@@ -2306,6 +2306,175 @@ Assignment to slices is also possible:
 Lists can be nested:
 : x = [['a', 'b', 'c'], [1, 2, 3]]
 : x[0][1] # 'b'
+
+*** Control Flow
+
+**** =while= Loop
+#+CINDEX:@code{while}
+: while condition:
+:    body
+
+The =while= loop executes as long as the /condition/ remains =true=.  Any
+non-zero integer value is =true=; zero is =false=.  The /condition/ may also be
+a string or list value, in fact any sequence; anything with a non-zero length
+is =true=, empty sequences are =false=.
+
+The body of the loop is indented.
+
+**** =if= Statements
+#+CINDEX:@code{if}
+: if condition:
+:    body
+: elif condition:
+:    body
+: else:
+:    body
+
+#+CINDEX:@code{elif}
+#+CINDEX:@code{else}
+#+CINDEX:@code{switch}
+#+CINDEX:@code{case}
+An =if … elif … elif …= sequence is a substitute for the =switch= or =case=
+statements found in other languages.
+
+**** =for= Statements
+Python’s =for= statement iterates over the items of any sequence (a list or a
+string), in the order that they appear in the sequence.
+: for var in list:
+:    body
+
+**** =range()= Function
+
+#+CINDEX:range
+#+CINDEX:sequence
+#+CINDEX:iterate
+#+CINDEX:iterable object
+#+CINDEX:iterator
+#+CINDEX:@code{list()} function
+A =range= returns an object which returns the successive items of the desired
+sequence when iterated over.  We say such an object is {{{dfn(iterable)}}},
+that is, suitable as a target for functions and constructs that expect
+something from which they can obtain successive items until the supply is
+exhausted.  The =for= statement is such an iterator.  The function =list()= is
+another; it creates lists from iterables: =list(range(5)) --> [0,1,2,3,4]=.
+
+#+CINDEX:@code{range} function
+Use the =range()= function to iterate over a sequence of numbers.  It generates
+arithmetic progressions:
+: for i in range(5):
+:    print(i)
+
+#+CINDEX:@code{len()} function
+To iterate over the indices of a sequence, you can combine =range()= and
+=len()= as follows:
+: for i in range(len(a)):
+:    print(i, a[i])
+
+#+CINDEX:@code{enumeate()} function
+In most such cases, however, it is convenient to use the =enumerate()=
+function.
+
+**** =break= and =continue= Statements--- =else= Clause on Loops
+
+#+CINDEX:@code{break} statement
+The =break= statement breaks out of the innermost enclosing =for= or =while=
+loop.
+
+#+CINDEX:@code{else} clause, loop statement
+Loop statements may have an =else= clause; it is executed when the loop
+terminates through exhaustion of the list (with =for=) or when the condition
+becomes =false= (with =while=), but not when the loop is terminated by a
+=break= statement.
+
+#+begin_src python -n
+  for n in range(2, 10):
+      for x in range(2, n):
+          if n % x == 0:
+              print(n, 'equals', x, '*', n//x)
+              break
+
+          else:
+              # loop fell through without finding a factor
+              print(n, 'is a prime number')
+#+end_src
+
+When used with a loop, the =else= clause has more in common with the =else=
+clause of a =try= statement than it does that of =if= statements: a =try=
+statement’s =else= clause runs when no exception occurs, and a loop’s =else=
+clause runs when no =break= occurs.  For more on the =try= statement and
+=exceptions=, see [[https://docs.python.org/3/tutorial/errors.html#tut-handling][Handling Exceptions]].
+
+#+CINDEX:@code{continue} statement
+The =continue= statement continues with the next iteration of the loop.
+
+**** =pass= Statement
+The =pass= statement does nothing.  It can be used when a statement is required
+syntactically but the program requires no action.
+: while True:
+:    pass
+
+This is commonly used for creating minimal classes:
+: class MyEmptyClass:
+:    pass
+
+*** Defining Functions
+#+CINDEX:@code{def} keyword
+#+CINDEX:function definition
+The keyword =def= introduces a function definition.  It must be followed by the
+function name and the parenthesized list of formal parameters.
+: def func(par):
+:    """This is a docstring"""
+:    body
+
+#+CINDEX:docstring
+The first statement of the function body can optionally be a string literal;
+this string literal is the function’s documentation string, or /docstring/
+([[https://docs.python.org/3/tutorial/controlflow.html#tut-docstrings][Documentation Strings]]).
+
+#+CINDEX:symbol tables
+#+CINDEX:local symbol table
+#+CINDEX:global symbol table
+#+CINDEX:local variables
+The execution of a function introduces a new symbol table used for the local
+variables of the function.  More precisely, all variable assignments in a
+function store the value in the local symbol table; whereas variable references
+first look in the local symbol table, then in the local symbol tables of
+enclosing functions, then in the global symbol table, and finally in the table
+of built-in names.  Thus, *global variables cannot be directly assigned a value
+within a function* (unless named in a global statement), although they may be
+referenced.
+
+When a function calls another function, a new local symbol table is created for
+that call.
+
+A function definition introduces the function name in the current symbol table.
+The value of the function name has a type that is recognized by the interpreter
+as a user-defined function.  This value can be assigned to another name which
+can then also be used as a function.  This serves as a general renaming
+mechanism.
+
+**** Parameters
+#+CINDEX:parameters
+#+CINDEX:call by value
+The actual parameters (arguments) to a function call are introduced in the
+local symbol table of the called function when it is called; thus, arguments
+are passed using /call by value/ (where the value is always an object
+reference, not the value of the object).  /Call by object reference/ would be a
+better description, since if a mutable object is passed, the caller will see
+any changes the callee makes to it (items inserted into a list).
+
+**** Return
+
+Even functions without a return statement do return a value, albeit a rather
+boring one.  This value is called =None= (it’s a built-in name).  Writing the value
+=None= is normally suppressed by the interpreter if it would be the only value
+written.  You can see it if you really want to using ~print()~:
+: fib(0)
+: print(fib(0)) --> None
+
+- The =return= statement returns with a value from a function.  =return=
+  without an expression argument returns =None=.  Falling off the end of a
+  function also returns =None=.
 
 ** Resources for Programmers
 - https://wiki.python.org/moin/BeginnersGuide/Programmers
