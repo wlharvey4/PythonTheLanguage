@@ -3,10 +3,8 @@
 #+TITLE: Python the Language
 #+SUBTITLE: Version {{{version}}} {{{time(%F %R)}}}
 #+AUTHOR: WLHarvey4
-#+date: 2019-05-19 10:48
-#+MACRO: version Version 0.3.0
-
-{{{title}}} ({{{version}}} last updated {{{date}}})
+#+DATE:2019-05-19 20:12
+#+MACRO: version 0.3.5
 
 * Keywords
 - False
@@ -1442,10 +1440,10 @@ used to build Python supports C ~long long~, or, on Windows, ~__int64~.
 *** Importing Modules and Module Attributes
     Modules can import other modules.  The imported module names are placed in
     the importing module’s global symbol table.  If the module name is followed
-    by ~as~, then the name following as is bound directly to the imported
+    by ~as~, then the name following ~as~ is bound directly to the imported
     module, i.e., ~import <module> as <alias>~.
 
-    There is a variant of the import statement (~from <module> import <name1>,
+    There is a variant of the ~import~ statement (~from <module> import <name1>,
     <name2>~) that imports names from a module directly into the importing
     module’s symbol table.  This does not introduce the module name from which
     the imports are taken in the local symbol table.  ~as~ can also be used in
@@ -1475,46 +1473,56 @@ hiding some things you have already defined.
    simpler API than built-in ~__import__()~ for invoking the import machinery.
 
 ** Packages
-   Python has only one type of module object, and all modules are of this type.
-   To help organize modules and provide a naming hierarchy, Python has a
-   concept of *packages*.
+- https://docs.python.org/3/tutorial/modules.html#packages
 
-   #+TEXINFO: @heading Packages and Modules Similar to File System
-   #+LATEX: \subsection*{Packages and Modules Similar to File System}
-   You can think of /packages/ as the directories on a file system and
-   /modules/ as files within directories, but don’t take this analogy too
-   literally since packages and modules need not originate from the file
-   system.  Like file system directories, /packages/ are organized
-   hierarchically, and /packages/ may themselves contain /subpackages/, as well
-   as regular /modules/.
 
-   #+TEXINFO: @heading Submodules
-   #+LATEX: \subsection*{Submodules}
-   Packages are a way of structuring Python’s module namespace by using
-   ``dotted module names''.  The module name ~A.B~ designates a submodule named
-   ~B~ in a package name ~A~.
+#+CINDEX:packages, about
+#+CINDEX:name hierarchy, package
+#+CINDEX:hierarchy, package name
+Python has only one type of module object, and all modules are of this type.
+To help organize modules and provide a naming hierarchy, Python has a
+concept of *packages*.
 
-   Modules within a package can be imported using dotted syntax:
-   : import A.B
-   This loads ~B~, which must be referenced with its full name:
-   : A.B.some_function()
+#+TEXINFO: @heading Packages and Modules Similar to File System
+#+LATEX: \subsection*{Packages and Modules Similar to File System}
+You can think of /packages/ as the directories on a file system and
+/modules/ as files within directories, but don’t take this analogy too
+literally since packages and modules need not originate from the file
+system.  Like file system directories, /packages/ are organized
+hierarchically, and /packages/ may themselves contain /subpackages/, as well
+as regular /modules/.
 
-   When importing using the pattern ~from <package> import <item>~, as
-   described below, ~<item>~ can be either a submodule or subpackage or some
-   name defined in ~<package>~, like a function, class or variable.  The
-   ~import~ statement first looks for a defined name in ~<package>~; if it is
-   not found, then it is assumed to be a module and the interpreter attempts to
-   load it.
+#+TEXINFO: @heading Submodules
+#+LATEX: \subsection*{Submodules}
+Packages are a way of structuring Python’s module namespace by using
+``dotted module names''.  The module name ~A.B~ designates a submodule named
+~B~ in a package name ~A~.
 
-   Alternatively, the submodule ~B~ can be imported as:
-   : from A import B
-   ~B~ can be used directly, as:
-   : B.some_function()
+- ~import A.B~
+- ~from A import B~
 
-   A function can be imported directly, as:
-   : from A.B import some_function
-   and it can be accessed directly as:
-   : some_function()
+
+Modules within a package can be imported using dotted syntax:
+: import A.B
+This loads ~B~, which must be referenced with its full name:
+: A.B.some_function()
+
+When importing using the pattern ~from <package> import <item>~, as
+described below, ~<item>~ can be either a submodule or subpackage or some
+name defined in ~<package>~, like a function, class or variable.  The
+~import~ statement first looks for a defined name in ~<package>~; if it is
+not found, then it is assumed to be a module and the interpreter attempts to
+load it.
+
+Alternatively, the submodule ~B~ can be imported as:
+: from A import B
+~B~ can be used directly, as:
+: B.some_function()
+
+A function can be imported directly, as:
+: from A.B import some_function
+and it can be accessed directly as:
+: some_function()
 
 *** ~__init__.py~ Files
     :CI:
@@ -1825,6 +1833,7 @@ search path.
 
 *** Attribute References
     #+cindex: attribute reference
+    #+CINDEX:@code{__getattr__()} method
     An {{{dfn(attribute reference)}}} is a primary followed by a period and a
     name:
     : attributeref ::=  primary "." identifier
@@ -1843,7 +1852,7 @@ search path.
     : subscription ::=  primary "[" expression_list "]"
     - The primary must evaluate to an object that supports subscription (lists
       or dictionaries for example).
-      #+cindex: ~__getitem__()~ method
+      #+cindex: @code{__getitem__()} method
     - User-defined objects can support subscription by defining a
       ~__getitem__()~ method.
     - For built-in objects, there are two types of objects that support
@@ -1984,6 +1993,7 @@ search path.
 * Statements
   A simple statement is comprised within a single logical line. Several simple
   statements may occur on a single line separated by semicolons.
+
 ** Syntax
      #+cindex: expression, definition
      #+cindex: procedure, definition
@@ -2017,17 +2027,754 @@ search path.
    - future statement
    - global statement
    - nonlocal statement
-* Python Standard Library
-[[https://docs.python.org/3/library/index.html][The Python Standard Library manual]] describes the standard library that is
-distributed with Python. It also describes some of the optional components that
-are commonly included in Python distributions.  Python’s standard library is
-very extensive, offering a wide range of facilities.
 
+#+CINDEX:statement, simple
+A simple statement is comprised within a single logical line.  Several simple
+statements may occur on a single line separated by semicolons.
+
+** Expression Statement
+#+cindex: expression statement, definition
+#+cindex: procedure, definition
+#+CINDEX:statement, expression
+#+CINDEX:@code{None}
+#+cindex: interactive mode
+{{{dfn(Expression statements)}}} are used (mostly interactively) to compute and
+write a value, or (usually) to call a {{{dfn(procedure)}}} (a function that
+returns no meaningful result; in Python, procedures return the value ~None~).
+In interactive mode, if the value is not ~None~, it is converted to a string
+using the built-in ~repr()~ function and the resulting string is written to
+standard output on a line by itself.
+
+An expression statement evaluates the /expression list/ (which may be a single
+expression).
+
+** Assignment Statement
+- [[https://docs.python.org/3/reference/simple_stmts.html?highlight=return#assignment-statements][Reference]]
+
+#+CINDEX:assignment statement, definition
+{{{dfn(Assignment statements)}}} are used to (re)bind names to values
+and to modify attributes or items of mutable objects.
+
+An assignment statement evaluates the /expression list/ (remember that this can
+be a single expression or a comma-separated list, the latter yielding a tuple)
+and assigns the single resulting object to each of the target lists, from left
+to right.
+
+Assignment is defined recursively depending on the form of the target
+(list).  When a target is part of a mutable object (an attribute
+reference, subscription or slicing), the mutable object must ultimately
+perform the assignment and decide about its validity, and may raise an
+exception if the assignment is unacceptable.
+
+Assignment of an object to a target list, optionally enclosed in
+parentheses or square brackets, is recursively defined...
+
+- single target, no trailing comma: object assigned to target
+
+- else object must be iterable with same number of items as targets in target
+  list: items are assigned left to right to corresponding targets
+
+  - if list contains a "starred target" (one target prefixed with an asterisk):
+    object must be iterable with at least as many items as targets in target
+    list minus one; items assigned left to right to targets before starred
+    target; final items assigned to targets afer starred target; a list of the
+    remaining items in the iterable is assigned to the starred target (list can
+    be empty)
+
+  - else object must be an iterable with same number of items as targets in
+    target list; items assigned left to right to corresponding targets
+
+Assignment of an object to a single target is recursively defined...
+
+- target is identifier:
+
+  - if name is not global or nonlocal: name is bound to object in current local
+    namespace
+
+  - otherwise: name is bound to object in the global namespace or out namespace
+    determined by nonlocal
+
+    The name is rebound if it was already bound. This may cause the reference
+    count for the object previously bound to the name to reach zero, causing
+    the object to be deallocated and its destructor (if it has one) to be
+    called.
+
+- target is an attribute reference:
+
+  - The primary expression in the reference is evaluated. It should yield an
+    object with assignable attributes; (otherwise =TypeError=).  That object is
+    then asked to assign the assigned object to the given attribute; (otherwise
+    =AttributeError=).
+
+- target is a subscription:
+
+  - The primary expression in the reference is evaluated. It should yield
+    either a mutable sequence object (such as a list) or a mapping object (such
+    as a dictionary). Next, the subscript expression is evaluated.
+
+    - If the primary is a mutable sequence object (such as a list), the
+      subscript must yield an integer.  If it is negative, the sequence’s
+      length is added to it.  The resulting value must be a nonnegative
+      integer less than the sequence’s length, and the sequence is asked to
+      assign the assigned object to its item with that index (possible
+      =IndexError=).
+
+    - If the primary is a mapping object (such as a dictionary), the subscript
+      must have a type compatible with the mapping’s key type, and the mapping
+      is then asked to create a key/datum pair which maps the subscript to the
+      assigned object. This can either replace an existing key/value pair with
+      the same key value, or insert a new key/value pair (if no key with the
+      same value existed).  For user-defined objects, the =__setitem__()=
+      method is called with appropriate arguments.
+
+- target is a slicing:
+
+  - The primary expression in the reference is evaluated. It should yield a
+    mutable sequence object (such as a list).  The assigned object should be a
+    sequence object of the same type.
+
+  - Next, the lower and upper bound expressions are evaluated, insofar they are
+    present; defaults are zero and the sequence’s length. The bounds should
+    evaluate to integers. If either bound is negative, the sequence’s length is
+    added to it. The resulting bounds are clipped to lie between zero and the
+    sequence’s length, inclusive.
+
+  - Finally, the sequence object is asked to replace the slice with the items
+    of the assigned sequence. The length of the slice may be different from the
+    length of the assigned sequence, thus changing the length of the target
+    sequence, if the target sequence allows it.
+
+
+*** Augmented Assignment Statements
+#+CINDEX:augmented assignment
+Augmented assignment is the combination, in a single statement, of a binary
+operation and an assignment statement.
+
+#+begin_example
++=
+-=
+*=
+@=
+/=
+//=
+%=
+**=
+>>=
+<<=
+&=
+^=
+|=
+#+end_example
+
+An augmented assignment evaluates the target (which, unlike normal assignment
+statements, cannot be an unpacking) and the expression list, performs the
+binary operation specific to the type of assignment on the two operands, and
+assigns the result to the original target. The target is only evaluated once.
+
+Unlike normal assignments, augmented assignments evaluate the left-hand side
+before evaluating the right-hand side. For example,
+: a[i] += f(x)
+first looks-up =a[i]=, then it evaluates =f(x)= and performs the addition, and
+lastly, it writes the result back to =a[i]=.
+
+*** Annotated Assignment Statements
+#+CINDEX:annotated assignment
+Annotation assignment is the combination, in a single statement, of a variable
+or attribute annotation and an optional assignment statement.
+
+The difference from normal Assignment statements is that only single target and
+only single right hand side value is allowed.
+
+*** Assert Statement
+Assert statements are a convenient way to insert debugging assertions into a
+program:
+: assert <expression>
+which is equivalent to
+: if __debug__:
+:     if not <expression>: raise AssertionError
+
+#+CINDEX:@code{__debug__}
+#+CINDEX:optimization
+- In the current implementation, the built-in variable =__debug__= is =True=
+  under normal circumstances, =False= when /optimization/ is requested (command
+  line option {{{option(-O)}}}).
+
+- The current code generator emits no code for an ~assert~ statement when
+  /optimization/ is requested at compile time.
+
+*** Pass Statement
+#+CINDEX:@code{pass} statement
+~pass~ is a null operation---when it is executed, nothing happens.
+: pass
+
+*** Delete Statement
+#+CINDEX:@code{del} statement
+#+CINDEX:delete
+Deletion is recursively defined very similar to the way assignment is defined.
+: del <target_list>
+
+*** Return Statement
+~return~ leaves the current function call with the expression list (or =None=)
+as return value.  If an expression list is present, it is evaluated, else
+=None= is substituted.
+: return [<expression_list>]
+
+**** Return Statement in a Generator Function
+In a generator function, the return statement indicates that the generator is
+done and will cause =StopIteration= to be raised.  The returned value (if any) is
+used as an argument to construct =StopIteration= and becomes the
+=StopIteration.value= attribute.
+
+**** Return Statement in an Asynchronous Generator Function
+In an asynchronous generator function, an empty return statement indicates that
+the asynchronous generator is done and will cause =StopAsyncIteration= to be
+raised.  A non-empty return statement is a syntax error in an asynchronous
+generator function.
+
+**** Yield Statement
+A yield statement is semantically equivalent to a yield expression. The yield
+statement can be used to omit the parentheses that would otherwise be required
+in the equivalent yield expression statement.
+: yield <expr>
+: yield from <expr>
+
+- raise statement
+- break statement
+- continue statement
+- import statement
+- future statement
+- global statement
+- nonlocal statement
+
+* Resources
+  :PROPERTIES:
+  :APPENDIX: t
+  :END:
+
+** Python Home
+- https://www.python.org/
+
+** Getting Started
+- https://www.python.org/about/gettingstarted/
+
+There is a list of tutorials suitable for experienced programmers on the
+[[http://wiki.python.org/moin/BeginnersGuide/Programmers][BeginnersGuide/Tutorials page]].
+
+** The Python Tutorial
+- https://docs.python.org/3/tutorial/index.html
+
+#+CINDEX:tutorial
+This tutorial introduces the reader informally to the basic concepts and
+features of the Python language and system.  It introduces many of Python’s
+most noteworthy features, and will give you a good idea of the language’s
+flavor and style.  After reading it, you will be able to read and write Python
+modules and programs, and you will be ready to learn more about the various
+Python library modules described in The Python Standard Library.
+
+*** Python Interpreter
+Invoke a Python interpreter using:
+
+: python3.7 (Port Python3.7.3)
+: python3 (Port Python3.7.3)
+: python2.7 (Port Python2.7.16)
+: python2 (Port Python2.7.16)
+: python (system Python2.7.10)
+
+Stop the interpreter with an end-of-line character =Control-D= or by using ~quit()~:
+
+: ^D
+
+#+begin_example
+? python3.7
+Python 3.7.3 (default, Mar 30 2019, 03:44:34)
+[Clang 9.1.0 (clang-902.0.39.2)] on darwin
+Type "help", "copyright", "credits" or "license" for more information.
+>>> ^D
+#+end_example
+
+#+CINDEX:~readline~
+The interpreter’s line-editing features include interactive editing, history
+substitution and code completion on systems that support ~readline~.
+
+Some common options for starting the Python interpretor are:
+
+- =-c= commands
+- =-m= module
+- =-i= interactive mode
+
+**** Arguments to the Interpreter
+
+- ~import sys~
+- ~sys.argv[0]~ script name, command, or module
+- ~sys.argv[1]~ command-line argument
+
+
+#+CINDEX:@code{argv} variable
+#+CINDEX:@code{sys} module
+When known to the interpreter, the script name and additional arguments
+thereafter are turned into a list of strings and assigned to the ~argv~ variable
+in the ~sys~ module.  You can access this list by executing ~import sys~.  The
+length of the list is at least one; when no script and no arguments are given,
+~sys.argv[0]~ is an empty string.  Options found after =-c= command or =-m= module
+are not consumed by the Python interpreter’s option processing but left in
+~sys.argv~ for the command or module to handle.
+
+**** Interactive Mode
+
+#+CINDEX:interactive mode
+When commands are read from a =tty=, the interpreter is said to be in
+{{{dfn(interactive mode)}}}.  In this mode it prompts for the next command with
+the primary prompt, usually three greater-than signs =(>>>=); for continuation
+lines it prompts with the secondary prompt, by default three dots (=...=).
+
+#+CINDEX:@code{_} variable
+In interactive mode, the last printed expression is assigned to the variable ~_~.
+
+*** Numbers
+
+#+CINDEX:Number types
+#+CINDEX:division operators
+- int
+- float
+- Decimal
+- Fraction
+- Complex
+- ~/~ division (float)
+- ~//~ floor division (int)
+- ~%~ remainder division
+
+**** Numeric Literals
+There are three types of numeric literals:
+- integers,
+- floating point numbers, and
+- imaginary numbers.
+
+
+There are no complex literals (complex numbers can be formed by adding a real
+number and an imaginary number).
+
+Note that numeric literals do not include a sign; a phrase like =-1= is
+actually an expression composed of the unary operator =-= and the literal =1=.
+
+***** Interger Literals
+- decimal =123=
+- binary =0b1001=
+- octal =0o777=
+- hex =0xA5F=
+
+
+There is no limit for the length of integer literals apart from what can be
+stored in available memory.  Underscores can be used to group digits for
+enhanced readability.
+
+***** Floating Point Literals
+- =3.14=
+- =10.=
+- =.001=
+- =1e100=
+- =3.14e-10=
+- =0e0=
+- =3.14_15_93=
+
+***** Imaginary Literals
+- 3.14j
+- 10.j
+- 10j
+- .001j
+- 1e00j
+
+
+An imaginary literal yields a complex number with a real part of 0.0.  To
+create a complex number with a nonzero real part, add a floating point number
+to it:
+: (3+4j)
+
+*** Strings
+
+Python strings cannot be changed — they are immutable.  Strings may also be
+created from other objects using the ~str~ constructor.  There is no separate
+“character” type.
+
+: '...'
+: "..."
+
+The only difference between the two is that within single quotes you don’t need
+to escape ="= (but you have to escape =\'=) and vice versa.
+
+String literals may span mulitple lines:
+: '''...'''
+: """..."""
+
+End of lines are automatically included in the string, but it’s possible to
+prevent this by adding a =\= at the end of the line.
+: print("""\
+: Usage: ...
+: """)
+
+Raw strings ignores special characters:
+: r"..."
+
+**** Some String Functions
+
+- ~len()~
+
+#+CINDEX:@code{len()} function
+The built-in function ~len()~ returns the length of a string:
+
+- ~print()~
+
+#+CINDEX:@code{print()} function
+The ~print()~ function produces a more readable output, by omitting the
+enclosing quotes and by printing escaped and special characters.
+
+**** String Operators
+
+#+CINDEX:concatenate, string
+#+CINDEX:repeat, string
+- concatenate =+=
+- repeat =*=
+
+
+Two or more string literals (i.e. the ones enclosed between quotes) next to
+each other are automatically concatenated.  This feature is particularly useful
+when you want to break long strings:
+: text = ('Put several strings within parentheses '
+:         'to have them joined together.')
+
+**** Indexing and Slicing
+
+- ~str[4]~ fifth position (0,1,2,3,4)
+- ~str[-1]~ last
+- ~str[1:4]~ position 1 up to but not including position 4
+- ~str[:4]~ starts at zero
+- ~str[1:]~ ends at last character
+
+**** Sequence Type
+- https://docs.python.org/3/library/stdtypes.html#textseq
+
+Strings are examples of /sequence types/, and support the common operations
+supported by such types.
+
+**** String Methods
+- https://docs.python.org/3/library/stdtypes.html#string-methods
+
+Strings support a large number of methods for basic transformations and
+searching.
+
+**** Formatted String Literals
+
+#+CINDEX:formatted string literals
+#+CINDEX:f-string
+Also known as an =f-string=, a string literal that is prefixed with =f= or =F=.
+
+These strings may contain replacement fields, which are expressions delimited
+by curly braces ={}=.  While other string literals always have a constant
+value, *formatted strings* are really /expressions/ evaluated at run time.
+
+- ={{= or =}}= are replaced with the corresponding single curly brace.
+- A single opening curly bracket ={= marks a replacement field, which starts
+  with a Python expression.
+- After the expression, there may be a conversion field, introduced by an
+  exclamation point =!=.
+- A format specifier may also be appended, introduced by a colon =:=
+- A replacement field ends with a closing curly bracket =}=.
+- Expressions in formatted string literals are treated like regular Python
+  expressions surrounded by parentheses, with a few exceptions.
+  - An empty expression is not allowed
+  - a lambda expression must be surrounded by explicit parentheses.
+  - Replacement expressions can contain line breaks (e.g. in triple-quoted
+    strings)
+  - but they cannot contain comments
+- Each expression is evaluated in the context where the formatted string
+  literal appears, in order from left to right.
+- If a conversion is specified, the result of evaluating the expression is
+  converted before formatting.
+  - Conversion =!s= calls ~str()~ on the result
+  - =!r= calls ~repr()~
+  - and =!a= calls ~ascii()~
+- The result is then formatted using the ~format()~ protocol.
+  - The format specifier is passed to the =__format__()= method of the
+    expression or conversion result.
+  - An empty string is passed when the format specifier is omitted.
+  - The formatted result is then included in the final value of the whole
+    string.
+  - Top-level format specifiers may include nested replacement fields.
+- [[https://docs.python.org/3/library/string.html#formatspec][Format Specification Mini-Language]]
+
+: f"He said his name is {name!r}."
+: f"He said his name is {repr(name)}." # equivalent
+
+: width = 10
+: precision = 4
+: value = decimal.Decimal("12.34567")
+: f"result: {value:{width}.{precision}}" # nested fields
+: 'result:      12.35'
+
+: today = datetime(year=2017, month=1, day=27)
+: f"{today:%B %d, %Y}"  # using date format specifier
+: 'January 27, 2017'
+
+*** Lists
+#+CINDEX:list
+A {{[dfn(list)}}} is a mutable list of comma-separated values (items) between
+square brackets.  Lists might contain items of different types.
+: squares = [1, 4, 9, 16, 25]
+
+Lists can be indexed and sliced:
+: squares[0]
+: squares[-1]
+: squares[-3:] # slicing returns a new list
+: squares[:] # returns a new (shallow) copy of the list:
+
+Lists also support operations like concatenation:
+: squares + [36, 49, 64, 81, 100]
+
+and methods like ~append()~:
+: squares.append(11 ** 2)
+
+List items can be changed:
+: cubes = [1, 8, 27, 65, 125]
+: cubes[3] = 4 ** 3 # replace the wrong value
+
+Assignment to slices is also possible:
+: letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
+: letters[2:5] = ['C', 'D', 'E']
+: ['a', 'b', 'C', 'D', 'E', 'f', 'g']
+: letters[2:5] = []
+: ['a', 'b', 'f', 'g']
+: letters[:] = [] # clear the list
+
+Lists can be nested:
+: x = [['a', 'b', 'c'], [1, 2, 3]]
+: x[0][1] # 'b'
+
+*** Control Flow
+
+**** =while= Loop
+#+CINDEX:@code{while}
+: while condition:
+:    body
+
+The =while= loop executes as long as the /condition/ remains =true=.  Any
+non-zero integer value is =true=; zero is =false=.  The /condition/ may also be
+a string or list value, in fact any sequence; anything with a non-zero length
+is =true=, empty sequences are =false=.
+
+The body of the loop is indented.
+
+**** =if= Statements
+#+CINDEX:@code{if}
+: if condition:
+:    body
+: elif condition:
+:    body
+: else:
+:    body
+
+#+CINDEX:@code{elif}
+#+CINDEX:@code{else}
+#+CINDEX:@code{switch}
+#+CINDEX:@code{case}
+An =if … elif … elif …= sequence is a substitute for the =switch= or =case=
+statements found in other languages.
+
+**** =for= Statements
+Python’s =for= statement iterates over the items of any sequence (a list or a
+string), in the order that they appear in the sequence.
+: for var in list:
+:    body
+
+**** =range()= Function
+
+#+CINDEX:range
+#+CINDEX:sequence
+#+CINDEX:iterate
+#+CINDEX:iterable object
+#+CINDEX:iterator
+#+CINDEX:@code{list()} function
+A =range= returns an object which returns the successive items of the desired
+sequence when iterated over.  We say such an object is {{{dfn(iterable)}}},
+that is, suitable as a target for functions and constructs that expect
+something from which they can obtain successive items until the supply is
+exhausted.  The =for= statement is such an iterator.  The function =list()= is
+another; it creates lists from iterables: =list(range(5)) --> [0,1,2,3,4]=.
+
+#+CINDEX:@code{range} function
+Use the =range()= function to iterate over a sequence of numbers.  It generates
+arithmetic progressions:
+: for i in range(5):
+:    print(i)
+
+#+CINDEX:@code{len()} function
+To iterate over the indices of a sequence, you can combine =range()= and
+=len()= as follows:
+: for i in range(len(a)):
+:    print(i, a[i])
+
+#+CINDEX:@code{enumeate()} function
+In most such cases, however, it is convenient to use the =enumerate()=
+function.
+
+**** =break= and =continue= Statements--- =else= Clause on Loops
+
+#+CINDEX:@code{break} statement
+The =break= statement breaks out of the innermost enclosing =for= or =while=
+loop.
+
+#+CINDEX:@code{else} clause, loop statement
+Loop statements may have an =else= clause; it is executed when the loop
+terminates through exhaustion of the list (with =for=) or when the condition
+becomes =false= (with =while=), but not when the loop is terminated by a
+=break= statement.
+
+#+begin_src python -n
+  for n in range(2, 10):
+      for x in range(2, n):
+          if n % x == 0:
+              print(n, 'equals', x, '*', n//x)
+              break
+
+          else:
+              # loop fell through without finding a factor
+              print(n, 'is a prime number')
+#+end_src
+
+When used with a loop, the =else= clause has more in common with the =else=
+clause of a =try= statement than it does that of =if= statements: a =try=
+statement’s =else= clause runs when no exception occurs, and a loop’s =else=
+clause runs when no =break= occurs.  For more on the =try= statement and
+=exceptions=, see [[https://docs.python.org/3/tutorial/errors.html#tut-handling][Handling Exceptions]].
+
+#+CINDEX:@code{continue} statement
+The =continue= statement continues with the next iteration of the loop.
+
+**** =pass= Statement
+The =pass= statement does nothing.  It can be used when a statement is required
+syntactically but the program requires no action.
+: while True:
+:    pass
+
+This is commonly used for creating minimal classes:
+: class MyEmptyClass:
+:    pass
+
+*** Defining Functions
+#+CINDEX:@code{def} keyword
+#+CINDEX:function definition
+The keyword =def= introduces a function definition.  It must be followed by the
+function name and the parenthesized list of formal parameters.
+: def func(par):
+:    """This is a docstring"""
+:    body
+
+#+CINDEX:docstring
+The first statement of the function body can optionally be a string literal;
+this string literal is the function’s documentation string, or /docstring/
+([[https://docs.python.org/3/tutorial/controlflow.html#tut-docstrings][Documentation Strings]]).
+
+#+CINDEX:symbol tables
+#+CINDEX:local symbol table
+#+CINDEX:global symbol table
+#+CINDEX:local variables
+The execution of a function introduces a new symbol table used for the local
+variables of the function.  More precisely, all variable assignments in a
+function store the value in the local symbol table; whereas variable references
+first look in the local symbol table, then in the local symbol tables of
+enclosing functions, then in the global symbol table, and finally in the table
+of built-in names.  Thus, *global variables cannot be directly assigned a value
+within a function* (unless named in a global statement), although they may be
+referenced.
+
+When a function calls another function, a new local symbol table is created for
+that call.
+
+A function definition introduces the function name in the current symbol table.
+The value of the function name has a type that is recognized by the interpreter
+as a user-defined function.  This value can be assigned to another name which
+can then also be used as a function.  This serves as a general renaming
+mechanism.
+
+**** Parameters
+#+CINDEX:parameters
+#+CINDEX:call by value
+The actual parameters (arguments) to a function call are introduced in the
+local symbol table of the called function when it is called; thus, arguments
+are passed using /call by value/ (where the value is always an object
+reference, not the value of the object).  /Call by object reference/ would be a
+better description, since if a mutable object is passed, the caller will see
+any changes the callee makes to it (items inserted into a list).
+
+**** Return
+
+Even functions without a return statement do return a value, albeit a rather
+boring one.  This value is called =None= (it’s a built-in name).  Writing the value
+=None= is normally suppressed by the interpreter if it would be the only value
+written.  You can see it if you really want to using ~print()~:
+: fib(0)
+: print(fib(0)) --> None
+
+- The =return= statement returns with a value from a function.  =return=
+  without an expression argument returns =None=.  Falling off the end of a
+  function also returns =None=.
+
+** Resources for Programmers
+- https://wiki.python.org/moin/BeginnersGuide/Programmers
+
+The tutorials on this page are aimed at people who have previous experience
+with other programming languages (C, Perl, Lisp, Visual Basic, etc.).
+
+** Python HOWTO s
+- https://docs.python.org/3/howto/index.html
+
+Python HOWTOs are documents that cover a single, specific topic, and attempt to
+cover it fairly completely.  Modelled on the Linux Documentation Project’s HOWTO
+collection, this collection is an effort to foster documentation that’s more
+detailed than the Python Library Reference.
+
+- Porting Python 2 Code to Python 3
+- Porting Extension Modules to Python 3
+- Curses Programming with Python
+- Descriptor HowTo Guide
+- Functional Programming HOWTO
+- Logging HOWTO
+- Logging Cookbook
+- Regular Expression HOWTO
+- Socket Programming HOWTO
+- Sorting HOW TO
+- Unicode HOWTO
+- HOWTO Fetch Internet Resources Using The urllib Package
+- Argparse Tutorial
+- An introduction to the ipaddress module
+- Argument Clinic How-To
+- Instrumenting CPython with DTrace and SystemTap
+
+** Online Documentation
+*** Python 3.7.3 documentation
+- https://docs.python.org/3/
+
+*** Python 3 Language Reference
+- https://docs.python.org/3/reference/index.html
+
+#+CINDEX:standard library
+This library reference manual describes the standard library that is
+distributed with Python.  It also describes some of the optional components
+that are commonly included in Python distributions.
+
+#+CINDEX:built-in modules
+#+CINDEX:modules, built-in
+>>>>>>> a594878f2275c2a83f340fda42f8c0a4cf6751a0
 The library contains built-in modules (written in C) that provide access to
 system functionality such as file I/O that would otherwise be inaccessible to
 Python programmers, as well as modules written in Python that provide
 standardized solutions for many problems that occur in everyday programming.
 
+Some of these modules are explicitly designed to encourage and enhance the
+portability of Python programs by abstracting away platform-specifics into
+platform-neutral APIs.
+
+#+CINDEX:package tools
+#+CINDEX:tools, packaging
+>>>>>>> a594878f2275c2a83f340fda42f8c0a4cf6751a0
 For Unix-like operating systems Python is normally provided as a collection of
 packages, so it may be necessary to use the packaging tools provided with the
 operating system to obtain some or all of the optional components.
@@ -2037,6 +2784,7 @@ In addition to the standard library, there is a growing collection of several
 thousand components (from individual programs and modules to packages and
 entire application development frameworks), available from the [[https://pypi.org/][Python Package
 Index]].
+
 ** About the Python Standard Library
 The “Python library” contains several different kinds of components.
 
@@ -2081,6 +2829,153 @@ The “Python library” contains several different kinds of components.
              configuration option was chosen at the time when Python was
              compiled and installed.
 
+*** Python 3 Standard Library
+- https://docs.python.org/3/library/index.html
+
+*** Glossary
+- https://docs.python.org/3/glossary.html
+
+** Python's Class Development Toolkit
+
+   - [[https://www.youtube.com/watch?v=HTLu2DFOdTg][Link]]
+
+   - [[https://speakerdeck.com/pyconslides/pythons-class-development-toolkit-@/by-raymond-hettinger][Slides]]
+
+   #+cindex: class toolset
+   #+cindex: toolset, class creation
+   #+attr_texinfo: :indic b
+   - Pub Date: :: Published on Mar 20, 2013
+   - Presenter: :: Raymond Hettinger
+   - About: :: This is a short, but thorough tutorial on the Python's built-in
+              toolset for creating classes.  We look at commonly encountered
+              challenges and how to solve them using Python.
+
+** Python Package Index---PyPi
+- https://pypi.org/
+
+*** About Installing Packages
+- https://packaging.python.org/tutorials/installing-packages/
+
+#+CINDEX:package, dfn
+#+CINDEX:distribution, dfn
+#+CINDEX:bundle of software
+It’s important to note that the term {{{dfn(package)}}} in this context is
+being used as a synonym for a {{{dfn(distribution)}}} (i.e. /a bundle of
+software to be installed/), not to refer to the kind of package that you import
+in your Python source code (i.e. a /container of modules/).  It is common in
+the Python community to refer to a distribution using the term “package”.  Using
+the term “distribution” is often not preferred, because it can easily be
+confused with a Linux distribution, or another larger software distribution
+like Python itself.
+
+  #+CINDEX:distribution package
+- Distribution Package ::
+
+     #+CINDEX:versioned archive file
+     #+CINDEX:archive file
+     #+CINDEX:file, archive
+     #+CINDEX:packages, Python
+     #+CINDEX:modules
+     #+CINDEX:Release
+     A *versioned archive file* that contains Python /packages/, /modules/, and
+     other resource files that are used to distribute a Release.  The archive
+     file is what an end-user will download from the internet and install.
+
+     #+CINDEX:package, as distribution
+     #+CINDEX:distribution, as package
+     #+CINDEX:import package
+     A *distribution package* is more commonly referred to with the single
+     words “package” or “distribution”, but this guide may use the expanded
+     term when more clarity is needed to prevent confusion with an Import
+     Package (which is also commonly called a “package”) or another kind of
+     distribution (e.g. a Linux distribution or the Python language
+     distribution), which are often referred to with the single term
+     “distribution”.
+
+  #+CINDEX:release
+- Release ::
+
+             #+CINDEX:project snapshot
+             #+CINDEX:version identifier
+             A snapshot of a Project at a particular point in time, denoted by
+             a version identifier.
+
+  #+CINDEX:project
+- Project ::
+
+             #+CINDEX:distribution, as project
+             A library, framework, script, plugin, application, or collection
+             of data or other resources, or some combination thereof that is
+             intended to be packaged into a Distribution.
+
+             Since most projects create Distributions using ~distutils~[fn::A
+             package in the Python Standard Library that has support for
+             creating and installing distributions. ] or ~setuptools~[fn::
+             ~setuptools~ (which includes easy_install) is a collection of
+             enhancements to the Python ~distutils~ that allow you to more
+             easily build and distribute Python distributions, especially ones
+             that have dependencies on other packages.], another practical way
+             to define projects currently is something that contains a
+             ~setup.py~ at the root of the project src directory, where
+             “setup.py” is the project specification filename used by
+             ~distutils~ and ~setuptools~.
+
+             Python projects must have unique names, which are registered on
+             PyPI.  Each project will then contain one or more *Releases*, and
+             each release may comprise one or more *distributions*.
+
+  #+CINDEX:import package
+- Import Package ::
+
+                    #+CINDEX:module
+                    A Python module which can contain other modules or
+                    recursively, other packages.
+
+                    An *import package* is more commonly referred to with the
+                    single word “package”, but this guide will use the expanded
+                    term when more clarity is needed to prevent confusion with
+                    a *Distribution Package* which is also commonly called a
+                    “package”.
+
+ #+CINDEX:module, as import package
+- Module ::
+
+            #+CINDEX:pure module
+            #+CINDEX:extension module
+            The basic unit of code reusability in Python, existing in one of
+            two types: Pure Module, or Extension Module.
+
+*** About Packaging Python Code
+- https://packaging.python.org/tutorials/packaging-projects/
+
+#+CINDEX:package a project
+This tutorial walks you through how to package a simple Python project.  It
+will show you how to add the necessary files and structure to create the
+package, how to build the package, and how to upload it to the Python Package
+Index.
+
+** Popular Python Recipes
+- http://code.activestate.com/recipes/langs/python/
+
+If you are looking for common Python recipes and patterns, you can browse the
+ActiveState Python Cookbook.
+
+* Python 2 or Python 3
+:PROPERTIES:
+:appendix: t
+:END:
+- https://wiki.python.org/moin/Python2orPython3
+
+
+Python 3.0 was released in 2008. The final 2.x version 2.7 release came out in
+mid-2010, with a statement of extended support for this end-of-life
+release. The 2.x branch will see no new major releases after that. 3.x is under
+active development and has already seen over five years of stable releases,
+including version 3.3 in 2012, 3.4 in 2014, 3.5 in 2015, and 3.6 in 2016. This
+means that all recent standard library improvements, for example, are only
+available by default in Python 3.x.
+>>>>>>> a594878f2275c2a83f340fda42f8c0a4cf6751a0
+
 * List of Tables
   :PROPERTIES:
   :UNNUMBERED: t
@@ -2106,6 +3001,7 @@ The “Python library” contains several different kinds of components.
   #+OPTIONS: H:4
 
   #+MACRO: dfn @@texinfo:@dfn{@@$1@@texinfo:}@@
+  #+MACRO: option @@texinfo:@option{@@$1@@texinfo:}@@
 
 ** LaTeX Setup                                                    :noexport:
   #+LATEX_CLASS: report
@@ -2119,4 +3015,3 @@ The “Python library” contains several different kinds of components.
 * Local Variables
 # Local Variables:
 # time-stamp-pattern:"8/^\\#\\+\\(DATE\\|date\\):\s?%:y-%02m-%02d %02H:%02M$"
-# End:
