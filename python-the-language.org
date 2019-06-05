@@ -3,9 +3,8 @@
 #+TITLE: Python the Language
 #+SUBTITLE: Version {{{version}}} {{{time(%F %R)}}}
 #+AUTHOR: WLHarvey4
-#+DATE:2019-05-15 12:14
-#+MACRO: version 0.3.4
-
+#+DATE:2019-06-05 11:17
+#+MACRO: version 0.4.0
 * Keywords
   - False
   - None
@@ -432,6 +431,162 @@ else:
   ~' " # \~ have special meaning in Python.
 
   ~$ ? `~ are not used and their use outside of a string constitutes an error.
+* Built-in Functions
+
+#+cindex:built-in functions
+- https://docs.python.org/3.7/library/functions.html#int
+
+The Python interpreter has a number of functions and types built into it that
+are always available.  They are listed here in alphabetical order.
+
+- abs()
+
+- all()
+
+- any()
+
+- ascii()
+
+- bin()
+
+- bool()
+
+- breakpoint()
+
+- bytearray()
+
+- bytes()
+
+- callable()
+
+- chr()
+
+- classmethod()
+
+- compile()
+
+- complex()
+
+- delattr()
+
+- dict()
+
+- dir()
+
+- divmod()
+
+- enumerate()
+
+- eval()
+
+- exec()
+
+- filter()
+
+- float()
+
+- format()
+
+- frozenset()
+
+- getattr()
+
+- globals()
+
+- hasattr()
+
+- hash()
+
+- help()
+
+- hex()
+
+- id()
+
+- input()
+
+- int()
+
+  Return an integer object constructed from a number or string x, or return 0
+  if no arguments are given.
+
+  If x defines =__int__()=, ~int(x)~ returns =x.__int__()=.  If x defines =__trunc__()=, it
+  returns =x.__trunc__()=.  For floating point numbers, this truncates towards
+  zero.
+
+  If x is not a number or if base is given, then x must be a string, =bytes=, or
+  =bytearray= instance representing an integer literal in radix base.
+
+- isinstance()
+
+- issubclass()
+
+- iter()
+
+- len()
+
+- list()
+
+- locals()
+
+- map()
+
+- max()
+
+- memoryview()
+
+- min()
+
+- next()
+
+- object()
+
+- oct()
+
+- open()
+
+- ord()
+
+- pow()
+
+- print()
+
+- property()
+
+- range()
+
+- repr()
+
+- reversed()
+
+- rount()
+
+- set()
+
+- setattr()
+
+- slice()
+
+- sorted()
+
+- staticmethod()
+
+- str()
+
+- sum()
+
+- super()
+
+- tuple()
+
+- type()
+
+- vars()
+
+- zip()
+
+- =__import__()=
+
 * Data
 
 ** Data Model
@@ -906,6 +1061,118 @@ used to build Python supports C ~long long~, or, on Windows, ~__int64~.
     the iterator protocol.  Once an iterator’s ~__next__()~ method raises
     ~StopIteration~, it must continue to do so on subsequent
     calls. Implementations that do not obey this property are deemed broken.
+
+* Data Structures
+- https://docs.python.org/3.7/tutorial/datastructures.html#list-comprehensions
+
+  #+cindex:lists, data structures
+** Lists
+
+#+cindex:list methods
+*** Methods of list objects
+
+- list.append(x)
+
+- list.extend(iterable)
+
+- list.insert(i, x)
+
+- list.remove(x)
+
+- list.pop([i])
+
+- list.clear()
+
+- list.index(x[, start[, end]])
+
+- list.count(x)
+
+- list.sort(key=None, reverse=False)
+
+- list.reverse()
+
+- list.copy()
+
+
+#+cindex:list as stack
+#+cindex:stack, using list
+*** Lists as Stacks
+
+- Stack ::: the last element added is the first element retrieved
+  (“last-in,first-out”).
+
+- Add to stack :: To add an item to the top of the stack, use ~append()~.
+
+- Retrieve from stack :: To retrieve an item from the top of the stack, use
+     ~pop()~ without an explicit index.
+
+
+#+cindex:list as queue
+#+cindex:queue, using list
+#+cindex:collections.queue
+*** Lists as Queues
+
+- Queue :: the first element added is the first element retrieved (“first-in,
+           first-out”).  Lists are not efficient for this purpose.  While
+           appends and pops from the end of list are fast, doing inserts or
+           pops from the beginning of a list is slow (because all of the other
+           elements have to be shifted by one).
+
+           #+cindex:collections.deque
+- ~collections.queue~ :: To implement a queue, use [[https://docs.python.org/3.7/library/collections.html#collections.deque][collections.deque]] which was
+     designed to have fast appends and pops from both ends.
+
+
+#+begin_src python
+  from collections import deque
+
+  queue = deque(["Eric", "John", "Michael"])
+  queue.append("Terry")           # Terry arrives
+  queue.append("Graham")          # Graham arrives
+  queue.popleft()                 # The first to arrive now leaves
+  #=> 'Eric'
+  queue.popleft()                 # The second to arrive now leaves
+  #=> 'John'
+
+  queue                           # Remaining queue in order of arrival
+  #=> deque(['Michael', 'Terry', 'Graham'])
+#+end_src
+
+
+#+cindex:list comprehensions
+*** List Comprehensions
+
+List comprehensions provide a concise way to create lists.  Common applications
+are to make new lists where each element is the result of some operations
+applied to each member of another sequence or iterable, or to create a
+subsequence of those elements that satisfy a certain condition.
+
+For example, assume we want to create a list of squares.  We can calculate the
+list of squares without any side effects using:
+
+#+begin_src python
+squares = list(map(lambda x: x**2, range(10)))
+#+end_src
+
+or, equivalently:
+
+#+begin_src python
+squares = [x**2 for x in range(10)]
+#+end_src
+
+A /list comprehension/ consists of brackets containing an expression followed
+by a ~for~ clause, then zero or more ~for~ or ~if~ clauses.  The result will be
+a new list resulting from evaluating the expression in the context of the ~for~
+and ~if~ clauses which follow it.
+
+#+begin_src python
+[(x, y) for x in [1,2,3] for y in [3,1,4] if x != y]
+#+end_src
+
+List comprehensions can contain complex expressions and nested functions.
+
+The initial expression in a list comprehension can be any arbitrary expression,
+including another list comprehension.
 
 * Execution
 
