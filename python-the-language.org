@@ -5,42 +5,43 @@
 #+AUTHOR: WLHarvey4
 #+DATE:2019-06-05 11:17
 #+MACRO: version 0.4.0
+
 * Keywords
-  - False
-  - None
-  - True
-  - and
-  - as
-  - assert
-  - async
-  - await
-  - break
-  - class
-  - continue
-  - def
-  - del
-  - elif
-  - else
-  - except
-  - finally
-  - for
-  - from
-  - global
-  - if
-  - import
-  - in
-  - is
-  - lambda
-  - nonlocal
-  - not
-  - or
-  - pass
-  - raise
-  - return
-  - try
-  - while
-  - with
-  - yield
+- False
+- None
+- True
+- and
+- as
+- assert
+- async
+- await
+- break
+- class
+- continue
+- def
+- del
+- elif
+- else
+- except
+- finally
+- for
+- from
+- global
+- if
+- import
+- in
+- is
+- lambda
+- nonlocal
+- not
+- or
+- pass
+- raise
+- return
+- try
+- while
+- with
+- yield
 
 * Operators
   Operators are the constructs which can manipulate the value of operands.
@@ -704,6 +705,7 @@ are always available.  They are listed here in alphabetical order.
     :END:
     Sequences represent finite ordered sets indexed by non-negative numbers.
 
+    #+CINDEX:@code{len()} function
     - ~len()~ :: function that returns the number of items of a sequence (zero
                  indexed).
     - selecting :: ~a[i]~ selects item ~i~ of sequence ~a~
@@ -742,6 +744,7 @@ are always available.  They are listed here in alphabetical order.
      built-in mutable sequence types.  The extension module ~array~ provides
      an additional example of a mutable sequence type.
 ***** Lists
+      #+CINDEX:lists, mutable sequence
       Lists are formed by placing a comma-separated list of expressions in
       square brackets.  The items of a list are arbitrary Python objects.
 ***** Byte Arrays
@@ -989,7 +992,7 @@ used to build Python supports C ~long long~, or, on Windows, ~__int64~.
      A class method object, like a static method object, is a wrapper around
      another object that alters the way in which that object is retrieved from
      classes and class instances.
-     
+
 ** Iteration
 
 *** Iterable
@@ -1232,24 +1235,42 @@ including another list comprehension.
      - free variable :: a variable used in a code block but not defined there
 
 *** Name Resolution
+    #+CINDEX:name, binding
+    #+CINDEX:binding, name, operations
+    #+CINDEX:declarations, none
+    #+CINDEX:block, code
+    #+CINDEX:code block
     Python lacks declarations and allows name binding operations to occur
     anywhere within a code block.
 
+    #+CINDEX:name resolution rules
+    #+CINDEX:resolution, name, rules
     Each occurrence of a name in the program text refers to the binding of that
-    name established by the following name resolution rules.
+    name established by the following /name resolution rules/.
 
+    #+CINDEX:scope
+    #+CINDEX:block
     - scope :: defines the visibility of a name within a block
+               #+CINDEX:local variable
+               #+CINDEX:variable, local
                + local variable :: If a local variable is defined in a block, its scope
                                    includes that block.  If the definition occurs in a
                                    function block, the scope extends to any blocks
                                    contained within the defining one, unless a contained
                                    block introduces a different binding for the name.
+    #+CINDEX:resolution
     - resolution :: When a name is used in a code block, it is resolved using
                     the nearest enclosing scope.
+    #+CINDEX:block environment
+    #+CINDEX:environment, block
     - block environment :: The set of all such scopes visible to a code block
          is called the block’s environment.
+    #+CINDEX:@code{NameError} exception
+    #+CINDEX:exception, @code{NameError}
     - ~NameError~ Exception :: the exception raised when a name is not found at
          all.
+    #+CINDEX:@code{UnboundLocalError} exception
+    #+CINDEX:exception, @code{UnboundLocalError}
     - ~UnboundLocalError~ Exception :: the error raised when if the current
          scope is a function scope, and the name refers to a local variable
          that has not yet been bound to a value at the point where the name is
@@ -2238,6 +2259,43 @@ search path.
    yields the value of that expression.  To create an empty tuple, use an empty
    pair of parentheses: ~()~.
 * Statements
+  A simple statement is comprised within a single logical line. Several simple
+  statements may occur on a single line separated by semicolons.
+
+** Syntax
+     #+cindex: expression, definition
+     #+cindex: procedure, definition
+   - Expression statement ::
+        {{{dfn(Expression statements)}}} are used (mostly interactively) to
+        compute and write a value, or (usually) to call a {{{dfn(procedure)}}}
+        (a function that returns no meaningful result; in Python, procedures
+        return the value ~None~).  An expression statement evaluates the
+        expression list (which may be a single expression).
+
+        #+cindex: interactive mode
+        #+cindex: @command{repr}
+        In *interactive mode*, if the value is not ~None~, it is converted to a
+        string using the built-in ~repr()~ function and the resulting string is
+        written to standard output on a line by itself (except if the result is
+        ~None~, so that procedure calls do not cause any output.)
+
+
+   - assert statement
+   - assignment statement
+     + augmented assignment statement
+     + annotated assignment statement
+   - pass statement
+   - delete statement
+   - return statement
+   - yield statement
+   - raise statement
+   - break statement
+   - continue statement
+   - import statement
+   - future statement
+   - global statement
+   - nonlocal statement
+
 #+CINDEX:statement, simple
 A simple statement is comprised within a single logical line.  Several simple
 statements may occur on a single line separated by semicolons.
@@ -2976,6 +3034,7 @@ The library contains built-in modules (written in C) that provide access to
 system functionality such as file I/O that would otherwise be inaccessible to
 Python programmers, as well as modules written in Python that provide
 standardized solutions for many problems that occur in everyday programming.
+
 Some of these modules are explicitly designed to encourage and enhance the
 portability of Python programs by abstracting away platform-specifics into
 platform-neutral APIs.
@@ -2985,6 +3044,56 @@ platform-neutral APIs.
 For Unix-like operating systems Python is normally provided as a collection of
 packages, so it may be necessary to use the packaging tools provided with the
 operating system to obtain some or all of the optional components.
+
+#+CINDEX:Python Package Index
+In addition to the standard library, there is a growing collection of several
+thousand components (from individual programs and modules to packages and
+entire application development frameworks), available from the [[https://pypi.org/][Python Package
+Index]].
+
+** About the Python Standard Library
+The “Python library” contains several different kinds of components.
+
+#+CINDEX:data types, standard libreary
+- data types ::
+
+                It contains data types that would normally be considered part
+                of the “core” of a language, such as numbers and lists.  For
+                these types, the Python language core defines the form of
+                literals and places some constraints on their semantics, but
+                does not fully define the semantics.
+
+- functions and exceptions ::
+
+     The library also contains built-in functions and exceptions --- objects
+     that can be used by all Python code without the need of an =import=
+     statement.  Some of these are defined by the core language, but many are
+     not essential for the core semantics and are only described here.
+
+- modules ::
+
+             The bulk of the library, however, consists of a collection of
+             modules.
+
+             - Some modules are written in C and built in to the Python
+               interpreter;
+
+             - others are written in Python and imported in source form.
+
+             - Some modules provide interfaces that are highly specific to
+               Python, like printing a stack trace;
+
+             - some provide interfaces that
+             are specific to particular operating systems, such as access to
+             specific hardware;
+
+             - others provide interfaces that are specific to a particular
+               application domain, like the World Wide Web. Some
+             modules are available in all versions and ports of Python; others
+             are only available when the underlying system supports or requires
+             them; yet others are available only when a particular
+             configuration option was chosen at the time when Python was
+             compiled and installed.
 
 *** Python 3 Standard Library
 - https://docs.python.org/3/library/index.html
@@ -3142,7 +3251,9 @@ available by default in Python 3.x.
   :index:    cp
   :END:
 
-* Texinfo Setup                                                    :noexport:
+* Export Settings                                                  :noexport:
+
+** Texinfo Setup                                                  :noexport:
   #+TEXINFO_FILENAME:python-the-language.info
   #+TEXINFO_CLASS: info
   #+TEXINFO_HEADER:
@@ -3157,7 +3268,7 @@ available by default in Python 3.x.
   #+MACRO: dfn @@texinfo:@dfn{@@$1@@texinfo:}@@
   #+MACRO: option @@texinfo:@option{@@$1@@texinfo:}@@
 
-* LaTeX Setup                                                      :noexport:
+** LaTeX Setup                                                    :noexport:
   #+LATEX_CLASS: report
   #+LATEX_CLASS_OPTIONS:
   #+LATEX_HEADER:
@@ -3166,7 +3277,6 @@ available by default in Python 3.x.
   #+KEYWORDS:
   #+LATEX_COMPILER: pdflatex
 
-* Local Variables                                                  :noexport:
+* Local Variables
 # Local Variables:
-# time-stamp-pattern: "8/^\\#\\+DATE:%:y-%02m-%02d %02H:%02M$"
-# End:
+# time-stamp-pattern:"8/^\\#\\+\\(DATE\\|date\\):\s?%:y-%02m-%02d %02H:%02M$"
