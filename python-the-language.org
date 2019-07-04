@@ -3,8 +3,8 @@
 #+title: Python the Language
 #+subtitle: Version {{{version}}} {{{time(%F %R)}}}
 #+author: WLHarvey4
-#+date:2019-07-02 21:55
-#+macro: version 0.4.1
+#+date:2019-07-04 09:30
+#+macro: version 0.4.2
 
 * Keywords
 - False
@@ -589,56 +589,63 @@ are always available.  They are listed here in alphabetical order.
 - =__import__()=
 
 * Data
-
 ** Data Model
    :CI:
    #+CINDEX: data model
    #+CINDEX: objects as data
    :END:
-
 *** Objects --- Identity • Type • Value
-    :CI:
-    #+CINDEX: identity
-    #+CINDEX: type
-    #+CINDEX: value
-    #+CINDEX: ~is~ operator
-    #+CINDEX: ~id()~ function
-    #+CINDEX: ~type()~ function
-    #+CINDEX: garbage collection
-    :END:
-
+    #+cindex:object, data model
     /Objects/ are Python’s  abstraction for *data*.  All data  in a Python
     program is represented by objects or by relations between objects.
     Every object has an:
 
+    #+cindex:object attributes
+    #+cindex:identity, data model
     - identity :: immutable; an object's place in memory
+                  #+cindex:@code{is} operator
                   - ~is~ :: operator to compare the identity of two objects
+                  #+cindex:@code{id} function
+                  #+cindex:CPhython, @code{id} function
                   - ~id()~  :: function that returns an integer representing
-                               the object's identity.
+                               the object's identity.  For CPython, ~id(x)~ is
+                               the memory address where ~x~ is stored.
+
+    #+cindex:type, data model
     - type :: determines the operations that the object supports, and the
               possible values for objects of that type.
+              #+cindex:@code{type} function
               - ~type()~ :: function returns an object's type (an object itself);
                             type is immutable
+
+    #+cindex:value, data model
+    #+cindex:mutability, data model
+    #+cindex:mutable objects
+    #+cindex:immutable objects
     - value :: values can be either mutable or immutable, which is
                determined by its type.  Numbers, strings, and tuples are
                /immutable/, while dictionaries and lists are /mutable/.
 
-    Objects are nevery explicitly destroyed; rather, they are
-    garbage-collected when they become unreachable.
+    #+cindex:garbage collection
+    #+cindex:CPython, garbage collection
+    Objects are nevery explicitly destroyed; rather, they are garbage-collected
+    when they become unreachable.  CPython currently uses a reference-counting
+    scheme with (optional) delayed detection of cyclically linked garbage,
+    which collects most objects as soon as they become unreachable, but is not
+    guaranteed to collect garbage containing circular references.
 
 *** Container Objects
-    :CI:
-    #+CINDEX: container objects
-    #+CINDEX: containers
-    #+CINDEX: containers, mutability
-    :END:
-
+    #+cindex:container objects, data model
+    #+cindex:containers
+    #+cindex:references, to objects
     /Container objects/ are objects that contain references to other
     objects.  Examples are:
     - tuples
     - lists
     - dictionaries
 
+    #+cindex:mutability, containers
+    #+cindex:container value, reference
     The references are part of a container’s value.  When referring to the
     /mutability/ of a container, the identities of the immediately
     contained objects are implied.  Thus, if an immutable container (like
@@ -646,9 +653,22 @@ are always available.  They are listed here in alphabetical order.
     if that mutable object is changed.
 
 ** Type Hierarchy
-   A discussion of the types built into Python.
+#+cindex:types, built-in
+#+cindex:standard types
+A discussion of the standard types built into Python.  Extension modules
+(written in C, Java, or other languages, depending on the implementation) can
+define additional types.
+
+#+cindex:special attributes
+#+cindex:attributes, special
+- Special attributes ::
+
+     These are attributes that provide access to the implementation and are not
+     intended for general use.  Their definition may change in the future.
 
 *** None
+    #+cindex:@code{None}, type
+    #+cindex:@code{false}, @code{None}
     - ~None~ :: single object with a single value, accessed through the
                 name ~None~.  It signifies /the absence of a value/,
                 i.e., it would be returned from a function that did not
@@ -656,6 +676,8 @@ are always available.  They are listed here in alphabetical order.
                 /false/.
 
 *** NotImplemented
+    #+cindex:@code{NotImplemented}, type
+    #+cindex:@{true}, @code{NotImplemented}
     - ~NotImplemented~ :: single object with a single value, accessed
          through the name ~NotImplemented~.  Numeric methods and rich
          comparison methods should return this value if they do not
@@ -663,37 +685,60 @@ are always available.  They are listed here in alphabetical order.
          value is /true/.
 
 *** Ellipsis
-    - ~Ellipsis~ :: single  object with a single  value, accessed through
-                    the literal ... or the name ~Ellipsis~.  It's *truth*
-                    value is /true/.
+    #+cindex:@code{Ellipsis}, type
+    #+cindex:@code{...}, @code{Ellipsis}
+    #+cindex:@code{true}, @code{Ellipsis}
+    - ~Ellipsis~ :: single object with a single value, accessed through the
+                    literal =...= or the name ~Ellipsis~.  It's *truth* value
+                    is /true/.
 
 *** numbers.Number
+    #+cindex:@code{numbers.Number}, type
+    #+cindex:@code{Number}, type
     These types are created by numeric literals and returned as results by
     arithmetic operators and arithmetic built-in functions.  They are
     immutable.  Python distinguishes between integers, floating point
     numbers, and complex numbers.
 
 **** ~numbers.Integral~
+     #+cindex:@code{numbers.Integral}, type
+     #+cindex:@code{Integral}, type
+     #+cindex:integers
      These are integers.  There are two types:
 
 ***** Integers ~int~
+      #+cindex:@code{int}, type
       These represent numbers in an unlimited range, subject to available
       (virtual) memory only.
 
 ***** Booleans ~bool~
+     #+cindex:@code{bool}, type
+     #+cindex:Booleans
+     #+cindex:@code{False}
+     #+cindex:@code{True}
       These represent the truth values ~False~ and ~True~.  The Boolean type is a
       subtype of the integer type, and Boolean values behave like the values 0 and 1,
       respectively, in almost all contexts, the exception being that when converted
       to a string, the strings "False" or "True" are returned, respectively.
 
 **** ~numbers.Real~ • Float
+     #+cindex:@code{Real}, type
+     #+cindex:@code{Float}, type
+     #+cindex:floating point numbers, double precision
+     #+cindex:double precision
+     #+cindex:single precision
      These represent machine-level double precision floating point numbers.  Python
      does not support single-precision floating point numbers;
 
 **** ~numbers.Complex~ • Complex
-     These represent complex numbers as a pair of machine-level double precision
-     floating point numbers.  The real and imaginary parts of a complex number z can
-     be retrieved through the read-only attributes:
+     #+cindex:@code{Complex}, type
+     #+cindex:complex numbers
+     #+cindex:double precision pair
+     These represent complex numbers as a pair of machine-level double
+     precision floating point numbers.  The real and imaginary parts of a
+     complex number ~z~ can be retrieved through the read-only attributes:
+     #+cindex:@code{z.real} attribute
+     #+cindex:@code{z.imag} attribute
      - ~z.real~
      - ~z.imag~
 
@@ -703,66 +748,110 @@ are always available.  They are listed here in alphabetical order.
     #+CINDEX: slice, sequence
     #+CINDEX: slice, extended, sequence
     :END:
+    #+cindex:sets, sequences
     Sequences represent finite ordered sets indexed by non-negative numbers.
 
-    #+CINDEX:@code{len()} function
+    #+CINDEX:@code{len()} function, sequences
     - ~len()~ :: function that returns the number of items of a sequence (zero
                  indexed).
     - selecting :: ~a[i]~ selects item ~i~ of sequence ~a~
     - slicing :: ~a[i:j]~ selects all items with index k such that ~i <= k < j~.
     - extended slicing :: ~a[i:j:k]~ selects all items of ~a~ with index ~x~ where
          ~x = i + n*k~, ~n >= 0~ and ~i <= x < j~.
-**** Immutable Sequences
-     An object of an immutable sequence type cannot change once it is created.
-***** Strings
-      A sequence of values that represent Unicode code points.  All the code
-      points in the range =U+0000 - U+10FFFF= can be represented in a string.
-      There is no ~char~ type.
-      - ~ord()~ :: converts a code point from its string form to an integer in
-                   the range =0 - 10FFFF=
-      - ~chr()~ :: converts an integer in the range =0 - 10FFFF= to the
-                   corresponding length 1 string object.
-      - ~str.encode()~ :: used to convert a ~str~ to ~bytes~ using the given
-                          text encoding
-      - ~bytes.encode()~ :: used to convert ~bytes~ to ~str~ using the given
-           text encoding
-***** Tuples
-      Tuples of two or more items are formed by comma-separated lists of
-      expressions.  The items of a tuple are arbitrary Python objects.  A tuple
-      of one item (a /singleton/) can be formed by affixing a comma to an
-      expression.  An empty tuple can be formed by an empty pair of
-      parentheses.
-***** Bytes
-      A ~bytes~ object is an immutable array.  The items are 8-bit bytes,
-      represented by integers in the range ~0 <= x < 256~.  To construct a
-      ~bytes~ object, use:
-      - ~b'abc'~ :: ~bytes~ literal
-      - ~bytes()~ :: ~bytes~ constructor
-      - ~decode()~ :: method to convert a ~bytes~ object to a string
-**** Mutable Sequences
-     Mutable sequences can be changed after they are created.  There are two
-     built-in mutable sequence types.  The extension module ~array~ provides
-     an additional example of a mutable sequence type.
-***** Lists
-      #+CINDEX:lists, mutable sequence
-      Lists are formed by placing a comma-separated list of expressions in
-      square brackets.  The items of a list are arbitrary Python objects.
-***** Byte Arrays
-      A mutable array.  Provide the same interface and functionality as
-      immutable ~bytes~ object.  Since a ~bytearray~ is mutable, it is also
-      unhashable.
-      - ~bytearray()~ :: constructor
-***** Arrays
-      The ~array~ extension module provides efficient arrays of basic numeric
-      values:
-      + characters
-      + integers
-      + floating point numbers
 
-      Arrays are /sequence types/ and behave very much like lists, except that
-      the type of objects stored in them is constrained.  The type is specified
-      at object creation time by using a type code, which is a single
-      character.
+
+    #+cindex:mutability, sequences
+    Sequences are distingushed according to their mutability.
+
+**** Immutable Sequences
+#+cindex:immutable sequences
+#+cindex:sequences, immutable
+An object of an immutable sequence type cannot change once it is created.
+
+***** Strings
+#+cindex:@code{String}, type
+#+cindex:immutable, String
+#+cindex:Unicode code points, String
+#+cindex:@code{char} type, none
+A sequence of values that represent Unicode code points.  All the code points
+in the range =U+0000 - U+10FFFF= can be represented in a string.  There is no
+~char~ type (every code point in the string is represented as a string object
+with length 1).
+
+#+cindex:@code{ord()} function
+- ~ord()~ :: converts a code point from its string form to an integer in
+             the range =0 - 10FFFF=
+
+#+cindex:@code{chr()} function
+- ~chr()~ :: converts an integer in the range =0 - 10FFFF= to the
+             corresponding length 1 string object.
+
+#+cindex:@code{str.encode()} method
+- ~str.encode()~ :: used to convert a ~str~ to ~bytes~ using the given
+                    text encoding
+
+#+cindex:@code{bytes.decode()} method
+- ~bytes.decode()~ :: used to convert ~bytes~ to ~str~ using the given text
+     encoding
+
+***** Tuples
+#+cindex:@code{Tuples} type
+Tuples of two or more items are formed by comma-separated lists of
+expressions.  The items of a tuple are arbitrary Python objects.  A tuple
+of one item (a /singleton/) can be formed by affixing a comma to an
+expression.  An empty tuple can be formed by an empty pair of
+parentheses.
+
+***** Bytes
+#+cindex:@code{Bytes}, type
+A ~bytes~ object is an immutable array.  The items are 8-bit bytes,
+represented by integers in the range ~0 <= x < 256~.  To construct a
+~bytes~ object, use:
+
+- ~b'abc'~ :: ~bytes~ literal
+
+#+cindex:@code{bytes()} constructor
+- ~bytes()~ :: ~bytes~ constructor
+
+#+cindex:@code{decode()} method
+#+cindex:@code{bytes.decode()} method
+- ~decode()~ :: method to convert a ~bytes~ object to a string
+
+**** Mutable Sequences
+#+cindex:mutable sequences
+#+cindex:sequences, mutable
+#+cindex:@code{array}, extension module
+Mutable sequences can be changed after they are created.  There are two
+built-in mutable sequence types.  The extension module ~array~ provides
+an additional example of a mutable sequence type.
+
+***** Lists
+#+CINDEX:lists, mutable sequence
+Lists are formed by placing a comma-separated list of expressions in square
+brackets.  The items of a list are arbitrary Python objects.
+
+***** Byte Arrays
+#+cindex:@code{bytearray} type
+A mutable array.  Provide the same interface and functionality as immutable
+~bytes~ object.  Since a ~bytearray~ is mutable, it is also unhashable.
+
+#+cindex:@code{bytearray()} constructor
+- ~bytearray()~ :: constructor
+
+***** Arrays
+#+cindex:Arrays, extension module
+#+cindex:@code{array} type
+The ~array~ extension module provides efficient arrays of basic numeric values:
+
++ characters
++ integers
++ floating point numbers
+
+
+Arrays are /sequence types/ and behave very much like lists, except that the
+type of objects stored in them is constrained.  The type is specified at object
+creation time by using a type code, which is a single character.
+
 ****** Sequence Operations
        Array objects support the ordinary sequence operations of
        + indexing
@@ -812,6 +901,36 @@ used to build Python supports C ~long long~, or, on Windows, ~__int64~.
             array’s ~fromlist()~, ~frombytes()~, or ~fromunicode()~ method to
             add initial items to the array.
        - array.typecodes :: a string with all available type codes.
+
+***** Collections Extension Module---Container Types
+:PROPERTIES:
+:source-code: [[https://github.com/python/cpython/blob/3.7/Lib/collections/__init__.py][Lib/collections/__init__.py]]
+:END:
+#+cindex:Collections
+#+cindex:Container types
+This module implements specialized container datatypes providing alternatives
+to Python’s general purpose built-in containers, ~dict~, ~list~, ~set~, and
+~tuple~.
+
+See https://docs.python.org/3/library/collections.html#module-collections
+
+****** namedtuple()
+
+****** deque
+
+****** ChainMap
+
+****** Counter
+
+****** OrderedDict
+
+****** defaultdict
+
+****** UserDict
+
+****** UserList
+
+****** UserString
 
 *** Set Types
     :CI:
@@ -994,7 +1113,6 @@ used to build Python supports C ~long long~, or, on Windows, ~__int64~.
      classes and class instances.
 
 ** Iteration
-
 *** Iterable
     #+cindex: iterable
     #+cindex: sequence types
