@@ -3,8 +3,8 @@
 #+title: Python the Language
 #+subtitle: Version {{{version}}} {{{time(%F %R)}}}
 #+author: WLHarvey4
-#+date:2019-07-04 10:11
-#+macro: version 0.4.4
+#+date:2019-07-04 11:07
+#+macro: version 0.4.5
 
 * Keywords
 - False
@@ -1320,6 +1320,164 @@ List comprehensions can contain complex expressions and nested functions.
 
 The initial expression in a list comprehension can be any arbitrary expression,
 including another list comprehension.
+
+*** Destructuring Collections
+- [[https://blog.tecladocode.com/destructuring-in-python/][Destructuring Python]]
+
+
+#+cindex:destructuring
+#+cindex:unpacking
+#+cindex:destructuring assignments
+#+cindex:collections, destructuring
+Destructuring (also called unpacking) is where we take a collection, like a
+list or a tuple, and we break it up into individual values.  This is quite
+useful, as it enables us to do things like destructuring assignments, where we
+assign values to several variables at once from a single collection.
+
+**** Destructuring Assignments
+Python allows more than one variable assignment at a time; you must provide the
+same number of values as variables (the values are assigned entirely based on
+order).
+
+: x, y = 5, 11
+
+This is an example of destructuring.
+
+: x, y = (5, 11)
+
+#+cindex:tuples
+Parentheses have nothing at all to do with tuples; rather, it's the commas
+which tell Python something is a tuple.  Brackets are used for readability or
+disambiguation.  Even here, brackets are still not part of the tuple syntax.
+Therefore, the two examples above are semantically identical, the destructuring
+of a tuple.
+
+#+cindex:@code{ValueError}
+Attempting to destructure a collection with the wrong number of variables
+results in a ~ValueError~, e.g.:
+
+: ValueError: not enough values to unpack (expected 4, got 3)
+
+**** Destructuring in ~for~ Loops
+#+cindex:@code{enumerate} function
+#+cindex:@code{enumerate} object
+#+cindex:iterable collection
+#+cindex:tuple
+The ~enumerate~ function takes an iterable collection as an argument and
+returns an ~enumerate~ object containing a tuple for each item in the
+collection.  Each tuple contains a counter value, which increments with each
+iteration, along with a value from the provided collection.
+
+#+cindex:@code{enumerate} syntax
+The syntax for ~enumerate~ looks like this:
+
+#+name:enumerate-syntax
+#+header: :results output
+#+begin_src python
+example_list = ["A", "B", "C"]
+
+for counter, letter in enumerate(example_list):
+	print(counter, letter)
+#+end_src
+
+#+RESULTS: enumerate-syntax
+: (0, 'A')
+: (1, 'B')
+: (2, 'C')
+
+#+cindex:destructuring example
+This is an example of destructuring: For each tuple in the ~enumerate~ object,
+the first value gets assigned to ~counter~, and the second value is assigned to
+~letter~.  It's possible to do this type of destructuring with as many values
+as we like, and this is not limited to the ~enumerate~ function.
+
+#+name:complex-destructuring
+#+header: :results output
+#+begin_src python
+people = [
+	("Bob", 42, "Mechanic"),
+	("James", 24, "Artist"),
+	("Harry", 32, "Lecturer")
+]
+
+for name, age, profession in people:
+	print(f"Name: {name}, Age: {age}, Profession: {profession}")
+#+end_src
+
+#+RESULTS: complex-destructuring
+: Name: Bob, Age: 42, Profession: Mechanic
+: Name: James, Age: 24, Profession: Artist
+: Name: Harry, Age: 32, Profession: Lecturer
+
+**** Ignoring Values
+To ignore a value, use =_= in place of a variable.  For example, if we take one
+of the tuples from the the people list above, and we only care about the name
+and profession, we can do the following:
+
+#+name:ignoring-values
+#+header: :results output
+#+begin_src python
+person = ("Bob", 42, "Mechanic")
+name, _, profession = person
+
+print(name, profession)  # Bob Mechanic
+#+end_src
+
+#+RESULTS: ignoring-values
+: Bob Mechanic
+
+This would also work just as well inside a loop, and can also be used when we
+don't care about any of the values. An example might be when using range to
+ensure a set number of iterations.
+
+#+begin_src python
+for _ in range(10):
+	<do something>
+#+end_src
+
+**** Using =*= to Collect Values
+#+cindex:@code{*} operator
+In some situations, we might want to isolate one or two values in a collection,
+and then keep the other items together.  In Python, we can use the =*= operator
+to collect leftover values when performing a destructuring assignment.  For
+example, we might have a list of numbers, and we want to grab the first number,
+and then assign the remaining numbers to a second variable:
+
+#+begin_src python
+head, *tail = [1, 2, 3, 4, 5]
+
+print(head)  # 1
+print(tail)  # [2, 3, 4, 5]
+#+end_src
+
+We can also do this the other way around, creating a new list with everything
+but the last value, and assigning the last value to its own variable.
+
+#+begin_src python
+*head, tail = [1, 2, 3, 4, 5]
+
+print(head)  # [1, 2, 3, 4]
+print(tail)  # 5
+#+end_src
+
+We can can assign any number of variables, and then gather up the remainder.
+We might grab the first and last items, and then gather up the middle, for
+example:
+
+#+begin_src python
+head, *middle, tail = [1, 2, 3, 4, 5]
+
+print(head)    # 1
+print(middle)  # [2, 3, 4]
+print(tail)    # 5
+#+end_src
+
+Alternatively, we might want to grab the first three items and then bundle up
+the rest:
+
+#+begin_src python
+first, second, third, *rest = [1, 2, 3, 4, 5]
+#+end_src
 
 * Execution
 
