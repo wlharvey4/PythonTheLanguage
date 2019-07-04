@@ -3,8 +3,15 @@
 #+title: Python the Language
 #+subtitle: Version {{{version}}} {{{time(%F %R)}}}
 #+author: WLHarvey4
-#+date:2019-07-04 11:07
-#+macro: version 0.4.5
+#+date:2019-07-04 11:25
+#+macro: version 0.4.6
+
+#+name:import-hello-and-this
+#+header: :results output :exports results
+#+begin_src python
+import __hello__
+import this
+#+end_src
 
 * Keywords
 - False
@@ -677,7 +684,7 @@ define additional types.
 
 *** NotImplemented
     #+cindex:@code{NotImplemented}, type
-    #+cindex:@{true}, @code{NotImplemented}
+    #+cindex:@code{true}, @code{NotImplemented}
     - ~NotImplemented~ :: single object with a single value, accessed
          through the name ~NotImplemented~.  Numeric methods and rich
          comparison methods should return this value if they do not
@@ -2537,10 +2544,10 @@ search path.
 
 ** Lambda Expressions (lambda form)
    #+cindex: lambda expression (form)
-   Lambda expressions[fn:3] (sometimes called lambda forms) are used to create
+   Lambda expressions (sometimes called lambda forms) are used to create
    anonymous functions. The expression ~lambda parameters: expression~ yields a
    function object.  Note that functions created with lambda expressions cannot
-   contain statements or annotations.
+   contain statements or annotations. [fn:3]
 
 ** Expression Lists
    An expression list containing at least one comma yields a tuple. The length
@@ -3654,14 +3661,9 @@ available by default in Python 3.x.
   #+KEYWORDS:
   #+LATEX_COMPILER: pdflatex
 
-* Local Variables
-# Local variables:
-# time-stamp-pattern:"8/^\\#\\+date:%:y-%02m-%02d %02H:%02M$"
-# End:
 * Footnotes
-
 [fn:3]If Guido van Rossum, the author of the programming language Python, had
-got his will, [there would be no ~lambda~ operator.  In his article from May
+got his will, there would be no ~lambda~ operator.  In his article from May
 2005 [[http://www.artima.com/weblogs/viewpost.jsp?thread=98196]["All Things Pythonic: The fate of reduce() in Python 3000"]], he gives his
 reasons for dropping ~lambda~, ~map()~, ~filter()~ and ~reduce()~.  He expected
 resistance from the Lisp and the scheme "folks".  What he didn't anticipate was
@@ -3675,12 +3677,14 @@ into the module ~functools~.
 
 His reasoning for dropping them is like this:
 
-- There is an equally powerful alternative to ~lambda~, ~filter~, ~map~ and
-  ~reduce~, i.e. [[https://www.python-course.eu/python3_list_comprehension.php][list comprehension]]
-- List comprehension is more evident and easier to understand
-- Having both list comprehension and "Filter, map, reduce and lambda" is
-  transgressing the Python motto "There should be one obvious way to solve a
-  problem"
+There is an equally powerful alternative to ~lambda~, ~filter~, ~map~ and
+~reduce~, i.e. [[https://www.python-course.eu/python3_list_comprehension.php][list comprehension]]
+
+List comprehension is more evident and easier to understand.
+
+Having both list comprehension and "Filter, map, reduce and lambda" is
+transgressing the Python motto "There should be one obvious way to solve a
+problem"
 
 Some like it, others hate it and many are afraid of the lambda operator.  The
 lambda operator or lambda function is a way to create small anonymous
@@ -3690,6 +3694,9 @@ functions are mainly used in combination with the functions filter(), map() and
 reduce().  The lambda feature was added to Python due to the demand from Lisp
 programmers.
 
-- https://www.python-course.eu/python3_lambda.php
+From [[https://www.python-course.eu/python3_lambda.php][Python Crash Course on Lambdas]]
+
+* Local Variables                                                  :noexport:
 # Local Variables:
-# time-stamp-pattern:"8/^\\#\\+\\(DATE\\|date\\):\s?%:y-%02m-%02d %02H:%02M$"
+# time-stamp-pattern:"8/^\\#\\+date:%:y-%02m-%02d %02H:%02M$"
+# End:
