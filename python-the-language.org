@@ -3,8 +3,8 @@
 #+title: Python the Language
 #+subtitle: Version {{{version}}} {{{time(%F %R)}}}
 #+author: WLHarvey4
-#+date:2019-07-04 09:55
-#+macro: version 0.4.3
+#+date:2019-07-04 10:11
+#+macro: version 0.4.4
 
 * Keywords
 - False
@@ -1186,61 +1186,88 @@ See https://docs.python.org/3/library/collections.html#module-collections
 * Data Structures
 - https://docs.python.org/3.7/tutorial/datastructures.html#list-comprehensions
 
-  #+cindex:lists, data structures
 ** Lists
-
+#+cindex:lists, data structures
 #+cindex:list methods
 *** Methods of list objects
 
+#+cindex:@code{append()}
+#+cindex:@code{list.append()}
 - list.append(x)
 
+  #+cindex:@code{extend()}
+  #+cindex:@code{list.extend()}
 - list.extend(iterable)
 
+  #+cindex:@code{insert()}
+  #+cindex:@code{list.insert()}
 - list.insert(i, x)
 
+  #+cindex:@code{remove()}
+  #+cindex:@code{list.remove()}
 - list.remove(x)
 
+  #+cindex:@code{pop()}
+  #+cindex:@code{list.pop()}
 - list.pop([i])
 
+  #+cindex:@code{clear()}
+  #+cindex:@code{list.clear()}
 - list.clear()
 
+  #+cindex:@code{index()}
+  #+cindex:@code{list.index()}
 - list.index(x[, start[, end]])
 
+  #+cindex:@code{count()}
+  #+cindex:@code{list.count()}
 - list.count(x)
 
+  #+cindex:@code{sort()}
+  #+cindex:@code{list.sort()}
 - list.sort(key=None, reverse=False)
 
+  #+cindex:@code{reverse()}
+  #+cindex:@code{list.reverse()}
 - list.reverse()
 
+  #+cindex:@code{copy()}
+  #+cindex:@code{list.copy()}
 - list.copy()
 
 
 #+cindex:list as stack
 #+cindex:stack, using list
 *** Lists as Stacks
+#+cindex:stacks, from lists
 
-- Stack ::: the last element added is the first element retrieved
-  (“last-in,first-out”).
+#+cindex:LIFO
+- Stack :: the last element added is the first element retrieved
+           (“last-in,first-out” (LIFO)).
 
+#+cindex:@code{append()}
+#+cindex:stack, add
 - Add to stack :: To add an item to the top of the stack, use ~append()~.
 
+#+cindex:@code{pop()}
+#+cindex:stack, retrieve
 - Retrieve from stack :: To retrieve an item from the top of the stack, use
      ~pop()~ without an explicit index.
 
-
+*** Lists as Queues
 #+cindex:list as queue
 #+cindex:queue, using list
-#+cindex:collections.queue
-*** Lists as Queues
-
+#+cindex:FIFO
 - Queue :: the first element added is the first element retrieved (“first-in,
-           first-out”).  Lists are not efficient for this purpose.  While
-           appends and pops from the end of list are fast, doing inserts or
-           pops from the beginning of a list is slow (because all of the other
-           elements have to be shifted by one).
+           first-out” (FIFO)).  Lists are not efficient for this purpose.
+           While appends and pops from the end of list are fast, doing inserts
+           or pops from the beginning of a list is slow (because all of the
+           other elements have to be shifted by one).
 
-           #+cindex:collections.deque
-- ~collections.queue~ :: To implement a queue, use [[https://docs.python.org/3.7/library/collections.html#collections.deque][collections.deque]] which was
+#+cindex:collections.deque
+#+cindex:deque
+#+cindex:queue
+- ~collections.deque~ :: To implement a queue, use [[https://docs.python.org/3.7/library/collections.html#collections.deque][collections.deque]] which was
      designed to have fast appends and pops from both ends.
 
 
@@ -1259,10 +1286,9 @@ See https://docs.python.org/3/library/collections.html#module-collections
   #=> deque(['Michael', 'Terry', 'Graham'])
 #+end_src
 
-
-#+cindex:list comprehensions
 *** List Comprehensions
-
+#+cindex:list comprehensions
+#+cindex:comprehensions, list
 List comprehensions provide a concise way to create lists.  Common applications
 are to make new lists where each element is the result of some operations
 applied to each member of another sequence or iterable, or to create a
