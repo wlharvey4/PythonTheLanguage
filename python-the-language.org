@@ -3,8 +3,8 @@
 #+title: Python the Language
 #+subtitle: Version {{{version}}} {{{time(%F %R)}}}
 #+author: WLHarvey4
-#+date:2019-07-04 09:30
-#+macro: version 0.4.2
+#+date:2019-07-04 09:55
+#+macro: version 0.4.3
 
 * Keywords
 - False
@@ -2631,6 +2631,81 @@ in the equivalent yield expression statement.
 - future statement
 - global statement
 - nonlocal statement
+
+** Compound Statement
+#+cindex:compount statement
+#+cindex:statement, compound
+Compound statements contain (groups of) other statements; they affect or
+control the execution of those other statements in some way.
+
+*** Summary of Compound Statements
+#+cindex:@code{if} statement
+#+cindex:@code{while} statement
+#+cindex:@code{for} statement
+~if~, ~while~, and ~for~ statements implement traditional control flow
+constructs.
+
+#+cindex:@code{try} statement
+~try~ specifies exception handlers and/or cleanup code for a group of
+statements.
+
+#+cindex:@code{while} statement
+the ~with~ statement allows the execution of initialization and finalization
+code around a block of code.
+
+#+cindex:function definition, compound statement
+#+cindex:class definition, compound statement
+Function and class definitions are also syntactically compound statements.
+
+*** List of Compound Statements
+- ~if~
+
+- ~while~
+
+- ~for~
+
+- ~try~
+
+- ~with~
+
+- ~funcdef~
+
+- ~classdef~
+
+- ~async_with~
+
+- ~async_for~
+
+- ~async_funcdef~
+
+*** Description of Compound Statement
+#+cindex:clause, compound statement
+- clauses ::
+
+             A compound statement consists of one or more ‘clauses.’  A clause
+             consists of a header and a ‘suite.’
+
+#+cindex:header, compound statement
+- header ::
+
+            The clause headers of a particular compound statement are all at
+            the same indentation level.  Each clause header begins with a
+            uniquely identifying keyword and ends with a colon.
+
+#+cindex:suite, compound statement
+- suite ::
+
+           A suite is a group of statements controlled by a clause.  A suite
+           can be one or more semicolon-separated simple statements on the same
+           line as the header, following the header’s colon, or it can be one
+           or more indented statements on subsequent lines.  Only the latter
+           form of a suite can contain nested compound statements;
+
+
+Statements always end in a NEWLINE possibly followed by a DEDENT.
+
+Optional continuation clauses always begin with a keyword that cannot start a
+statement (there are no ambiguities).
 
 * Resources
   :PROPERTIES:
