@@ -3,8 +3,8 @@
 #+title: Python the Language
 #+subtitle: Version {{{version}}} {{{time(%F %R)}}}
 #+author: WLHarvey4
-#+date:2019-07-04 11:25
-#+macro: version 0.4.6
+#+date:2019-07-04 17:44
+#+macro: version 0.4.7
 
 #+name:import-hello-and-this
 #+header: :results output :exports results
@@ -3625,6 +3625,113 @@ including version 3.3 in 2012, 3.4 in 2014, 3.5 in 2015, and 3.6 in 2016. This
 means that all recent standard library improvements, for example, are only
 available by default in Python 3.x.
 
+* Packaging
+** Python Packaging User Guide
+#+cindex:packaging user guide
+A collection of tutorials and references to help you distribute and install
+Python packages with modern tools.
+- https://packaging.python.org/
+
+- [[https://github.com/pypa/python-packaging-user-guide][Github]]
+
+** An Overview of Packaging for Python
+- https://packaging.python.org/overview/
+
+
+#+cindex:environment
+#+cindex:packaging options
+Python’s flexibility is why the first step in every Python project must be to
+think about the project’s /audience/ and the corresponding /environment/ where
+the project will run.  This overview provides a general-purpose decision tree
+for reasoning about Python’s plethora of /packaging options/.
+
+*** Deployment
+#+cindex:deploy, package
+Packages exist to be installed (or /deployed/), so before you package anything,
+you’ll want to have some answers to the deployment questions below:
+
+- Who are your software’s users?  Will your software be installed by other
+  developers doing software development, operations people in a datacenter, or
+  a less software-savvy group?
+
+- Is your software intended to run on servers, desktops, mobile clients
+  (phones, tablets, etc.), or embedded in dedicated devices?
+
+- Is your software installed individually, or in large deployment batches?
+
+
+Packaging is all about target environment and deployment experience.  With this
+information, the following overview will guide you to the packaging
+technologies best suited to your project.
+
+*** Packaging Libraries and Tools
+The following approaches to packaging are meant for libraries and tools used by
+technical audience in a development setting.  If you’re looking for ways to
+package Python for a non-technical audience and/or a production setting, skip
+ahead to Packaging Python applications.
+
+**** Modules
+#+cindex:modules
+A Python file[fn:5], provided it only relies on the standard library, can be
+redistributed and reused.  You will also need to ensure it’s written for the
+right version of Python, and only relies on the standard library.  However,
+this pattern won’t scale for projects that consist of multiple files, need
+additional libraries, or need a specific version of Python, hence the options
+below.
+
+**** Source Distributions
+#+cindex:import package
+#+cindex:directory structure
+If your code consists of multiple Python files, it’s usually organized into a
+directory structure.  Any directory containing Python files can comprise an
+/import package/.[fn:4].  Because packages consist of multiple files, they are
+harder to distribute.  Most protocols support transferring only one file at a
+time.
+
+{{heading(Source Distribution Package)}}}
+
+#+cindex:native packaging tools
+#+cindex:sdist
+So long as your code contains nothing but pure Python code, and you know your
+deployment environment supports your version of Python, then you can use
+Python’s *native packaging tools* to create a /source distribution package/, or
+/sdist/ for short.  Python’s /sdists/ are compressed archives (~.tar.gz~ files)
+containing one or more packages or modules.
+
+If you rely on any non-Python code, or non-Python packages (such as ~libxml2~
+in the case of ~lxml~, or =BLAS= libraries in the case of ~numpy~), you will
+need to use the format detailed in the next section, which also has many
+advantages for pure-Python libraries.
+
+**** Binary Distributions
+So much of Python’s practical power comes from its ability to integrate with
+the software ecosystem, in particular libraries written in C, C++, Fortran,
+Rust, and other languages.
+
+#+cindex:@code{wheel}
+Not all developers have the right tools or experiences to build these
+components written in these compiled languages, so Python created the ~wheel~,
+a /package format/ designed to ship libraries with compiled artifacts.  In
+fact, Python’s package installer, ~pip~, always prefers wheels because
+installation is always faster, so even pure-Python packages work better with
+wheels.
+
+#+cindex:binary distribution
+#+cindex:@code{sdist}
+Binary distributions are best when they come with source distributions to
+match.  Even if you don’t upload wheels of your code for every operating
+system, by uploading the ~sdist~, you’re enabling users of other platforms to
+still build it for themselves.  Default to publishing both ~sdist~ and ~wheel~
+archives together, unless you’re creating artifacts for a very specific use
+case where you know the recipient only needs one or the other.
+
+Python and PyPI make it easy to upload both wheels and ~sdists~ together.  Just
+follow the [[https://packaging.python.org/tutorials/packaging-projects/][Packaging Python Projects]] tutorial.
+
+#+caption:Packaging for Python Tools and Libraries
+#+cindex:python-packaging
+[[file:figs/py_pkg_tools_and_libs.png]]
+
 * List of Tables
   :PROPERTIES:
   :UNNUMBERED: t
@@ -3662,6 +3769,17 @@ available by default in Python 3.x.
   #+LATEX_COMPILER: pdflatex
 
 * Footnotes
+
+[fn:5] *Module* is the basic unit of code reusability in Python, existing in
+one of two types: Pure Module, or Extension Module.  A *Pure Module* is a
+module written in Python and contained in a single ~.py~ file (and possibly
+associated ~.pyc~ and/or ~.pyo~ files). 
+
+[fn:4] *Import Package* is a Python /module/ which can contain other modules or
+recursively, other packages.  An /import package/ is more commonly referred to
+with the single word “package”, but this guide will use the expanded term when
+more clarity is needed to prevent confusion with a Distribution Package which
+is also commonly called a “package”. 
 [fn:3]If Guido van Rossum, the author of the programming language Python, had
 got his will, there would be no ~lambda~ operator.  In his article from May
 2005 [[http://www.artima.com/weblogs/viewpost.jsp?thread=98196]["All Things Pythonic: The fate of reduce() in Python 3000"]], he gives his
