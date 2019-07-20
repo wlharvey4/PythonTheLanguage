@@ -3,8 +3,8 @@
 #+title: Python the Language
 #+subtitle: Version {{{version}}} {{{time(%F %R)}}}
 #+author: WLHarvey4
-#+date:2019-07-04 17:44
-#+macro: version 0.4.7
+#+date:2019-07-20 08:05
+#+macro: version 0.4.8
 
 #+name:import-hello-and-this
 #+header: :results output :exports results
@@ -3117,6 +3117,8 @@ searching.
 
 #+CINDEX:formatted string literals
 #+CINDEX:f-string
+#+cindex:string literal, prefixed with f
+#+cindex:@code{f"}
 Also known as an =f-string=, a string literal that is prefixed with =f= or =F=.
 
 These strings may contain replacement fields, which are expressions delimited
