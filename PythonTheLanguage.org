@@ -3,8 +3,8 @@
 #+title: Python the Language
 #+subtitle: Version {{{version}}} {{{time(%F %R)}}}
 #+author: WLHarvey4
-#+date:2019-07-20 08:05
-#+macro: version 0.4.8
+#+date:2019-07-20 10:48
+#+macro: version 0.4.9
 
 #+name:import-hello-and-this
 #+header: :results output :exports results
@@ -1487,17 +1487,17 @@ first, second, third, *rest = [1, 2, 3, 4, 5]
 #+end_src
 
 * Execution
+#+cindex:execution model
+#+cindex:model, execution
+From [[https://docs.python.org/3/reference/executionmodel.html][Documentation >> The Python Language Reference >> 4. Execution Model]]
 
 ** Program Structure
-   :CI:
-   #+CINDEX: program
-   #+CINDEX: code block
-   #+CINDEX: block of code
-   #+CINDEX: execution frame
-   :END:
 *** Program
+    #+cindex:program
     - program :: is constructed from code blocks
 *** Code Block
+    #+cindex:code block
+    #+cindex:block
     - block :: is a piece of Python program text that is executed as a unit.
                + module
                + function body
@@ -1510,40 +1510,71 @@ first, second, third, *rest = [1, 2, 3, 4, 5]
                + The string argument passed to the built-in functions ~eval()~ and
                  ~exec()~ is a code block.
 *** Execution Frame
+   #+cindex:execution frame
+   #+cindex:frame, execution
     - execution frame :: where a code block is executed.  A frame contains some
          administrative information (used for debugging) and determines where
          and how execution continues after the code block’s execution has
          completed.
 
 ** Naming and Binding
+   #+cindex:name
+   #+cindex:binding operation
+   #+cindex:name binding operations
    - name :: refers to an object; introduced by name binding operations.
 
+
+   /Names/ are introduced by /name binding operations/.
+
 *** Name Binding
-    - formal parameters to functions
-    - ~import~ statements
-    - class and function definitions
-    - targets that are identifiers if occurring in an assignmetn
-    - ~for~ loop header
-    - ~as~ after a ~with~ statement or ~except~ clause
-    - ~from ... import *~ binds all names defined in the imported module,
-      except those beginning with an underscore.
-    - target occurring in a ~del~ statement is considered bound
+The following constructs /bind/ names:
+
+- formal parameters to functions
+- import statements
+
+  The ~import~ statement of the form ~from ... import *~ binds all names
+  defined in the imported module, except those beginning with an underscore.
+
+- class definitions
+- function defintions
+
+  these bind the class or function name in the defining block
+
+- targets that are identifiers if occurring in an:
+  - assignment
+  - ~for~ loop header
+  - after ~as~ in a ~with~ statement or ~except~ clause
+
+- target occurring in a ~del~ statement is considered bound, though the actual
+  semantics are to unbind the name
 
 **** Where Binding Occurs
+     #+cindex:assignment
+     #+cindex:import statement
      - where occurs :: Each assignment or import statement occurs within a
                        block defined by a class or function definition or at
                        the module level (the top-level code block).
+
+     #+cindex:local variable
      - local variable :: If a name is bound in a block, it is a local variable
                          of that block
+
+     #+cindex:nonlocal variable
+     #+cindex:global variable
      - ~nonlocal~ or ~global~ declaration :: unless declared as nonlocal or
           global
+
+     #+cindex:global variable
      - global variable :: If a name is bound at the module level, it is a
           global variable.
+
      - module level :: The variables of the module code block are local and
                        global.
+
+     #+cindex:free variable
      - free variable :: a variable used in a code block but not defined there
 
-*** Name Resolution
+*** Name Resolution Rules
     #+CINDEX:name, binding
     #+CINDEX:binding, name, operations
     #+CINDEX:declarations, none
@@ -1568,12 +1599,13 @@ first, second, third, *rest = [1, 2, 3, 4, 5]
                                    contained within the defining one, unless a contained
                                    block introduces a different binding for the name.
     #+CINDEX:resolution
+    #+cindex:name resolution
     - resolution :: When a name is used in a code block, it is resolved using
                     the nearest enclosing scope.
     #+CINDEX:block environment
     #+CINDEX:environment, block
     - block environment :: The set of all such scopes visible to a code block
-         is called the block’s environment.
+         is called the /block’s environment/.
     #+CINDEX:@code{NameError} exception
     #+CINDEX:exception, @code{NameError}
     - ~NameError~ Exception :: the exception raised when a name is not found at
@@ -1586,15 +1618,23 @@ first, second, third, *rest = [1, 2, 3, 4, 5]
          used.  This is a subclass of ~NameError~ exception.
 
 **** References to the Current Block
-     If a name binding operation occurs anywhere within a code block, all uses
-     of the name within the block are treated as references to the current
-     block.  This can lead to errors when a name is used within a block before
-     it is bound.  This rule is subtle.
+#+cindex:name binding operation
+If a name binding operation occurs anywhere within a code block, all uses
+of the name within the block are treated as references to the current
+block.  This can lead to errors when a name is used within a block before
+it is bound.  This rule is subtle.
 
-     The /local variables/ of a code block can be determined by scanning the
-     entire text of the block for name binding operations.
+Python lacks declarations and allows name binding operations to occur anywhere
+within a code block.
+
+#+cindex:local variables, determined
+The /local variables/ of a code block can be determined by scanning the
+entire text of the block for name binding operations.
 
 **** Global Variables
+#+cindex:@code{global} statement
+#+cindex:top-level namespace
+#+cindex:free variable
      - global statement :: If the ~global~ statement occurs within a block, all
           uses of the name specified in the statement refer to the binding of
           that name in the top-level namespace.  Names are resolved in the
@@ -1607,6 +1647,8 @@ first, second, third, *rest = [1, 2, 3, 4, 5]
           name binding operation in the same block. If the nearest enclosing
           scope for a free variable contains a global statement, the free
           variable is treated as a global.
+
+     #+cindex:@code{nonlocal} statement
      - nonlocal statement :: The ~nonlocal~ statement causes corresponding names
           to refer to previously bound variables in the nearest enclosing
           function scope.  ~SyntaxError~ is raised at compile time if the given
@@ -1614,26 +1656,55 @@ first, second, third, *rest = [1, 2, 3, 4, 5]
 
 
 **** Module Namespace
-     The namespace for a module is automatically created the first time a module
-     is imported.
+#+cindex:namespace, module
+#+cindex:module namespace
+#+cindex:main modulen
+#+cindex:@code{__main__} namespace
+The namespace for a module is automatically created the first time a module is
+imported.
 
      - ~__main__~ :: The main module for a script is always called ~__main__~.
 
 **** Class Definition Blocks • Arguments to exec and eval
-     These are special in the context of name resolution.
+#+cindex:class definition blocks
+These are special in the context of name resolution.
 
-     A class definition is an executable statement that may use and define
-     names.  These references follow the normal rules for name resolution
+A class definition is an executable statement that may use and define names.
+These references follow the normal rules for name resolution
 
-     with an exception that /unbound local variables/ are looked up in the
-     global namespace.
+#+cindex:unbound local variables
+with an exception that /unbound local variables/ are looked up in the global
+namespace.
 
-     The namespace of the class definition becomes the /attribute dictionary/
-     of the class.
+#+cindex:class definition namespace
+The namespace of the class definition becomes the /attribute dictionary/ of the
+class.
+
+The scope of names defined in a class block is limited to the class block; it
+does not extend to the code blocks of methods.
 
 *** Builtins
+#+cindex:@code{__builtins__}
+Users should not touch ~__builtins__~; it is strictly an implementation
+detail.
+
+#+cindex:@code{builtins} namespace, modify
+Users wanting to override values in the =builtins= namespace should import the
+=builtins= module and modify its attributes appropriately.
 
 *** Dynamic Feature Interaction
+#+cindex:name reesolution, runtime
+Name resolution of free variables occurs at runtime, not at compile time.
+
+#+caption:This code prints 42
+#+name:name-resolution-at-runtime
+#+begin_src python
+i = 10
+def f():
+    print(i)
+i = 42
+f()
+#+end_src
 
 ** Exceptions
 
