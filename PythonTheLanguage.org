@@ -3,8 +3,8 @@
 #+title: Python the Language
 #+subtitle: Version {{{version}}} {{{time(%F %R)}}}
 #+author: WLHarvey4
-#+date:2019-07-20 10:48
-#+macro: version 0.4.9
+#+date:2019-09-16 10:01
+#+macro: version 0.4.10
 
 #+name:import-hello-and-this
 #+header: :results output :exports results
@@ -3683,12 +3683,24 @@ Index.
 If you are looking for common Python recipes and patterns, you can browse the
 ActiveState Python Cookbook.
 
-* Python 2 or Python 3
+* Why Python? --- Which Python?
 :PROPERTIES:
 :appendix: t
 :END:
-- https://wiki.python.org/moin/Python2orPython3
 
+#+attr_texinfo: :author https://www.reddit.com/r/perl/comments/d2yix0/how_did_perl_lose_ground_to_bash/
+#+begin_quote
+I know a comp sci professor.  I asked why he thought Python was so popular.
+
+"Every teacher I know has students using it.  We do it because it's an easy
+language, there's only one way to do it, and with whitespace as syntax it's
+easy to grade.  We don't teach it because it is some powerful or exceptional
+language."
+
+Then he said if he really needs to get something done, it's Perl or C.
+#+end_quote
+
+- https://wiki.python.org/moin/Python2orPython3
 
 Python 3.0 was released in 2008. The final 2.x version 2.7 release came out in
 mid-2010, with a statement of extended support for this end-of-life
@@ -3814,8 +3826,15 @@ follow the [[https://packaging.python.org/tutorials/packaging-projects/][Packagi
   :PROPERTIES:
   :index:    cp
   :END:
+* Macro Definitions                                                :noexport:
+
+#+MACRO: dfn @@texinfo:@dfn{@@$1@@texinfo:}@@
+#+MACRO: option @@texinfo:@option{@@$1@@texinfo:}@@
 
 * Export Settings                                                  :noexport:
+
+** Options
+#+options: ':t H:4
 
 ** Texinfo Setup                                                  :noexport:
   #+TEXINFO_FILENAME:python-the-language.info
@@ -3827,10 +3846,6 @@ follow the [[https://packaging.python.org/tutorials/packaging-projects/][Packagi
   #+TEXINFO_DIR_TITLE:Python
   #+TEXINFO_DIR_DESC:Python the Language
   #+TEXINFO_PRINTED_TITLE: Python the Language
-  #+OPTIONS: H:4
-
-  #+MACRO: dfn @@texinfo:@dfn{@@$1@@texinfo:}@@
-  #+MACRO: option @@texinfo:@option{@@$1@@texinfo:}@@
 
 ** LaTeX Setup                                                    :noexport:
   #+LATEX_CLASS: report
